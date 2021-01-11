@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.activity.ChooseLoginTypeScreen">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clClinic"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rectangle_box_rounded_corner"
+            app:layout_constraintBottom_toTopOf="@+id/clDoctor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView4"
+                style="@style/TextInputDefault"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/join_as"
+                android:textColor="@color/colorWhite"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Teacher"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/btnLoginAsTeacher"
+                style="@style/TextLabelDefault"
+                android:layout_width="84dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="52dp"
+                android:background="@drawable/rounded_colorfill_button"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                android:text="@string/next"
+                android:textColor="@color/blue"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clDoctor"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rectangle_box_rounded_corner"
+            android:backgroundTint="@color/yellow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clClinic">
+
+            <TextView
+                android:id="@+id/tvJoin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/join_as"
+                android:textColor="@color/colorWhite"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDoctor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/parents"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvJoin" />
+
+            <TextView
+                android:id="@+id/btnLoginAsParent"
+                style="@style/TextLabelDefault"
+                android:layout_width="84dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="48dp"
+                android:background="@drawable/rounded_colorfill_button"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                android:text="@string/next"
+                android:textColor="@color/yellow"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDoctor" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="156dp"
+            android:layout_height="80dp"
+            app:layout_constraintBottom_toTopOf="@+id/clClinic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/clClinic"
+            app:srcCompat="@drawable/ic_clinic" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="156dp"
+            android:layout_height="80dp"
+            app:layout_constraintBottom_toTopOf="@+id/clDoctor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/clDoctor"
+            app:srcCompat="@drawable/ic_objects" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
