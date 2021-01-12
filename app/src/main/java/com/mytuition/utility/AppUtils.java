@@ -22,6 +22,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.mytuition.R;
 
@@ -53,12 +56,6 @@ public class AppUtils {
     public static final String MY_PREFS_NAME = "myPref";
 
     public static String getMimeType(Context context, Uri uri) {
-        /*String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        }
-        return type;*/
         String mimeType = null;
         if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
             ContentResolver cr = context.getContentResolver();
@@ -408,4 +405,19 @@ public class AppUtils {
 
     }
 
+
+    public static FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public static FirebaseFirestore getFirestoreReference() {
+        return FirebaseFirestore.getInstance();
+    }
+
+    public static String getUid() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (null != user)
+            return user.getUid();
+        else return null;
+    }
 }

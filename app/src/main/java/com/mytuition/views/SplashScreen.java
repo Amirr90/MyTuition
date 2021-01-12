@@ -13,6 +13,7 @@ import com.mytuition.views.activity.ChooseLoginTypeScreen;
 import com.mytuition.views.activity.ParentScreen;
 import com.mytuition.views.activity.TeacherScreen;
 
+import static com.mytuition.utility.AppUtils.getCurrentUser;
 import static com.mytuition.utility.Utils.LOGIN_TYPE;
 import static com.mytuition.utility.Utils.LOGIN_TYPE_PARENT;
 import static com.mytuition.utility.Utils.LOGIN_TYPE_TEACHER;
@@ -31,14 +32,14 @@ public class SplashScreen extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        //loginType = AppUtils.getString(LOGIN_TYPE, this);
+        loginType = AppUtils.getString(LOGIN_TYPE, this);
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent;
-
-                Toast.makeText(SplashScreen.this, ""+loginType, Toast.LENGTH_SHORT).show();
-                if (loggedIn) {
+                if (getCurrentUser() != null) {
                     //checkLoginType
                     if (loginType.equalsIgnoreCase(LOGIN_TYPE_PARENT)) {
                         //logged In As Parent
