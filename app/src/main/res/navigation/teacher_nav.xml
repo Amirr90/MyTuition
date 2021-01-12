@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/teacher_nav">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teacher_nav"
+    app:startDestination="@id/teacherDashboardFragment">
 
+    <fragment
+        android:id="@+id/teacherDashboardFragment"
+        android:name="com.mytuition.TeacherDashboardFragment"
+        android:label="fragment_teacher_dashboard"
+        tools:layout="@layout/fragment_teacher_dashboard" />
 </navigation>

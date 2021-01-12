@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="doc"
+            type="com.mytuition.models.TeacherModel" />
+
+        <variable
+            name="recommendedInterface"
+            type="com.mytuition.interfaces.AdapterInterface" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="200dp"
+        android:layout_height="226dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="1dp"
+        android:elevation="5dp"
+        app:cardCornerRadius="8dp">
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{()->recommendedInterface.onItemClicked(doc)}">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="11dp"
+                android:loadCustomTeacherImage="@{doc.image}"
+                android:src="@drawable/ic_launcher_foreground"
+                app:civ_border_color="@color/colorPrimary"
+                app:civ_border_width="0.5dp" />
+
+
+            <ImageView
+                android:id="@+id/imageView32"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="13dp"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/profile_image"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:id="@+id/textView97"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:singleLine="true"
+                    android:text="@{doc.name}"
+                    android:textAlignment="center"
+                    android:textColor="#262E3F"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView98"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textView97"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@{doc.name}"
+                    android:textAlignment="center"
+                    android:textColor="#3F4E6E"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView99"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textView98"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/poppins"
+                    android:text="@{doc.experience}"
+                    android:textAlignment="center"
+                    android:textColor="#3F4E6E"
+                    android:textSize="12sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textView99"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/textView100"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/imageView33"
+                        android:fontFamily="@font/poppins"
+                        android:text="@{doc.rating+`(`+doc.review+` reviews)`}"
+                        android:textAlignment="center"
+                        android:textColor="#3F4E6E"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:id="@+id/imageView33"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="8dp"
+                        app:srcCompat="@drawable/star" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

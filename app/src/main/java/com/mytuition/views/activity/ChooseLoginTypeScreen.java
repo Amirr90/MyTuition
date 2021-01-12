@@ -19,10 +19,7 @@ import java.util.Map;
 
 import static com.mytuition.utility.AppConstant.TIMESTAMP;
 import static com.mytuition.utility.AppConstant.UID;
-import static com.mytuition.utility.AppConstant.USERS;
 import static com.mytuition.utility.AppUtils.fadeIn;
-import static com.mytuition.utility.AppUtils.getCurrentUser;
-import static com.mytuition.utility.AppUtils.getFirestoreReference;
 import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.AppUtils.setString;
 import static com.mytuition.utility.Utils.LOGIN_TYPE;
@@ -30,6 +27,7 @@ import static com.mytuition.utility.Utils.LOGIN_TYPE_PARENT;
 import static com.mytuition.utility.Utils.LOGIN_TYPE_TEACHER;
 
 public class ChooseLoginTypeScreen extends AppCompatActivity {
+    private static final String TAG = "ChooseLoginTypeScreen";
 
     ActivityChooseLoginTypeScreen2Binding loginTypeScreenBinding;
 
@@ -49,7 +47,6 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
         loginTypeScreenBinding.btnLoginAsTeacher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Setting login Type As Teacher
                 loginUi(LOGIN_TYPE_TEACHER);
             }
         });
@@ -58,14 +55,13 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
         loginTypeScreenBinding.btnLoginAsParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Setting login Type As Parents
                 loginUi(LOGIN_TYPE_PARENT);
             }
         });
     }
 
     private void loginUi(String loginType) {
-
+        loginTypeScreenBinding.progressBar.setVisibility(View.VISIBLE);
         showLoginScreen();
         this.loginType = loginType;
 
@@ -74,7 +70,6 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
 
     private void showLoginScreen() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.PhoneBuilder().build());
-
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
@@ -89,34 +84,32 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 10) {
 
+        if (requestCode == 10) {
+            loginTypeScreenBinding.progressBar.setVisibility(View.GONE);
             if (resultCode == RESULT_OK) {
+
                 Toast.makeText(ChooseLoginTypeScreen.this, "sign in successfully", Toast.LENGTH_SHORT).show();
                 setString(LOGIN_TYPE, loginType, ChooseLoginTypeScreen.this);
                 if (loginType.equalsIgnoreCase(LOGIN_TYPE_TEACHER)) {
-                    startActivity(new Intent(ChooseLoginTypeScreen.this, RegistrationActivity.class));
+                    startActivity(new Intent(ChooseLoginTypeScreen.this, RegistrationActivity.class)
+                            .putExtra(LOGIN_TYPE, loginType));
                 } else
-                    startActivity(new Intent(ChooseLoginTypeScreen.this, ParentScreen.class));
+                    startActivity(new Intent(ChooseLoginTypeScreen.this, ParentScreen.class)
+                            .putExtra(LOGIN_TYPE, loginType));
                 finish();
             } else {
                 Toast.makeText(ChooseLoginTypeScreen.this, "sign in failed", Toast.LENGTH_SHORT).show();
-                updateUI(loginType);
+
             }
         }
     }
 
-    private void updateUI(String loginType) {
-        if (getUid() == null) {
-            Toast.makeText(this, "Uid is null", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        getFirestoreReference().collection(USERS).document(getUid()).update(getUserMap());
-    }
 
-    public static Map<String, Object> getUserMap() {
+    public static Map<String, Object> getUserMap(String loginType) {
         Map<String, Object> map = new HashMap<>();
         map.put(UID, getUid());
+        map.put(LOGIN_TYPE, loginType);
         map.put(TIMESTAMP, System.currentTimeMillis());
         return map;
     }

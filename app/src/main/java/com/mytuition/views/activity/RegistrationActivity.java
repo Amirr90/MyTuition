@@ -11,6 +11,9 @@ import com.mytuition.R;
 import com.mytuition.databinding.ActivityRegistrationBinding;
 import com.mytuition.models.Registration;
 
+import static com.mytuition.utility.Utils.LOGIN_TYPE;
+import static com.mytuition.utility.Utils.updateUI;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     ActivityRegistrationBinding registrationBinding;
@@ -28,6 +31,7 @@ public class RegistrationActivity extends AppCompatActivity {
         registration = new Registration();
         registrationBinding.setRegistration(registration);
 
+        updateUI(getIntent().getStringExtra(LOGIN_TYPE));
 
         registrationBinding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override

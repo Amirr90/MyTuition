@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="symptoms"
+            type="com.mytuition.models.SpecialityModel" />
+
+        <variable
+            name="adapterInterface"
+            type="com.mytuition.interfaces.AdapterInterface" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvSymptoms"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:elevation="5dp"
+        android:focusable="true"
+        app:cardCornerRadius="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp">
+
+            <ImageView
+                android:id="@+id/imageView27"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_centerVertical="true"
+                android:loadCustomTeacherImage="@{symptoms.icon}"
+                app:srcCompat="@drawable/ic_launcher_foreground" />
+
+            <TextView
+                android:id="@+id/textView68"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginRight="10dp"
+                android:layout_toStartOf="@+id/radioButton5"
+                android:layout_toEndOf="@+id/imageView27"
+                android:fontFamily="@font/poppins_medium"
+                android:maxLines="2"
+                android:text="@{symptoms.name}"
+                android:textColor="#262E3F"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/radioButton5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:checked="false"
+                android:onClick="@{()->adapterInterface.onItemClicked(symptoms)}" />
+
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

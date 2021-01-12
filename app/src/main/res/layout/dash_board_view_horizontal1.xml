@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="dashboard2"
+            type="com.mytuition.models.TeacherModel" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/cv"
+        android:layout_width="118dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:elevation="10dp"
+        app:cardCornerRadius="25dp">
+
+
+        <LinearLayout
+            android:layout_width="118dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView22"
+                android:layout_width="118dp"
+                android:layout_height="118dp"
+                android:background="@drawable/box_one"
+                android:loadCustomTeacherImage="@{dashboard2.image}"
+                android:padding="10dp"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/textView66"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center_horizontal"
+                android:paddingLeft="@dimen/_5sdp"
+                android:paddingRight="@dimen/_5sdp"
+                android:text="@{dashboard2.name}"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

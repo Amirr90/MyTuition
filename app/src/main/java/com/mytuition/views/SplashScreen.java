@@ -19,7 +19,6 @@ import static com.mytuition.utility.Utils.LOGIN_TYPE_PARENT;
 import static com.mytuition.utility.Utils.LOGIN_TYPE_TEACHER;
 
 public class SplashScreen extends AppCompatActivity {
-    boolean loggedIn = false;
     String loginType = LOGIN_TYPE_PARENT;
 
     @Override
@@ -33,19 +32,14 @@ public class SplashScreen extends AppCompatActivity {
         super.onStart();
 
         loginType = AppUtils.getString(LOGIN_TYPE, this);
-
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent;
                 if (getCurrentUser() != null) {
-                    //checkLoginType
                     if (loginType.equalsIgnoreCase(LOGIN_TYPE_PARENT)) {
-                        //logged In As Parent
                         intent = new Intent(SplashScreen.this, ParentScreen.class);
                     } else if (loginType.equalsIgnoreCase(LOGIN_TYPE_TEACHER)) {
-                        //logged In As Teacher
                         intent = new Intent(SplashScreen.this, TeacherScreen.class);
                     } else intent = new Intent(SplashScreen.this, ChooseLoginTypeScreen.class);
                 } else {

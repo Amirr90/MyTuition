@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="doctor"
+            type="com.mytuition.models.TeacherModel" />
+
+        <variable
+            name="recommendedInterface"
+            type="com.mytuition.interfaces.AdapterInterface" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="11dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:onClick="@{()->recommendedInterface.onItemClicked(doctor)}"
+            android:orientation="vertical"
+            android:padding="13dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+
+                    android:id="@+id/imageView20"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:loadCustomTeacherImage="@{doctor.image}"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/ic_launcher_foreground" />
+
+                <TextView
+                    android:id="@+id/textView76"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_toStartOf="@+id/ivShareDocProfile"
+                    android:layout_toEndOf="@+id/imageView20"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:singleLine="true"
+                    android:text="@{doctor.name}"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView77"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textView76"
+                    android:layout_marginStart="8dp"
+                    android:layout_toStartOf="@+id/ivShareDocProfile"
+                    android:layout_toEndOf="@+id/imageView20"
+                    android:fontFamily="@font/poppins"
+                    android:singleLine="true"
+                    android:text="@{doctor.speciality}"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView78"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textView77"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@+id/imageView20"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:singleLine="true"
+                    android:text="11:00 AM to 8:00 Pm"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/ivShareDocProfile"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="3dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    app:srcCompat="@drawable/share_doc_profile_image" />
+
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/GreyColo" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/imageView30"
+                    android:layout_width="9dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/rupee_indian" />
+
+                <TextView
+                    android:id="@+id/textView82"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@{String.valueOf(doctor.fee)}"
+                    android:textColor="#262E3F"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView83"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="@string/consulation_fee"
+                    android:textColor="#262E3F"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

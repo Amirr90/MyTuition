@@ -95,4 +95,17 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="find_tutor_by">Find Tutors By</string>
+    <string name="speciality">Speciality</string>
+    <string name="classs">Class</string>
+    <string name="name">Name</string>
+    <string name="find_coachings">Find Coachings</string>
+    <string name="near_you">Near you</string>
+    <string name="proceed">Proceed</string>
+    <string name="search_speciality_here">Search Speciality Here</string>
+    <string name="select_speciality">Speciality</string>
+    <string name="sorry">Sorry!</string>
+    <string name="recommended_teachers">Recommended Teachers</string>
+    <string name="popular_teachers">Popular Teachers</string>
+    <string name="consulation_fee">Fee</string>
 </resources>

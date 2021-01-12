@@ -9,5 +9,55 @@
         android:id="@+id/parentDashboardFragment2"
         android:name="com.mytuition.ParentDashboardFragment"
         android:label="fragment_parent_dashboard"
-        tools:layout="@layout/fragment_parent_dashboard" />
+        tools:layout="@layout/fragment_parent_dashboard" >
+        <action
+            android:id="@+id/action_parentDashboardFragment2_to_specialityFragment"
+            app:destination="@id/specialityFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_parentDashboardFragment2_to_tuitorByClassFragment"
+            app:destination="@id/tuitorByClassFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_parentDashboardFragment2_to_coachingListFragment"
+            app:destination="@id/coachingListFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/specialityFragment"
+        android:name="com.mytuition.SpecialityFragment"
+        android:label="fragment_speciality"
+        tools:layout="@layout/fragment_speciality" >
+        <action
+            android:id="@+id/action_specialityFragment_to_teacherListFragment"
+            app:destination="@id/teacherListFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/tuitorByClassFragment"
+        android:name="com.mytuition.TuitorByClassFragment"
+        android:label="fragment_tuitor_by_class"
+        tools:layout="@layout/fragment_tuitor_by_class" />
+    <fragment
+        android:id="@+id/coachingListFragment"
+        android:name="com.mytuition.CoachingListFragment"
+        android:label="fragment_coaching_list"
+        tools:layout="@layout/fragment_coaching_list" />
+    <fragment
+        android:id="@+id/teacherListFragment"
+        android:name="com.mytuition.TeacherListFragment"
+        android:label="fragment_teacher_list"
+        tools:layout="@layout/fragment_teacher_list" />
 </navigation>

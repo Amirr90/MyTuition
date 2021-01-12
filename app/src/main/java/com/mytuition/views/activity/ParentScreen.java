@@ -14,15 +14,26 @@ import com.mytuition.utility.AppUtils;
 
 import java.util.Objects;
 
+import static com.mytuition.utility.Utils.LOGIN_TYPE;
+import static com.mytuition.utility.Utils.updateUI;
+
 public class ParentScreen extends AppCompatActivity {
+    private static final String TAG = "ParentScreen";
 
     ActivityParentScreenBinding mainBinding;
     NavController navController;
+
+    public static ParentScreen instance;
+
+    public static ParentScreen getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_parent_screen);
+        instance = this;
     }
 
     @Override
@@ -31,7 +42,9 @@ public class ParentScreen extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_parent);
         NavigationUI.setupActionBarWithNavController(this, navController);
         Objects.requireNonNull(getSupportActionBar()).hide();
+        updateUI(getIntent().getStringExtra(LOGIN_TYPE));
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -41,5 +54,14 @@ public class ParentScreen extends AppCompatActivity {
             e.printStackTrace();
         }
         return navController.navigateUp();
+    }
+
+
+    public void navigate(int id) {
+        navController.navigate(id);
+    }
+
+    public void navigate(int id, Bundle bundle) {
+        navController.navigate(id, bundle);
     }
 }

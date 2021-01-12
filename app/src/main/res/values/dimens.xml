@@ -17,4 +17,7 @@
     <dimen name="_12sdp">15dp</dimen>
     <dimen name="_15sdp">18dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="dimen_10dp">10dp</dimen>
+    <dimen name="_5sdp">5dp</dimen>
+    <dimen name="_100sdp">100dp</dimen>
 </resources>
