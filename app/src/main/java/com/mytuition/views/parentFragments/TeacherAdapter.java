@@ -1,4 +1,4 @@
-package com.mytuition;
+package com.mytuition.views.parentFragments;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mytuition.R;
 import com.mytuition.databinding.DashBoardViewHorizontal1Binding;
 import com.mytuition.models.TeacherModel;
 

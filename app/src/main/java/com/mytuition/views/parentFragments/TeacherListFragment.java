@@ -1,4 +1,4 @@
-package com.mytuition;
+package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.mytuition.R;
 import com.mytuition.adapters.PopularTeachersAdapter;
 import com.mytuition.adapters.RecommendedTeachersAdapter;
 import com.mytuition.databinding.FragmentTeacherListBinding;
@@ -21,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.mytuition.utility.AppConstant.TEACHER_ID;
 
 
 public class TeacherListFragment extends Fragment implements AdapterInterface {
@@ -70,9 +73,12 @@ public class TeacherListFragment extends Fragment implements AdapterInterface {
         }
         return teacherModels;
     }
-    
+
     @Override
     public void onItemClicked(Object o) {
-
+        TeacherModel teacherModel = (TeacherModel) o;
+        Bundle bundle = new Bundle();
+        bundle.putString(TEACHER_ID, teacherModel.getId());
+        navController.navigate(R.id.action_teacherListFragment_to_teacherProfileFragment, bundle);
     }
 }

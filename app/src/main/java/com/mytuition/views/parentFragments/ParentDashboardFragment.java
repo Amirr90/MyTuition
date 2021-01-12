@@ -1,4 +1,4 @@
-package com.mytuition;
+package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
+import com.mytuition.R;
 import com.mytuition.adapters.CoachingAdapter;
 import com.mytuition.adapters.DashboardPatientAdapter1;
 import com.mytuition.adapters.MainSliderAdapter;

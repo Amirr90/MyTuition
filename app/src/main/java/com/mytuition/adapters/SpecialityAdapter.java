@@ -11,7 +11,7 @@ import com.mytuition.databinding.SymptomsViewBinding;
 import com.mytuition.interfaces.AdapterInterface;
 import com.mytuition.models.SpecialityModel;
 
-import static com.mytuition.SpecialityFragment.specialitiesIds;
+import static com.mytuition.views.parentFragments.SpecialityFragment.specialitiesIds;
 
 public class SpecialityAdapter extends ListAdapter<SpecialityModel, SpecialityAdapter.SymptomVH> {
     AdapterInterface adapterInterface;

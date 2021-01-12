@@ -47,7 +47,7 @@ public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, Dashb
                 if (position == 0)
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_specialityFragment);
                 else if (position == 1)
-                    ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_tuitorByClassFragment);
+                    ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_subjectListFragment);
                 else if (position == 2)
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_tuitorByClassFragment);
                 else if (position == 3)

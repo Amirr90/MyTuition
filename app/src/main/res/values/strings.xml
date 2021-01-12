@@ -99,7 +99,7 @@
     <string name="speciality">Speciality</string>
     <string name="classs">Class</string>
     <string name="name">Name</string>
-    <string name="find_coachings">Find Coachings</string>
+    <string name="find_coachings">Find Coaching</string>
     <string name="near_you">Near you</string>
     <string name="proceed">Proceed</string>
     <string name="search_speciality_here">Search Speciality Here</string>
@@ -108,4 +108,8 @@
     <string name="recommended_teachers">Recommended Teachers</string>
     <string name="popular_teachers">Popular Teachers</string>
     <string name="consulation_fee">Fee</string>
+    <string name="about_doc">About the Doctor</string>
+    <string name="tution_hours">Tuition Hours</string>
+    <string name="request_tuition">Request Tuition</string>
+    <string name="select_slot">Select Time Slot</string>
 </resources>

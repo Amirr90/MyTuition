@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="calender"
+            type="com.mytuition.models.CalendarModel" />
+
+        <variable
+            name="calenderInterface"
+            type="com.mytuition.adapters.CalendarAdapter.CalenderInterface" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/rlCalenderRoot"
+        android:layout_width="59dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+
+        android:background="@drawable/rectangle_outline_new_ui_color">
+
+
+        <TextView
+            android:id="@+id/textView81"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="@{calender.day}"
+            android:textColor="#B33F4E6E"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textView85"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView81"
+            android:layout_centerHorizontal="true"
+            android:text="@{calender.date}"
+            android:textColor="#0A586C"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView86"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView85"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dimen_5dp"
+            android:text="@string/select_slot"
+            android:textAlignment="center"
+            android:textColor="#B33F4E6E"
+            android:textSize="9sp" />
+    </RelativeLayout>
+</layout>

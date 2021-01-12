@@ -20,4 +20,5 @@
     <dimen name="dimen_10dp">10dp</dimen>
     <dimen name="_5sdp">5dp</dimen>
     <dimen name="_100sdp">100dp</dimen>
+    <dimen name="dimen_5dp">5dp</dimen>
 </resources>
