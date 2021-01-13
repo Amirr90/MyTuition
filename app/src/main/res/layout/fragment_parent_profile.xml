@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.mytuition.models.ParentModel" />
+
+        <variable
+            name="mobile"
+            type="String" />
+
+        <variable
+            name="dialogInterface"
+            type="com.mytuition.interfaces.MyDialogInterface" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ParentProfileFragment">
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            tools:context=".view.fragments.digiDoctorFragments.ProfileFragment">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_image"
+                    android:layout_width="111dp"
+                    android:layout_height="111dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"
+                    android:loadCustomParentImage="@{user.image}"
+                    android:src="@drawable/profile_demo_image"
+                    app:civ_border_color="@color/colorPrimary"
+                    app:civ_border_overlay="true"
+                    app:civ_border_width="1dp" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_image"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="10dp"
+                    android:text="@{user.image==`` ?`upload profile photo`:`change profile photo`}"
+                    android:textColor="#0A586C"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/textView5"
+                    android:layout_marginTop="40dp"
+                    android:orientation="vertical"
+                    android:paddingStart="26dp"
+                    android:paddingEnd="16dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivName"
+                            android:layout_width="14dp"
+                            android:layout_height="17dp"
+                            app:srcCompat="@drawable/user_small_icon" />
+
+                        <TextView
+                            android:id="@+id/tvName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivName"
+                            android:text="@string/full_name"
+                            android:textColor="#BCBCBC"
+                            android:textSize="12sp" />
+
+                        <EditText
+                            android:id="@+id/editTextTextPersonName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvName"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivName"
+                            android:background="@null"
+                            android:fontFamily="@font/poppins_medium"
+                            android:hint="@string/enterFullName"
+                            android:inputType="textPersonName"
+                            android:text="@{user.name}"
+                            android:textColor="#262E3F"
+                            android:textColorHint="#BCBCBC"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_below="@+id/editTextTextPersonName"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/GreyColo" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivEmail"
+                            android:layout_width="14dp"
+                            android:layout_height="17dp"
+                            app:srcCompat="@drawable/email" />
+
+                        <TextView
+                            android:id="@+id/tvEmail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivEmail"
+                            android:text="@string/email"
+                            android:textColor="#BCBCBC"
+                            android:textSize="12sp" />
+
+                        <EditText
+                            android:id="@+id/editTextTextPersonEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvEmail"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivEmail"
+                            android:background="@null"
+                            android:fontFamily="@font/poppins_medium"
+                            android:hint="@string/enter_your_email"
+                            android:inputType="textEmailAddress"
+                            android:text="@{user.email}"
+                            android:textColor="#262E3F"
+                            android:textColorHint="#BCBCBC"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_below="@+id/editTextTextPersonEmail"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/GreyColo" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivNumber"
+                            android:layout_width="14dp"
+                            android:layout_height="17dp"
+                            app:srcCompat="@drawable/smartphone" />
+
+                        <TextView
+                            android:id="@+id/tvNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivNumber"
+                            android:text="@string/mobile_no"
+                            android:textColor="#BCBCBC"
+                            android:textSize="12sp" />
+
+                        <EditText
+                            android:id="@+id/editTextTextPersonNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvNumber"
+                            android:layout_marginStart="11dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_toEndOf="@+id/ivNumber"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:fontFamily="@font/poppins_medium"
+                            android:hint="@string/mobile_number"
+                            android:inputType="phone"
+                            android:maxLength="10"
+                            android:text="@{mobile}"
+                            android:textColor="#262E3F"
+                            android:textColorHint="#BCBCBC"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_below="@+id/editTextTextPersonNumber"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/GreyColo" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()->dialogInterface.onAgeItemClick()}"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivDob"
+                            android:layout_width="14dp"
+                            android:layout_height="17dp"
+                            app:srcCompat="@drawable/cake" />
+
+                        <TextView
+                            android:id="@+id/tvDob"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivDob"
+                            android:text="@string/dob"
+                            android:textColor="#BCBCBC"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/editTextTextPersonDob"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvDob"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivDob"
+                            android:fontFamily="@font/poppins_medium"
+                            android:hint="@string/your_dob"
+                            android:paddingEnd="10dp"
+                            android:text="@{user.dob}"
+                            android:textColor="#262E3F"
+                            android:textColorHint="#BCBCBC"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/ivDobDialog"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="10dp"
+                            app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_below="@+id/editTextTextPersonDob"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/GreyColo" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()->dialogInterface.onGenderItemClick()}"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivGender"
+                            android:layout_width="14dp"
+                            android:layout_height="17dp"
+                            app:srcCompat="@drawable/gender" />
+
+                        <TextView
+                            android:id="@+id/tvGender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivGender"
+                            android:text="@string/gender"
+                            android:textColor="#BCBCBC"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/editTextTextPersonGender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvGender"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivGender"
+                            android:fontFamily="@font/poppins_medium"
+                            android:hint="@string/gender"
+                            android:paddingEnd="10dp"
+                            android:text="@{user.gender}"
+                            android:textColor="#262E3F"
+                            android:textColorHint="#BCBCBC"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_below="@+id/editTextTextPersonGender"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/GreyColo" />
+
+                        <ImageView
+                            android:id="@+id/ivGenderDialog"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="10dp"
+                            app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivAddress"
+                            android:layout_width="14dp"
+                            android:layout_height="17dp"
+                            app:srcCompat="@drawable/address" />
+
+                        <TextView
+                            android:id="@+id/tvAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivAddress"
+                            android:text="@string/address"
+                            android:textColor="#BCBCBC"
+                            android:textSize="12sp" />
+
+                        <EditText
+                            android:id="@+id/editTextTextPersonAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvAddress"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/ivAddress"
+                            android:background="@null"
+                            android:fontFamily="@font/poppins_medium"
+                            android:hint="@string/address"
+                            android:inputType="textMultiLine"
+                            android:overScrollMode="always"
+                            android:text="@{user.address}"
+                            android:textColor="#262E3F"
+                            android:textColorHint="#BCBCBC"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_below="@+id/editTextTextPersonAddress"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/GreyColo" />
+                    </RelativeLayout>
+
+
+                    <Button
+
+                        android:id="@+id/btnUpdateProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/round_for_search"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/save"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
+</layout>

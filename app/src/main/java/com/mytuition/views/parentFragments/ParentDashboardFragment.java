@@ -93,6 +93,14 @@ public class ParentDashboardFragment extends Fragment {
 
 
         loadBigBannerImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmYPN1bz0VvoryldNhKmQ-MPLPxh5Lgdj8ig&usqp=CAU");
+
+
+        parentDashboardBinding.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.action_parentDashboardFragment2_to_parentProfileFragment);
+            }
+        });
     }
 
     private void loadBigBannerImage(String imageUrl) {

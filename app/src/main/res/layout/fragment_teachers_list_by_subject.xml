@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".TeachersListBySubjectFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_round"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="@dimen/_20sdp"
+        android:paddingRight="10dp"
+        android:paddingBottom="@dimen/_20sdp">
+
+
+        <EditText
+            android:id="@+id/editTextTextSearchDocBySpeciality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/round_for_search"
+            android:backgroundTint="@android:color/white"
+            android:drawableEnd="@drawable/magnifier"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="@string/search_teachers"
+            android:imeOptions="actionSearch"
+            android:inputType="textPersonName"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:singleLine="true"
+            android:textColorHint="#A2B3B8"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/subSpecialityRec"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/sub_speciality_view" />
+
+    <RelativeLayout
+        android:id="@+id/rlNoDocFound"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="241dp"
+            android:src="@drawable/ic_launcher_foreground" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="58dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/sorry"
+            android:textColor="#262E3F"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/no_teachers_found"
+            android:textColor="#262E3F"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+</LinearLayout>

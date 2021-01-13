@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="teacher"
+            type="com.mytuition.models.TeacherModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:elevation="5dp"
+        android:padding="@dimen/_10sdp"
+        app:cardCornerRadius="8dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_10sdp">
+
+                <ImageView
+                    android:id="@+id/imageView20"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:loadCustomTeacherImage="@{teacher.image}"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/ic_launcher_foreground" />
+
+                <TextView
+                    android:id="@+id/textView76"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_toStartOf="@+id/ivShareDocProfile"
+                    android:layout_toEndOf="@+id/imageView20"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:singleLine="true"
+                    android:text="@{teacher.name}"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView77"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textView76"
+                    android:layout_marginStart="8dp"
+                    android:layout_toStartOf="@+id/ivShareDocProfile"
+                    android:layout_toEndOf="@+id/imageView20"
+                    android:fontFamily="@font/poppins"
+                    android:singleLine="true"
+                    android:text="@{teacher.speciality+`,`+teacher.experience}"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView78"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textView77"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@+id/imageView20"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:singleLine="true"
+                    android:text="@{teacher.collegeName}"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/ivShareDocProfile"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="3dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/share_doc_profile_image" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imageView29"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+                    <TextView
+                        android:id="@+id/textView79"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@+id/imageView29"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:fontFamily="@font/poppins"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@{String.valueOf(teacher.experience)+` Patients`}"
+                        android:textColor="#3F4E6E"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivGraduated"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@+id/ivGraduated"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:fontFamily="@font/poppins"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@{teacher.degree}"
+                        android:textColor="#3F4E6E"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivLocationPin"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        app:srcCompat="@drawable/ic_baseline_location_on_24" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@+id/ivLocationPin"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:fontFamily="@font/poppins"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@{teacher.address}"
+                        android:textColor="#3F4E6E"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.2dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/GreyColo" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageView30"
+                        android:layout_width="9dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        app:srcCompat="@drawable/rupee_indian" />
+
+                    <TextView
+                        android:id="@+id/textView82"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@{String.valueOf(teacher.fee)}"
+                        android:textColor="#262E3F"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView83"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="@font/poppins"
+                        android:text="@string/consulation_fee"
+                        android:textColor="#262E3F"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.2dp"
+                    android:background="@color/GreyColo" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/button4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/round_for_search"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:textColor="@android:color/white"
+                        android:visibility="gone" />
+
+
+                    <Button
+                        android:id="@+id/btnBookAppointment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/round_for_search"
+                        android:backgroundTint="#EDA537"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:text="@string/request_tuition"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

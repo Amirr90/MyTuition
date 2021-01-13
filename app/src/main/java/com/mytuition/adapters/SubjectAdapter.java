@@ -47,7 +47,7 @@ public class SubjectAdapter extends ListAdapter<SubjectModel, SubjectAdapter.Spe
                 AppUtils.hideSoftKeyboard(activity);
                 Bundle bundle = new Bundle();
                 bundle.putString("id", String.valueOf(subjectModel.getId()));
-                ParentScreen.getInstance().navigate(R.id.action_subjectListFragment_to_teacherListFragment, bundle);
+                ParentScreen.getInstance().navigate(R.id.action_subjectListFragment_to_teachersListBySubjectFragment, bundle);
             }
         });
 

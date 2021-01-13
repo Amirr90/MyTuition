@@ -163,6 +163,25 @@ public class CustomLoadImage {
 
     }
 
+    @BindingAdapter("android:loadCustomParentImage")
+    public static void loadCustomParentImage(ImageView imageView, String imagePath) {
+        if (null != imagePath && !imagePath.isEmpty()) {
+            try {
+                Glide.with(ParentScreen.getInstance())
+                        .load(imagePath)
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .into(imageView);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "loadImage: " + e.getLocalizedMessage());
+                imageView.setImageResource(R.drawable.ic_launcher_foreground);
+            }
+        }
+
+    }
+
     @BindingAdapter("android:loadCustomCoachingImage")
     public static void loadCustomCoachingImage(ImageView imageView, String imagePath) {
         if (null != imagePath && !imagePath.isEmpty()) {
@@ -180,5 +199,11 @@ public class CustomLoadImage {
             }
         }
 
+    }
+
+    @BindingAdapter("android:loadNavImage")
+    public static void loadNavImage(ImageView imageView, int imagePath) {
+        imageView.setImageResource(imagePath);
+        Log.d(TAG, "loadNavImage: " + imagePath);
     }
 }

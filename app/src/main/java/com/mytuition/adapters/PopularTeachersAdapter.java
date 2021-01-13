@@ -41,7 +41,6 @@ public class PopularTeachersAdapter extends ListAdapter<TeacherModel, PopularTea
 
         else holder.popularDocViewBinding.textView77.setVisibility(View.GONE);
 
-
     }
 
     public class PopularVH extends RecyclerView.ViewHolder {
