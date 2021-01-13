@@ -77,6 +77,14 @@ public class SelectTimeSlotsFragment extends Fragment {
         slotsBinding.calRec.setAdapter(calendarAdapter);
         getDocTimerSlot(date);
 
+        slotsBinding.btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.action_selectTimeSlotsFragment_to_requestTuitonFragment);
+
+            }
+        });
+
     }
 
     private List<CalendarModel> getNextWeekDays() {
@@ -106,5 +114,6 @@ public class SelectTimeSlotsFragment extends Fragment {
     }
 
     private void getDocTimerSlot(String date) {
+        // navController.navigate(R.id.action_selectTimeSlotsFragment_to_requestTuitonFragment);
     }
 }

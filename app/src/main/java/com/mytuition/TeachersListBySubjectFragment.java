@@ -74,6 +74,6 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
         Log.d(TAG, "onItemClick: " + item);
         Bundle bundle = new Bundle();
         bundle.putString("docModel", item);
-        navController.navigate(R.id.action_teachersListBySubjectFragment_to_teacherProfileFragment, bundle);
+        navController.navigate(R.id.action_teachersListBySubjectFragment_to_selectTimeSlotsFragment, bundle);
     }
 }

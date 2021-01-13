@@ -125,4 +125,10 @@
     <string name="gender">Gender</string>
     <string name="address">Address</string>
     <string name="save">Save</string>
+    <string name="your_name">Your Name</string>
+    <string name="your_email">Your Email</string>
+    <string name="you_want_to_update_on_whatsapp">Update me on WhatsApp</string>
+    <string name="confirm">Confirm</string>
+    <string name="thank_you_for_using_our_services">Thank you for using our services.</string>
+    <string name="tuition_details">Tuition Details</string>
 </resources>

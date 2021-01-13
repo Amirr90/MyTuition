@@ -11,4 +11,5 @@
     <color name="yellow">#EDA537</color>
     <color name="GreyColo">#a2b3b8</color>
     <color name="white">#ffffff</color>
+    <color name="BackgroundColor">#f2f6fe</color>
 </resources>

@@ -15,6 +15,8 @@ import com.mytuition.adapters.SubjectAdapter;
 import com.mytuition.databinding.FragmentSubjectListBinding;
 import com.mytuition.models.SubjectModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +27,7 @@ public class SubjectListFragment extends Fragment {
     SubjectAdapter subjectAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         subjectListBinding = FragmentSubjectListBinding.inflate(getLayoutInflater());
         return subjectListBinding.getRoot();

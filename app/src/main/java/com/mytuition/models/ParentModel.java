@@ -13,6 +13,15 @@ public class ParentModel extends BaseObservable {
     public String gender;
     public String address;
     public String name;
+    public String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     @Bindable
     public String getName() {

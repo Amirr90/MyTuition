@@ -9,7 +9,7 @@
         android:id="@+id/parentDashboardFragment2"
         android:name="com.mytuition.views.parentFragments.ParentDashboardFragment"
         android:label="fragment_parent_dashboard"
-        tools:layout="@layout/fragment_parent_dashboard" >
+        tools:layout="@layout/fragment_parent_dashboard">
         <action
             android:id="@+id/action_parentDashboardFragment2_to_specialityFragment"
             app:destination="@id/specialityFragment"
@@ -50,7 +50,7 @@
         android:id="@+id/specialityFragment"
         android:name="com.mytuition.views.parentFragments.SpecialityFragment"
         android:label="fragment_speciality"
-        tools:layout="@layout/fragment_speciality" >
+        tools:layout="@layout/fragment_speciality">
         <action
             android:id="@+id/action_specialityFragment_to_teacherListFragment"
             app:destination="@id/teacherListFragment"
@@ -73,7 +73,7 @@
         android:id="@+id/teacherListFragment"
         android:name="com.mytuition.views.parentFragments.TeacherListFragment"
         android:label="fragment_teacher_list"
-        tools:layout="@layout/fragment_teacher_list" >
+        tools:layout="@layout/fragment_teacher_list">
         <action
             android:id="@+id/action_teacherListFragment_to_teacherProfileFragment"
             app:destination="@id/teacherProfileFragment"
@@ -86,12 +86,20 @@
         android:id="@+id/selectTimeSlotsFragment"
         android:name="com.mytuition.SelectTimeSlotsFragment"
         android:label="fragment_select_time_slots"
-        tools:layout="@layout/fragment_select_time_slots" />
+        tools:layout="@layout/fragment_select_time_slots" >
+        <action
+            android:id="@+id/action_selectTimeSlotsFragment_to_requestTuitonFragment"
+            app:destination="@id/requestTuitonFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
     <fragment
         tools:layout="@layout/fragment_teacher_profile"
         android:id="@+id/teacherProfileFragment"
         android:name="com.mytuition.views.commonFragments.TeacherProfileFragment"
-        android:label="TeacherProfileFragment" >
+        android:label="TeacherProfileFragment">
         <action
             android:id="@+id/action_teacherProfileFragment_to_selectTimeSlotsFragment"
             app:destination="@id/selectTimeSlotsFragment"
@@ -104,7 +112,7 @@
         android:id="@+id/subjectListFragment"
         android:name="com.mytuition.SubjectListFragment"
         android:label="fragment_subject_list"
-        tools:layout="@layout/fragment_subject_list" >
+        tools:layout="@layout/fragment_subject_list">
         <action
             android:id="@+id/action_subjectListFragment_to_teacherListFragment"
             app:destination="@id/teacherListFragment"
@@ -124,10 +132,17 @@
         android:id="@+id/teachersListBySubjectFragment"
         android:name="com.mytuition.TeachersListBySubjectFragment"
         android:label="fragment_teachers_list_by_subject"
-        tools:layout="@layout/fragment_teachers_list_by_subject" >
+        tools:layout="@layout/fragment_teachers_list_by_subject">
         <action
             android:id="@+id/action_teachersListBySubjectFragment_to_teacherProfileFragment"
             app:destination="@id/teacherProfileFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_teachersListBySubjectFragment_to_selectTimeSlotsFragment"
+            app:destination="@id/selectTimeSlotsFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
@@ -140,7 +155,30 @@
         tools:layout="@layout/fragment_parent_profile" />
     <fragment
         android:id="@+id/requestTuitonFragment"
-        android:name="com.mytuition.RequestTuitonFragment"
+        android:name="com.mytuition.RequestTuitionFragment"
         android:label="fragment_request_tuiton"
-        tools:layout="@layout/fragment_request_tuiton" />
+        tools:layout="@layout/fragment_request_tuition" >
+        <action
+            android:id="@+id/action_requestTuitonFragment_to_requestTuitionSuccessfullyFragment"
+            app:destination="@id/requestTuitionSuccessfullyFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/parentDashboardFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestTuitionSuccessfullyFragment"
+        android:name="com.mytuition.RequestTuitionSuccessfullyFragment"
+        android:label="fragment_request_tuition_successfully"
+        tools:layout="@layout/fragment_request_tuition_successfully" >
+        <action
+            android:id="@+id/action_requestTuitionSuccessfullyFragment_to_requestedTuitionDetailFragment"
+            app:destination="@id/requestedTuitionDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestedTuitionDetailFragment"
+        android:name="com.mytuition.RequestedTuitionDetailFragment"
+        android:label="fragment_requested_tuition_detail"
+        tools:layout="@layout/fragment_requested_tuition_detail" />
 </navigation>

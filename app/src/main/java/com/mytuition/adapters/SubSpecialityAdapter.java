@@ -1,5 +1,6 @@
 package com.mytuition.adapters;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,10 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.mytuition.R;
 import com.mytuition.databinding.SubSpecialityViewBinding;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.views.activity.ParentScreen;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,10 +45,9 @@ public class SubSpecialityAdapter extends ListAdapter<TeacherModel, SubSpecialit
         holder.subSpecialityViewBinding.btnBookAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Gson gson = new Gson();
                 String jsonString = gson.toJson(teacherModel);
-                Log.d(TAG, "onClickTeacherModel: "+teacherModel.toString());
+                Log.d(TAG, "onClickTeacherModel: " + teacherModel.toString());
                 Log.d(TAG, "onClickTeacher: " + jsonString.toString());
                 try {
                     JSONObject request = new JSONObject(jsonString);
@@ -54,6 +56,15 @@ public class SubSpecialityAdapter extends ListAdapter<TeacherModel, SubSpecialit
                     e.printStackTrace();
                 }
 
+            }
+        });
+
+        holder.subSpecialityViewBinding.mailLAyout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("docModel", teacherModel.toString());
+                ParentScreen.getInstance().navigate(R.id.action_teachersListBySubjectFragment_to_teacherProfileFragment, bundle);
             }
         });
 
