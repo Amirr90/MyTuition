@@ -16,10 +16,10 @@ import com.mytuition.views.activity.ParentScreen;
 public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, DashboardPatientAdapter1.DashboardModelVH> {
 
     Integer[] images = new Integer[]{
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background};
+            R.drawable.tuitor_image,
+            R.drawable.ic_launcher_foreground,
+            R.drawable.ic_launcher_foreground,
+            R.drawable.ic_launcher_foreground};
 
 
     public DashboardPatientAdapter1() {

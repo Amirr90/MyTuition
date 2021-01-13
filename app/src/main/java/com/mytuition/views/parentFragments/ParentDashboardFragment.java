@@ -136,7 +136,7 @@ public class ParentDashboardFragment extends Fragment {
         for (int a = 0; a < 10; a++) {
             TeacherModel teacherModel = new TeacherModel();
             teacherModel.setName("Teacher Name");
-            teacherModel.setImage("https://img.pngio.com/hd-teach-blogger-round-logo-png-transparent-png-image-download-teach-png-533_533.png");
+            teacherModel.setImage("https://cdn2.iconfinder.com/data/icons/school-flat-circle/512/Guy_hipster_jumper_man_teacher_sir-512.png");
             teacherModels.add(teacherModel);
         }
         return teacherModels;
