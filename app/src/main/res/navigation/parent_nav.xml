@@ -138,4 +138,9 @@
         android:name="com.mytuition.ParentProfileFragment"
         android:label="fragment_parent_profile"
         tools:layout="@layout/fragment_parent_profile" />
+    <fragment
+        android:id="@+id/requestTuitonFragment"
+        android:name="com.mytuition.RequestTuitonFragment"
+        android:label="fragment_request_tuiton"
+        tools:layout="@layout/fragment_request_tuiton" />
 </navigation>
