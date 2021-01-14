@@ -6,7 +6,7 @@
 
         <variable
             name="subject"
-            type="com.mytuition.models.SubjectModel" />
+            type="com.mytuition.models.SpecialityModel" />
     </data>
 
     <RelativeLayout
@@ -23,7 +23,7 @@
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:elevation="@dimen/_10sdp"
-            android:loadCustomTeacherImage="@{subject.image}"
+            android:loadCustomTeacherImage="@{subject.icon}"
             app:srcCompat="@drawable/ic_launcher_foreground" />
 
         <androidx.cardview.widget.CardView
@@ -57,7 +57,7 @@
                     android:maxLines="2"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
-                    android:text="@{subject.subjectName}"
+                    android:text="@{subject.name}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
-                    android:text="@{subject.teachers}"
+                    android:text="@{subject.id}"
                     android:textColor="@android:color/black"
                     android:textSize="17sp"
                     android:textStyle="bold" />

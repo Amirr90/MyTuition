@@ -38,7 +38,7 @@ import ss.com.bannerslider.Slider;
 
 public class ParentDashboardFragment extends Fragment {
 
-
+    //aamirr.3212@gmail.com
     FragmentParentDashboardBinding parentDashboardBinding;
     DashboardPatientAdapter1 adapter1;
     TeacherAdapter adapter2;
@@ -101,6 +101,8 @@ public class ParentDashboardFragment extends Fragment {
                 navController.navigate(R.id.action_parentDashboardFragment2_to_parentProfileFragment);
             }
         });
+
+
     }
 
     private void loadBigBannerImage(String imageUrl) {

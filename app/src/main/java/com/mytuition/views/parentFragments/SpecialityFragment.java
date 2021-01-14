@@ -18,6 +18,7 @@ import com.mytuition.R;
 import com.mytuition.adapters.SpecialityAdapter;
 import com.mytuition.databinding.FragmentSpecialityBinding;
 import com.mytuition.interfaces.AdapterInterface;
+import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.SpecialityModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
+import static com.mytuition.utility.DatabaseUtils.getSubjectData;
+import static com.mytuition.utility.Utils.getFirebaseReference;
 
 
 public class SpecialityFragment extends Fragment implements AdapterInterface {
@@ -40,6 +45,8 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         specialityBinding = FragmentSpecialityBinding.inflate(getLayoutInflater());
+        /// FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        getFirebaseReference(SPECIALITY).keepSynced(true);
         return specialityBinding.getRoot();
     }
 
@@ -49,10 +56,22 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
         navController = Navigation.findNavController(view);
         specialityBinding.symptomsRec.setAdapter(specialityAdapter);
 
+
         specialityAdapter = new SpecialityAdapter(this);
 
         specialityBinding.symptomsRec.setAdapter(specialityAdapter);
-        specialityAdapter.submitList(getSpecialityData());
+
+        getSubjectData(new DatabaseCallbackInterface() {
+            @Override
+            public void onSuccess(Object obj) {
+                specialityAdapter.submitList((List<SpecialityModel>) obj);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         specialityBinding.btnProceedOnSymptomPage.setOnClickListener(new View.OnClickListener() {
@@ -78,18 +97,6 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
         });
     }
 
-    private List<SpecialityModel> getSpecialityData() {
-
-        List<SpecialityModel> specialityModels = new ArrayList<>();
-        for (int a = 0; a < 10; a++) {
-            SpecialityModel specialityModel = new SpecialityModel();
-            specialityModel.setName("Maths");
-            specialityModel.setId("" + System.currentTimeMillis());
-            specialityModels.add(specialityModel);
-        }
-        specialityBinding.progressBar2.setVisibility(View.GONE);
-        return specialityModels;
-    }
 
     @Override
     public void onResume() {

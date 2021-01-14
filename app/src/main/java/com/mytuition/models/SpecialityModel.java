@@ -10,6 +10,15 @@ public class SpecialityModel {
     String icon;
     String name;
     String id;
+    boolean isActive;
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     public String getId() {
         return id;

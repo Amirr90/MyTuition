@@ -1,20 +1,31 @@
 package com.mytuition.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mytuition.R;
 import com.mytuition.databinding.DashBoardViewBinding;
 import com.mytuition.models.DashboardModel1;
+import com.mytuition.models.SpecialityModel;
 import com.mytuition.views.activity.ParentScreen;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, DashboardPatientAdapter1.DashboardModelVH> {
 
+    private static final String TAG = "DashboardPatientAdapter";
+    public static final String SPECIALITY = "Speciality";
     Integer[] images = new Integer[]{
             R.drawable.teacher,
             R.drawable.classroom,
@@ -45,20 +56,43 @@ public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, Dashb
             @Override
             public void onClick(View v) {
                 if (position == 0)
-                    ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_specialityFragment);
-                else if (position == 1)
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_subjectListFragment);
+                else if (position == 1)
+                    ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_specialityFragment);
                 else if (position == 2)
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_tuitorByClassFragment);
-                else if (position == 3)
+                else if (position == 3) {
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_tuitorByClassFragment);
-
+                    //createSpecialityData();
+                }
             }
         });
 
         holder.dashBoardViewBinding.textView55.setText(dashboardModel1.getDescription());
 
 
+    }
+
+    private void createSpecialityData() {
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child(SPECIALITY);
+        String specialityId = String.valueOf(System.currentTimeMillis());
+        myRef.child(specialityId).setValue(getSpecialityMap(specialityId)).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
+            }
+        });
+
+        Log.d(TAG, "createSpecialityData: " + specialityId);
+    }
+
+    private Object getSpecialityMap(String specialityId) {
+        SpecialityModel specialityModel = new SpecialityModel();
+        specialityModel.setIcon("");
+        specialityModel.setName("English");
+        specialityModel.setId(specialityId);
+        specialityModel.setActive(true);
+        return specialityModel;
     }
 
     public class DashboardModelVH extends RecyclerView.ViewHolder {

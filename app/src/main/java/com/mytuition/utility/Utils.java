@@ -1,13 +1,26 @@
 package com.mytuition.utility;
 
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.mytuition.adapters.SpecialityAdapter;
+import com.mytuition.interfaces.DatabaseCallbackInterface;
+import com.mytuition.models.SpecialityModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 import static com.mytuition.utility.AppConstant.USERS;
 import static com.mytuition.utility.AppUtils.getFirestoreReference;
 import static com.mytuition.utility.AppUtils.getUid;
@@ -49,4 +62,13 @@ public class Utils {
         });
 
     }
+
+    public static DatabaseReference getFirebaseReference() {
+        return FirebaseDatabase.getInstance().getReference();
+    }
+
+    public static DatabaseReference getFirebaseReference(String child) {
+        return FirebaseDatabase.getInstance().getReference().child(child);
+    }
+
 }

@@ -10,10 +10,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.mytuition.adapters.SubjectAdapter;
 import com.mytuition.databinding.FragmentSubjectListBinding;
+import com.mytuition.interfaces.DatabaseCallbackInterface;
+import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.SubjectModel;
+import com.mytuition.utility.DatabaseUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,21 +44,19 @@ public class SubjectListFragment extends Fragment {
 
         subjectAdapter = new SubjectAdapter(requireActivity());
         subjectListBinding.specRec.setAdapter(subjectAdapter);
-        subjectAdapter.submitList(getSubjectData());
-    }
 
-    private List<SubjectModel> getSubjectData() {
-        List<SubjectModel> subjectModels = new ArrayList<>();
-        for (int a = 0; a < 16; a++) {
-            SubjectModel subjectModel = new SubjectModel();
-            subjectModel.setId(String.valueOf(System.currentTimeMillis()));
-            subjectModel.setImage("https://img.pngio.com/hd-teach-blogger-round-logo-png-transparent-png-image-download-teach-png-533_533.png");
-            subjectModel.setSubjectName("English");
-            subjectModel.setTeachers("12");
-            subjectModels.add(subjectModel);
-        }
 
-        return subjectModels;
+        DatabaseUtils.getSubjectData(new DatabaseCallbackInterface() {
+            @Override
+            public void onSuccess(Object obj) {
+                subjectAdapter.submitList((List<SpecialityModel>) obj);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

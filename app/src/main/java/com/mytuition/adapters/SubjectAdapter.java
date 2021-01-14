@@ -12,17 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mytuition.R;
 import com.mytuition.databinding.SpecialitiyViewBinding;
+import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.SubjectModel;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.activity.ParentScreen;
 
-public class SubjectAdapter extends ListAdapter<SubjectModel, SubjectAdapter.SpecialityVH> {
+public class SubjectAdapter extends ListAdapter<SpecialityModel, SubjectAdapter.SpecialityVH> {
     private static final String TAG = "SpecialityAdapter";
 
     Activity activity;
 
     public SubjectAdapter(Activity activity) {
-        super(SubjectModel.itemCallback);
+        super(SpecialityModel.itemCallback);
         this.activity = activity;
     }
 
@@ -37,7 +38,7 @@ public class SubjectAdapter extends ListAdapter<SubjectModel, SubjectAdapter.Spe
     @Override
     public void onBindViewHolder(@NonNull SpecialityVH holder, int position) {
 
-        final SubjectModel subjectModel = getItem(position);
+        final SpecialityModel subjectModel = getItem(position);
         holder.specialitiyViewBinding.setSubject(subjectModel);
 
 
