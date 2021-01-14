@@ -41,7 +41,7 @@ public class TeacherAdapter extends ListAdapter<TeacherModel, TeacherAdapter.Das
 
         Random rand = new Random();
         int pos = rand.nextInt(5);
-        holder.dashBoardViewBinding.imageView22.setBackgroundResource(cards[pos]);
+        //holder.dashBoardViewBinding.imageView22.setBackgroundResource(cards[pos]);
 
     }
 

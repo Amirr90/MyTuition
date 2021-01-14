@@ -92,7 +92,7 @@ public class ParentDashboardFragment extends Fragment {
         setSlider(getSliderData());
 
 
-        loadBigBannerImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmYPN1bz0VvoryldNhKmQ-MPLPxh5Lgdj8ig&usqp=CAU");
+        loadBigBannerImage("https://image.freepik.com/free-vector/business-coaching-leadership-mentoring-concept_8140-440.jpg");
 
 
         parentDashboardBinding.profileImage.setOnClickListener(new View.OnClickListener() {

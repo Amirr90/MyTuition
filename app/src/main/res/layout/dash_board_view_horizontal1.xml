@@ -30,7 +30,6 @@
                 android:id="@+id/imageView22"
                 android:layout_width="118dp"
                 android:layout_height="118dp"
-                android:background="@drawable/box_one"
                 android:loadCustomTeacherImage="@{dashboard2.image}"
                 android:padding="10dp"
                 android:scaleType="fitXY" />
