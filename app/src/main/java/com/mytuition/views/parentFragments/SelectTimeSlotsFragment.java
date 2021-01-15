@@ -1,4 +1,4 @@
-package com.mytuition;
+package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.gson.Gson;
+import com.mytuition.R;
 import com.mytuition.adapters.CalendarAdapter;
 import com.mytuition.adapters.TimeSlotsAdapter;
 import com.mytuition.databinding.FragmentSelectTimeSlotsBinding;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.mytuition.utility.AppUtils.getCurrentDateInWeekMonthDayFormat;
+import static com.mytuition.utility.Utils.AddTimeSlot;
 
 public class SelectTimeSlotsFragment extends Fragment {
 
@@ -61,6 +63,7 @@ public class SelectTimeSlotsFragment extends Fragment {
 
         slotsBinding.setTeacher(teacherModel);
 
+        AddTimeSlot(teacherModel.getId());
 
         slotsBinding.tvCurrentDate.setText(getCurrentDateInWeekMonthDayFormat());
 
@@ -86,6 +89,7 @@ public class SelectTimeSlotsFragment extends Fragment {
         });
 
     }
+
 
     private List<CalendarModel> getNextWeekDays() {
         List<CalendarModel> calendarModelList = new ArrayList<>();

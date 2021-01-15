@@ -84,7 +84,7 @@
     </fragment>
     <fragment
         android:id="@+id/selectTimeSlotsFragment"
-        android:name="com.mytuition.SelectTimeSlotsFragment"
+        android:name="com.mytuition.views.parentFragments.SelectTimeSlotsFragment"
         android:label="fragment_select_time_slots"
         tools:layout="@layout/fragment_select_time_slots" >
         <action
@@ -110,16 +110,9 @@
     </fragment>
     <fragment
         android:id="@+id/subjectListFragment"
-        android:name="com.mytuition.SubjectListFragment"
+        android:name="com.mytuition.views.parentFragments.SubjectListFragment"
         android:label="fragment_subject_list"
         tools:layout="@layout/fragment_subject_list">
-        <action
-            android:id="@+id/action_subjectListFragment_to_teacherListFragment"
-            app:destination="@id/teacherListFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_subjectListFragment_to_teachersListBySubjectFragment"
             app:destination="@id/teachersListBySubjectFragment"
@@ -130,7 +123,7 @@
     </fragment>
     <fragment
         android:id="@+id/teachersListBySubjectFragment"
-        android:name="com.mytuition.TeachersListBySubjectFragment"
+        android:name="com.mytuition.views.parentFragments.TeachersListBySubjectFragment"
         android:label="fragment_teachers_list_by_subject"
         tools:layout="@layout/fragment_teachers_list_by_subject">
         <action
@@ -150,12 +143,12 @@
     </fragment>
     <fragment
         android:id="@+id/parentProfileFragment"
-        android:name="com.mytuition.ParentProfileFragment"
+        android:name="com.mytuition.views.parentFragments.ParentProfileFragment"
         android:label="fragment_parent_profile"
         tools:layout="@layout/fragment_parent_profile" />
     <fragment
         android:id="@+id/requestTuitonFragment"
-        android:name="com.mytuition.RequestTuitionFragment"
+        android:name="com.mytuition.views.parentFragments.RequestTuitionFragment"
         android:label="fragment_request_tuiton"
         tools:layout="@layout/fragment_request_tuition" >
         <action
@@ -169,7 +162,7 @@
     </fragment>
     <fragment
         android:id="@+id/requestTuitionSuccessfullyFragment"
-        android:name="com.mytuition.RequestTuitionSuccessfullyFragment"
+        android:name="com.mytuition.views.parentFragments.RequestTuitionSuccessfullyFragment"
         android:label="fragment_request_tuition_successfully"
         tools:layout="@layout/fragment_request_tuition_successfully" >
         <action
@@ -178,7 +171,7 @@
     </fragment>
     <fragment
         android:id="@+id/requestedTuitionDetailFragment"
-        android:name="com.mytuition.RequestedTuitionDetailFragment"
+        android:name="com.mytuition.views.parentFragments.RequestedTuitionDetailFragment"
         android:label="fragment_requested_tuition_detail"
         tools:layout="@layout/fragment_requested_tuition_detail" />
 </navigation>

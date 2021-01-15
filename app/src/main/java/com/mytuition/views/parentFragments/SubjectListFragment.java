@@ -1,4 +1,4 @@
-package com.mytuition;
+package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
 
@@ -17,6 +17,7 @@ import com.mytuition.databinding.FragmentSubjectListBinding;
 import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.SubjectModel;
+import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.DatabaseUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,14 +47,17 @@ public class SubjectListFragment extends Fragment {
         subjectListBinding.specRec.setAdapter(subjectAdapter);
 
 
+        AppUtils.showRequestDialog(requireActivity());
         DatabaseUtils.getSubjectData(new DatabaseCallbackInterface() {
             @Override
             public void onSuccess(Object obj) {
+                AppUtils.hideDialog();
                 subjectAdapter.submitList((List<SpecialityModel>) obj);
             }
 
             @Override
             public void onFailed(String msg) {
+                AppUtils.hideDialog();
                 Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
             }
         });

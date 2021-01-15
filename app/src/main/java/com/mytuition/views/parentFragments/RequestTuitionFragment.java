@@ -1,4 +1,4 @@
-package com.mytuition;
+package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
 
@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mytuition.R;
 import com.mytuition.databinding.FragmentRequestTuitionBinding;
 import com.mytuition.models.ParentModel;
 import com.mytuition.models.TeacherModel;

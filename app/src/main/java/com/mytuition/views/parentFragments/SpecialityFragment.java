@@ -20,6 +20,7 @@ import com.mytuition.databinding.FragmentSpecialityBinding;
 import com.mytuition.interfaces.AdapterInterface;
 import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.SpecialityModel;
+import com.mytuition.utility.AppUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -61,14 +62,17 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
 
         specialityBinding.symptomsRec.setAdapter(specialityAdapter);
 
+        AppUtils.showRequestDialog(requireActivity());
         getSubjectData(new DatabaseCallbackInterface() {
             @Override
             public void onSuccess(Object obj) {
+                AppUtils.hideDialog();
                 specialityAdapter.submitList((List<SpecialityModel>) obj);
             }
 
             @Override
             public void onFailed(String msg) {
+                AppUtils.hideDialog();
                 Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
             }
         });
@@ -87,7 +91,6 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
                 try {
                     Bundle bundle = new Bundle();
                     bundle.putString("id", ids.toString());
-                    Log.d(TAG, "onClick: SpecialityId: " + ids.toString());
                     navController.navigate(R.id.action_specialityFragment_to_teacherListFragment, bundle);
                 } catch (Exception e) {
                     e.printStackTrace();

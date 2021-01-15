@@ -22,7 +22,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ParentProfileFragment">
+        tools:context=".views.parentFragments.ParentProfileFragment">
 
 
         <androidx.core.widget.NestedScrollView

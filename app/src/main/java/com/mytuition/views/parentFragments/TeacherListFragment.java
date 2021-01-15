@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,14 +17,18 @@ import com.mytuition.adapters.PopularTeachersAdapter;
 import com.mytuition.adapters.RecommendedTeachersAdapter;
 import com.mytuition.databinding.FragmentTeacherListBinding;
 import com.mytuition.interfaces.AdapterInterface;
+import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.DatabaseUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 import static com.mytuition.utility.AppConstant.TEACHER_ID;
+import static com.mytuition.utility.Utils.getTeacherModel;
 
 
 public class TeacherListFragment extends Fragment implements AdapterInterface {
@@ -33,6 +38,8 @@ public class TeacherListFragment extends Fragment implements AdapterInterface {
 
     RecommendedTeachersAdapter doctorsAdapter;
     PopularTeachersAdapter popularDoctorsAdapter;
+
+    String specialityId = null;
 
 
     @Override
@@ -48,31 +55,40 @@ public class TeacherListFragment extends Fragment implements AdapterInterface {
 
         navController = Navigation.findNavController(view);
 
+        if (null == getArguments())
+            return;
+
+        specialityId = getArguments().getString(SPECIALITY);
         doctorsAdapter = new RecommendedTeachersAdapter(this);
         popularDoctorsAdapter = new PopularTeachersAdapter(this);
 
         teacherListBinding.recommendedRec.setAdapter(doctorsAdapter);
         teacherListBinding.popularRec.setAdapter(popularDoctorsAdapter);
 
-        doctorsAdapter.submitList(getPopularTeacherData());
-        popularDoctorsAdapter.submitList(getPopularTeacherData());
+
+        DatabaseUtils.getPopularTeacher(specialityId, new DatabaseCallbackInterface() {
+            @Override
+            public void onSuccess(Object obj) {
+                List<TeacherModel> teacherModelList = (List<TeacherModel>) obj;
+                popularDoctorsAdapter.submitList(teacherModelList);
+                doctorsAdapter.submitList(getPopularTeacherData());
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private List<TeacherModel> getPopularTeacherData() {
         List<TeacherModel> teacherModels = new ArrayList<>();
         for (int a = 0; a < 10; a++) {
-            TeacherModel teacherModel = new TeacherModel();
-            teacherModel.setName("Teacher Name");
-            teacherModel.setExperience("5");
-            teacherModel.setSpeciality("Computer");
-            teacherModel.setFee("500");
-            teacherModel.setRating("5");
-            teacherModel.setReview("500");
-            teacherModel.setImage("https://img.pngio.com/hd-teach-blogger-round-logo-png-transparent-png-image-download-teach-png-533_533.png");
-            teacherModels.add(teacherModel);
+            teacherModels.add(getTeacherModel(""));
         }
         return teacherModels;
     }
+
 
     @Override
     public void onItemClicked(Object o) {

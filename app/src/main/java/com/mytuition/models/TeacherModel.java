@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.recyclerview.widget.DiffUtil;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class TeacherModel extends BaseObservable {
@@ -19,6 +21,7 @@ public class TeacherModel extends BaseObservable {
     String address;
     String description;
     String id;
+
 
     public String getId() {
         return id;
@@ -141,4 +144,5 @@ public class TeacherModel extends BaseObservable {
             return oldItem.equals(newItem);
         }
     };
+
 }

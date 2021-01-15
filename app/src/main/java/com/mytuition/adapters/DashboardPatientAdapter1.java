@@ -22,10 +22,13 @@ import com.mytuition.views.activity.ParentScreen;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.mytuition.utility.Utils.getTeacherModel;
+
 public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, DashboardPatientAdapter1.DashboardModelVH> {
 
     private static final String TAG = "DashboardPatientAdapter";
     public static final String SPECIALITY = "Speciality";
+    public static final String TEACHERS = "Teachers";
     Integer[] images = new Integer[]{
             R.drawable.teacher,
             R.drawable.classroom,
@@ -63,7 +66,7 @@ public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, Dashb
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_tuitorByClassFragment);
                 else if (position == 3) {
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_tuitorByClassFragment);
-                    //createSpecialityData();
+                    createSpecialityData();
                 }
             }
         });
@@ -74,9 +77,9 @@ public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, Dashb
     }
 
     private void createSpecialityData() {
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child(SPECIALITY);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child(TEACHERS);
         String specialityId = String.valueOf(System.currentTimeMillis());
-        myRef.child(specialityId).setValue(getSpecialityMap(specialityId)).addOnFailureListener(new OnFailureListener() {
+        myRef.child(specialityId).setValue(getTeacherModel(specialityId)).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, "onFailure: " + e.getLocalizedMessage());

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ListAdapter;
@@ -17,8 +18,11 @@ import com.mytuition.models.SubjectModel;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.activity.ParentScreen;
 
+import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
+
 public class SubjectAdapter extends ListAdapter<SpecialityModel, SubjectAdapter.SpecialityVH> {
     private static final String TAG = "SpecialityAdapter";
+    public static final String ID = "id";
 
     Activity activity;
 
@@ -47,7 +51,8 @@ public class SubjectAdapter extends ListAdapter<SpecialityModel, SubjectAdapter.
             public void onClick(View v) {
                 AppUtils.hideSoftKeyboard(activity);
                 Bundle bundle = new Bundle();
-                bundle.putString("id", String.valueOf(subjectModel.getId()));
+                bundle.putString(ID, String.valueOf(subjectModel.getId()));
+                bundle.putString(SPECIALITY, subjectModel.getName());
                 ParentScreen.getInstance().navigate(R.id.action_subjectListFragment_to_teachersListBySubjectFragment, bundle);
             }
         });
