@@ -1,6 +1,7 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,22 +15,29 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.mytuition.R;
 import com.mytuition.adapters.CoachingAdapter;
 import com.mytuition.adapters.DashboardPatientAdapter1;
 import com.mytuition.adapters.MainSliderAdapter;
 import com.mytuition.databinding.FragmentParentDashboardBinding;
+import com.mytuition.models.Banner;
 import com.mytuition.models.BannerModel;
 import com.mytuition.models.CoachingModel;
 import com.mytuition.models.DashboardModel1;
+import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.PicassoImageLoadingService;
+import com.mytuition.utility.Utils;
 import com.mytuition.viewHolder.ParentViewHolder;
 import com.mytuition.views.activity.ParentScreen;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,6 +46,10 @@ import ss.com.bannerslider.Slider;
 
 public class ParentDashboardFragment extends Fragment {
 
+    public static final String DASHBOARD = "Dashboard";
+    public static final String BANNER = "Banner";
+    public static final String BANNER_SLIDER = "SliderBanner";
+    private static final String TAG = "ParentDashboardFragment";
     //aamirr.3212@gmail.com
     FragmentParentDashboardBinding parentDashboardBinding;
     DashboardPatientAdapter1 adapter1;
@@ -89,10 +101,10 @@ public class ParentDashboardFragment extends Fragment {
 
 
         //Binding Slider Adapter
-        setSlider(getSliderData());
+        setSlider();
 
 
-        loadBigBannerImage("https://image.freepik.com/free-vector/business-coaching-leadership-mentoring-concept_8140-440.jpg");
+        loadBigBannerImage();
 
 
         parentDashboardBinding.profileImage.setOnClickListener(new View.OnClickListener() {
@@ -105,9 +117,25 @@ public class ParentDashboardFragment extends Fragment {
 
     }
 
-    private void loadBigBannerImage(String imageUrl) {
-        Glide.with(requireActivity()).load(imageUrl)
-                .into(parentDashboardBinding.dashboardHomeImage);
+    private void loadBigBannerImage() {
+        Utils.getFirebaseReference().child(DASHBOARD).child(BANNER).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Banner imageUrl = dataSnapshot.getValue(Banner.class);
+                    if (null != imageUrl)
+                        Glide.with(requireActivity()).load(imageUrl.getBannerImage())
+                                .placeholder(R.drawable.ic_launcher_foreground)
+                                .into(parentDashboardBinding.dashboardHomeImage);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private List<CoachingModel> getTopCoachingData() {
@@ -144,19 +172,49 @@ public class ParentDashboardFragment extends Fragment {
         return teacherModels;
     }
 
-    private List<BannerModel> getSliderData() {
-        List<BannerModel> bannerDetails = new ArrayList<>();
-        bannerDetails.add(new BannerModel("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIMtTXtQqOhJIBPSSS2oZvX_IMG-d-PN-7Qw&usqp=CAU"));
-        bannerDetails.add(new BannerModel("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzksE4aiykxPHYitCwoE6rl_1N1gH43Fd2MA&usqp=CAU"));
+    private List<Banner> getSliderData() {
+        List<Banner> bannerDetails = new ArrayList<>();
+        Banner banner = new Banner();
+        banner.setBannerImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIMtTXtQqOhJIBPSSS2oZvX_IMG-d-PN-7Qw&usqp=CAU");
+        bannerDetails.add(banner);
+
+        banner.setBannerImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzksE4aiykxPHYitCwoE6rl_1N1gH43Fd2MA&usqp=CAU");
+        bannerDetails.add(banner);
         return bannerDetails;
     }
 
-    private void setSlider(List<BannerModel> bannerDetails) {
+    private void setSlider() {
 
-        ArrayList<String> images = new ArrayList<>();
-        for (BannerModel bannerModel : bannerDetails)
-            images.add(bannerModel.getSliderImages());
-        parentDashboardBinding.bannerSlider1.setAdapter(new MainSliderAdapter(images));
+
+        Utils.getFirebaseReference().child(DASHBOARD).child(BANNER_SLIDER).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> images = new ArrayList<>();
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        // TODO: handle the post
+                        Banner banner = postSnapshot.getValue(Banner.class);
+                        if (banner != null)
+                            images.add(banner.getBannerImage());
+                    }
+                } else {
+                    for (Banner banner : getSliderData())
+                        images.add(banner.getBannerImage());
+                }
+
+                parentDashboardBinding.bannerSlider1.setAdapter(new MainSliderAdapter(images));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                ArrayList<String> images = new ArrayList<>();
+                for (Banner banner : getSliderData())
+                    images.add(banner.getBannerImage());
+                parentDashboardBinding.bannerSlider1.setAdapter(new MainSliderAdapter(images));
+
+            }
+        });
     }
 
     @Override

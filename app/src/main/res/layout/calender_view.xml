@@ -17,7 +17,6 @@
         android:layout_width="59dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_5sdp"
-
         android:background="@drawable/rectangle_outline_new_ui_color">
 
 

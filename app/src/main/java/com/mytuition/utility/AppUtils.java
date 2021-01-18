@@ -31,6 +31,7 @@ import com.mytuition.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -243,6 +244,18 @@ public class AppUtils {
 
     }
 
+    public static String getTimeFormat(long currentTimeMillis, String outFormat) {
+        try {
+            String value = new java.text.SimpleDateFormat(outFormat).
+                    format(new java.util.Date(currentTimeMillis));
+            return value;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
 
     public static Animation fadeIn(Activity activity) {
         return AnimationUtils.loadAnimation(activity, R.anim.fade_in);
@@ -286,7 +299,7 @@ public class AppUtils {
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd", Locale.getDefault());
         SimpleDateFormat sdfDay = new SimpleDateFormat("EEE", Locale.getDefault());
         SimpleDateFormat sdfDateSend = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             hashMap = new HashMap<>();
 
             Calendar calendar = Calendar.getInstance();
@@ -322,6 +335,15 @@ public class AppUtils {
             e.printStackTrace();
         }
         return str;
+    }
+
+
+    public static String sdfFromTimeStamp(String outPattern) {
+        Date date = new Date();
+        Timestamp ts = new Timestamp(date.getTime());
+        SimpleDateFormat formatter = new SimpleDateFormat(outPattern);
+        System.out.println(formatter.format(ts));
+        return formatter.format(ts);
     }
 
     public static String getMonthFromDate(String incomingDate) {

@@ -6,6 +6,11 @@ public class TimeSlotModel {
     String slotType;
     List<TimeDetails> timeDetails;
 
+    public TimeSlotModel(String slotType, List<TimeDetails> timeDetails) {
+        this.slotType = slotType;
+        this.timeDetails = timeDetails;
+    }
+
     public String getSlotType() {
         return slotType;
     }
@@ -22,9 +27,14 @@ public class TimeSlotModel {
         this.timeDetails = timeDetails;
     }
 
-    public class TimeDetails {
+    public static class TimeDetails {
         String slotTime;
         Boolean booked;
+
+        public TimeDetails(String slotTime, Boolean booked) {
+            this.slotTime = slotTime;
+            this.booked = booked;
+        }
 
         public Boolean getBooked() {
             return booked;

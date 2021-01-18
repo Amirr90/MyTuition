@@ -88,7 +88,6 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
         if (requestCode == 10) {
             loginTypeScreenBinding.progressBar.setVisibility(View.GONE);
             if (resultCode == RESULT_OK) {
-
                 Toast.makeText(ChooseLoginTypeScreen.this, "sign in successfully", Toast.LENGTH_SHORT).show();
                 setString(LOGIN_TYPE, loginType, ChooseLoginTypeScreen.this);
                 if (loginType.equalsIgnoreCase(LOGIN_TYPE_TEACHER)) {
@@ -108,9 +107,7 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
 
     public static Map<String, Object> getUserMap(String loginType) {
         Map<String, Object> map = new HashMap<>();
-        map.put(UID, getUid());
         map.put(LOGIN_TYPE, loginType);
-        map.put(TIMESTAMP, System.currentTimeMillis());
         return map;
     }
 }

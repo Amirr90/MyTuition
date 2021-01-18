@@ -15,6 +15,16 @@ public class ParentModel extends BaseObservable {
     public String name;
     public String mobile;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String id;
+
     public String getMobile() {
         return mobile;
     }

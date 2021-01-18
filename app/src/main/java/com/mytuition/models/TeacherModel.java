@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class TeacherModel extends BaseObservable {
-    String image;
+    public static String image;
     String name;
     String experience;
     String rating;
@@ -21,7 +21,15 @@ public class TeacherModel extends BaseObservable {
     String address;
     String description;
     String id;
+    Integer priority;
 
+    public Integer getPriority() {
+        return null == priority ? 10 : priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
 
     public String getId() {
         return id;

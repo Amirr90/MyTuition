@@ -64,6 +64,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                     ParentScreen.getInstance().getResources().getColor(R.color.GreyColo));
             holder.calenderViewBinding.getRoot().setBackground(ParentScreen.getInstance().getResources().getDrawable(R.drawable.rectangle_outline_new_ui_color));
         }
+
+
     }
 
     private void setTextColor(CalenderVH holder, int color, int color2) {
