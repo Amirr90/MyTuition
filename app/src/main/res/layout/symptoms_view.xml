@@ -16,7 +16,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cvSymptoms"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="80dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="1dp"
         android:layout_marginRight="15dp"
@@ -36,11 +36,11 @@
 
             <ImageView
                 android:id="@+id/imageView27"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_centerVertical="true"
-                android:loadCustomTeacherImage="@{symptoms.icon}"
-                app:srcCompat="@drawable/ic_launcher_foreground" />
+                android:loadCustomClassImage="@{symptoms.icon}"
+                app:srcCompat="@drawable/class_demo_image" />
 
             <TextView
                 android:id="@+id/textView68"

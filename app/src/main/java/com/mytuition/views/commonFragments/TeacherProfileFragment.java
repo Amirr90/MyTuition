@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.mytuition.R;
 import com.mytuition.databinding.FragmentTeacherProfileBinding;
 import com.mytuition.databinding.FragmentTuitorByClassBinding;
@@ -39,7 +40,14 @@ public class TeacherProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
-        teacherModel = new TeacherModel();
+
+        if (null == getArguments())
+            return;
+
+        String jsonString = getArguments().getString("docModel");
+        Gson gson = new Gson();
+
+        teacherModel = gson.fromJson(jsonString, TeacherModel.class);
         teacherProfileBinding.setTeacher(teacherModel);
 
 
@@ -47,7 +55,7 @@ public class TeacherProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("teacherModel", getJSONFromModel(teacherModel));
+                bundle.putString("docModel", getJSONFromModel(teacherModel));
                 navController.navigate(R.id.action_teacherProfileFragment_to_selectTimeSlotsFragment, bundle);
             }
         });

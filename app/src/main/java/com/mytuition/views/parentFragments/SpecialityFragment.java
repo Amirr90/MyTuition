@@ -46,7 +46,6 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         specialityBinding = FragmentSpecialityBinding.inflate(getLayoutInflater());
-        /// FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         getFirebaseReference(SPECIALITY).keepSynced(true);
         return specialityBinding.getRoot();
     }
@@ -63,19 +62,8 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
         specialityBinding.symptomsRec.setAdapter(specialityAdapter);
 
         AppUtils.showRequestDialog(requireActivity());
-        getSubjectData(new DatabaseCallbackInterface() {
-            @Override
-            public void onSuccess(Object obj) {
-                AppUtils.hideDialog();
-                specialityAdapter.submitList((List<SpecialityModel>) obj);
-            }
 
-            @Override
-            public void onFailed(String msg) {
-                AppUtils.hideDialog();
-                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
-            }
-        });
+        specialityAdapter.submitList(getClassData());
 
 
         specialityBinding.btnProceedOnSymptomPage.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +86,30 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
                 }
             }
         });
+    }
+
+    private List<SpecialityModel> getClassData() {
+        List<SpecialityModel> specialityModels = new ArrayList<>();
+
+        specialityModels.add(new SpecialityModel("","Class 1","1",false));
+        specialityModels.add(new SpecialityModel("","Class 2","2",false));
+        specialityModels.add(new SpecialityModel("","Class 3","3",false));
+        specialityModels.add(new SpecialityModel("","Class 4","4",false));
+        specialityModels.add(new SpecialityModel("","Class 5","5",false));
+        specialityModels.add(new SpecialityModel("","Class 6","6",false));
+        specialityModels.add(new SpecialityModel("","Class 7","7",false));
+        specialityModels.add(new SpecialityModel("","Class 8","8",false));
+        specialityModels.add(new SpecialityModel("","Class 9 (UP Board)","9",false));
+        specialityModels.add(new SpecialityModel("","Class 10 (UP Board)","10",false));
+        specialityModels.add(new SpecialityModel("","Class 10 (ICSE Board)","11",false));
+        specialityModels.add(new SpecialityModel("","Class 10 (ICSE Board)","12",false));
+        specialityModels.add(new SpecialityModel("","Class 11 (UP Board)","13",false));
+        specialityModels.add(new SpecialityModel("","Class 11 (UP Board)","14",false));
+        specialityModels.add(new SpecialityModel("","Class 12 (ISE Board)","15",false));
+        specialityModels.add(new SpecialityModel("","Class 12 (ISE Board)","16",false));
+        AppUtils.hideDialog();
+        return specialityModels;
+
     }
 
 

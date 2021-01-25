@@ -160,6 +160,26 @@ public class CustomLoadImage {
                 imageView.setImageResource(R.drawable.ic_launcher_foreground);
             }
         }
+        else imageView.setImageResource(R.drawable.ic_launcher_foreground);
+
+    }
+
+    @BindingAdapter("android:loadCustomClassImage")
+    public static void loadCustomClassImage(ImageView imageView, String imagePath) {
+        if (null != imagePath && !imagePath.isEmpty()) {
+            try {
+                Glide.with(ParentScreen.getInstance())
+                        .load(imagePath)
+                        .centerCrop()
+                        .placeholder(R.drawable.class_demo_image)
+                        .into(imageView);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "loadImage: " + e.getLocalizedMessage());
+                imageView.setImageResource(R.drawable.class_demo_image);
+            }
+        } else imageView.setImageResource(R.drawable.class_demo_image);
 
     }
 

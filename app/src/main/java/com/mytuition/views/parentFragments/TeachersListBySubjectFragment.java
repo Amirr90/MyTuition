@@ -82,7 +82,6 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
 
     @Override
     public void onItemClick(String item) {
-
         Log.d(TAG, "onItemClick: " + item);
         Bundle bundle = new Bundle();
         bundle.putString("docModel", item);

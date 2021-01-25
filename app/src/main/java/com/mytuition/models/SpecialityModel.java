@@ -12,6 +12,16 @@ public class SpecialityModel {
     String id;
     boolean isActive;
 
+    public SpecialityModel() {
+    }
+
+    public SpecialityModel(String icon, String name, String id, boolean isActive) {
+        this.icon = icon;
+        this.name = name;
+        this.id = id;
+        this.isActive = isActive;
+    }
+
     public boolean isActive() {
         return isActive;
     }

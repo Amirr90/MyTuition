@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -441,5 +442,25 @@ public class AppUtils {
         if (null != user)
             return user.getUid();
         else return null;
+    }
+
+    public static String getCurrencyFormat(double num) {
+        String COUNTRY = "IN";
+        String LANGUAGE = "en";
+        return NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(num);
+    }
+
+    public static String getCurrencyFormat(long num) {
+        String COUNTRY = "IN";
+        String LANGUAGE = "en";
+        return NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(num);
+    }
+
+    public static String getCurrencyFormat(String num) {
+        Double number = Double.parseDouble(num);
+        String COUNTRY = "IN";
+        String LANGUAGE = "en";
+        return NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(number);
+
     }
 }

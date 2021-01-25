@@ -49,7 +49,7 @@
     <fragment
         android:id="@+id/specialityFragment"
         android:name="com.mytuition.views.parentFragments.SpecialityFragment"
-        android:label="fragment_speciality"
+        android:label="Select Class"
         tools:layout="@layout/fragment_speciality">
         <action
             android:id="@+id/action_specialityFragment_to_teacherListFragment"
@@ -72,7 +72,7 @@
     <fragment
         android:id="@+id/teacherListFragment"
         android:name="com.mytuition.views.parentFragments.TeacherListFragment"
-        android:label="fragment_teacher_list"
+        android:label="Teachers"
         tools:layout="@layout/fragment_teacher_list">
         <action
             android:id="@+id/action_teacherListFragment_to_teacherProfileFragment"
@@ -85,8 +85,8 @@
     <fragment
         android:id="@+id/selectTimeSlotsFragment"
         android:name="com.mytuition.views.parentFragments.SelectTimeSlotsFragment"
-        android:label="fragment_select_time_slots"
-        tools:layout="@layout/fragment_select_time_slots" >
+        android:label="Select Time Slot"
+        tools:layout="@layout/fragment_select_time_slots">
         <action
             android:id="@+id/action_selectTimeSlotsFragment_to_requestTuitonFragment"
             app:destination="@id/requestTuitonFragment"
@@ -96,10 +96,10 @@
             app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
-        tools:layout="@layout/fragment_teacher_profile"
         android:id="@+id/teacherProfileFragment"
         android:name="com.mytuition.views.commonFragments.TeacherProfileFragment"
-        android:label="TeacherProfileFragment">
+        android:label="Profile"
+        tools:layout="@layout/fragment_teacher_profile">
         <action
             android:id="@+id/action_teacherProfileFragment_to_selectTimeSlotsFragment"
             app:destination="@id/selectTimeSlotsFragment"
@@ -111,7 +111,7 @@
     <fragment
         android:id="@+id/subjectListFragment"
         android:name="com.mytuition.views.parentFragments.SubjectListFragment"
-        android:label="fragment_subject_list"
+        android:label="@string/speciality"
         tools:layout="@layout/fragment_subject_list">
         <action
             android:id="@+id/action_subjectListFragment_to_teachersListBySubjectFragment"
@@ -124,7 +124,7 @@
     <fragment
         android:id="@+id/teachersListBySubjectFragment"
         android:name="com.mytuition.views.parentFragments.TeachersListBySubjectFragment"
-        android:label="fragment_teachers_list_by_subject"
+        android:label="Teachers"
         tools:layout="@layout/fragment_teachers_list_by_subject">
         <action
             android:id="@+id/action_teachersListBySubjectFragment_to_teacherProfileFragment"
@@ -149,8 +149,8 @@
     <fragment
         android:id="@+id/requestTuitonFragment"
         android:name="com.mytuition.views.parentFragments.RequestTuitionFragment"
-        android:label="fragment_request_tuiton"
-        tools:layout="@layout/fragment_request_tuition" >
+        android:label="Request Tuition"
+        tools:layout="@layout/fragment_request_tuition">
         <action
             android:id="@+id/action_requestTuitonFragment_to_requestTuitionSuccessfullyFragment"
             app:destination="@id/requestTuitionSuccessfullyFragment"
@@ -163,8 +163,8 @@
     <fragment
         android:id="@+id/requestTuitionSuccessfullyFragment"
         android:name="com.mytuition.views.parentFragments.RequestTuitionSuccessfullyFragment"
-        android:label="fragment_request_tuition_successfully"
-        tools:layout="@layout/fragment_request_tuition_successfully" >
+        android:label="Congratulation"
+        tools:layout="@layout/fragment_request_tuition_successfully">
         <action
             android:id="@+id/action_requestTuitionSuccessfullyFragment_to_requestedTuitionDetailFragment"
             app:destination="@id/requestedTuitionDetailFragment" />

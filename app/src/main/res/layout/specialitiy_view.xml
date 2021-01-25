@@ -10,21 +10,20 @@
     </data>
 
     <RelativeLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginRight="5dp">
 
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageView26"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:elevation="@dimen/_10sdp"
-            android:loadCustomTeacherImage="@{subject.icon}"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
+            android:loadCustomTeacherImage="@{subject.icon}" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -39,7 +38,7 @@
             <LinearLayout
                 android:id="@+id/llspeality"
                 android:layout_width="match_parent"
-                android:layout_height="163dp"
+                android:layout_height="113dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
@@ -59,10 +58,11 @@
                     android:paddingRight="8dp"
                     android:text="@{subject.name}"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/textView72"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -77,6 +77,7 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/docCount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

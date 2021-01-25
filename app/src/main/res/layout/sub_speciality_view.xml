@@ -33,8 +33,8 @@
 
                 <ImageView
                     android:id="@+id/imageView20"
-                    android:layout_width="54dp"
-                    android:layout_height="54dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:loadCustomTeacherImage="@{teacher.image}"
                     android:padding="2dp"
                     app:srcCompat="@drawable/ic_launcher_foreground" />
@@ -47,10 +47,13 @@
                     android:layout_toStartOf="@+id/ivShareDocProfile"
                     android:layout_toEndOf="@+id/imageView20"
                     android:fontFamily="@font/poppins_semibold"
+                    android:includeFontPadding="false"
+                    android:lineSpacingExtra="0dp"
+                    android:lineSpacingMultiplier="1"
                     android:singleLine="true"
-                    android:text="@{teacher.name}"
+                    android:text="@{teacher.name,default=`Aamir khan`}"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -59,11 +62,15 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/textView76"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="-4dp"
                     android:layout_toStartOf="@+id/ivShareDocProfile"
                     android:layout_toEndOf="@+id/imageView20"
                     android:fontFamily="@font/poppins"
+                    android:includeFontPadding="false"
+                    android:lineSpacingExtra="0dp"
+                    android:lineSpacingMultiplier="1"
                     android:singleLine="true"
-                    android:text="@{teacher.speciality+`,`+teacher.experience}"
+                    android:text="@{teacher.degree,default=`M.sc`}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />
 
@@ -73,10 +80,14 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/textView77"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="-3dp"
                     android:layout_toEndOf="@+id/imageView20"
-                    android:fontFamily="@font/poppins_semibold"
+                    android:fontFamily="@font/poppins"
+                    android:includeFontPadding="false"
+                    android:lineSpacingExtra="0dp"
+                    android:lineSpacingMultiplier="1"
                     android:singleLine="true"
-                    android:text="@{teacher.collegeName}"
+                    android:text="@{teacher.collegeName,default=`College Name`}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />
 
@@ -94,7 +105,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="@dimen/_10sdp">
+                android:paddingLeft="@dimen/_10sdp"
+                android:paddingRight="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_10sdp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -105,7 +118,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_centerVertical="true"
-                        app:srcCompat="@drawable/ic_launcher_foreground" />
+                        app:srcCompat="@drawable/ic_baseline_work_24" />
 
                     <TextView
                         android:id="@+id/textView79"
@@ -115,9 +128,12 @@
                         android:layout_toEndOf="@+id/imageView29"
                         android:drawablePadding="@dimen/_10sdp"
                         android:fontFamily="@font/poppins"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="0dp"
+                        android:lineSpacingMultiplier="1"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
-                        android:text="@{String.valueOf(teacher.experience)+` Patients`}"
+                        android:text="@{String.valueOf(teacher.experience)+` Years of Experiance`}"
                         android:textColor="#3F4E6E"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -131,18 +147,22 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_centerVertical="true"
-                        app:srcCompat="@drawable/ic_launcher_foreground" />
+                        app:srcCompat="@drawable/ic_baseline_thumb_up_24" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="-5dp"
                         android:layout_toEndOf="@+id/ivGraduated"
                         android:drawablePadding="@dimen/_10sdp"
                         android:fontFamily="@font/poppins"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="0dp"
+                        android:lineSpacingMultiplier="1"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
-                        android:text="@{teacher.degree}"
+                        android:text="@{`Speciality : `+teacher.speciality,default=`B.Tech(IT)`}"
                         android:textColor="#3F4E6E"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -162,12 +182,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="-5dp"
                         android:layout_toEndOf="@+id/ivLocationPin"
                         android:drawablePadding="@dimen/_10sdp"
                         android:fontFamily="@font/poppins"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="0dp"
+                        android:lineSpacingMultiplier="1"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
-                        android:text="@{teacher.address}"
+                        android:text="@{teacher.address,default=`Rajajipuram, Lucknow`}"
                         android:textColor="#3F4E6E"
                         android:textSize="12sp" />
                 </RelativeLayout>
@@ -191,6 +215,7 @@
                         android:layout_width="9dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center_vertical"
+                        android:visibility="gone"
                         app:srcCompat="@drawable/rupee_indian" />
 
                     <TextView
@@ -200,14 +225,14 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/poppins_bold"
-                        android:text="@{String.valueOf(teacher.fee)}"
+                        android:text="@{teacher.feeInInstance}"
                         android:textColor="#262E3F"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textView83"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
@@ -215,12 +240,57 @@
                         android:text="@string/consulation_fee"
                         android:textColor="#262E3F"
                         android:textSize="15sp" />
+
+                    <View
+                        android:layout_width="0.5dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/tvPerVisit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@{teacher.perVisitFeeInInstance}"
+                        android:textColor="#262E3F"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPerVisitTag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="end"
+                        android:text="@string/per_visit"
+                        android:textColor="#262E3F"
+                        android:textSize="15sp" />
                 </LinearLayout>
+
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.2dp"
                     android:background="@color/GreyColo" />
+
+                <TextView
+                    android:id="@+id/tvFreeDemoTag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/poppins"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:text="Free Demo Class Available"
+                    android:textColor="#58d68d "
+                    android:textSize="12sp"
+                    android:textStyle="normal" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -2,65 +2,128 @@ package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.mytuition.BR;
 import com.mytuition.R;
+import com.mytuition.databinding.FragmentParentProfileBinding;
+import com.mytuition.databinding.FragmentTeacherProfileBinding;
+import com.mytuition.models.ParentModel;
+import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.AppUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ParentProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mytuition.utility.AppConstant.USERS;
+import static com.mytuition.utility.AppUtils.getFirestoreReference;
+import static com.mytuition.utility.AppUtils.getUid;
+import static com.mytuition.utility.AppUtils.isEmailValid;
+import static com.mytuition.utility.Utils.getParentModel;
+import static com.mytuition.utility.Utils.setParentModel;
+
 public class ParentProfileFragment extends Fragment {
+    private static final String TAG = "ParentProfileFragment";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String NAME = "name";
+    private static final String ADDRESS = "address";
+    private static final String EMAIL = "email";
+    FragmentParentProfileBinding profileBinding;
+    NavController navController;
 
-    public ParentProfileFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ParentProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ParentProfileFragment newInstance(String param1, String param2) {
-        ParentProfileFragment fragment = new ParentProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    ParentModel parentModel;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_parent_profile, container, false);
+
+        profileBinding = FragmentParentProfileBinding.inflate(getLayoutInflater());
+        return profileBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+
+        parentModel = getParentModel(requireActivity());
+
+        profileBinding.setUser(parentModel);
+
+        profileBinding.btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isAllFieldCheck() && null != getUid()) {
+                    AppUtils.showRequestDialog(requireActivity());
+                    getFirestoreReference().collection(USERS).document(getUid())
+                            .update(getUserMap(parentModel))
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    AppUtils.hideDialog();
+                                    Toast.makeText(requireActivity(), "Profile Updated !!", Toast.LENGTH_SHORT).show();
+                                    setParentModel(requireActivity(),parentModel);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            AppUtils.hideDialog();
+                            Toast.makeText(requireActivity(), "try again", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private Map<String, Object> getUserMap(ParentModel parentModel) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(NAME, parentModel.getName());
+        map.put(ADDRESS, parentModel.getAddress());
+        map.put(EMAIL, parentModel.getEmail());
+        return map;
+    }
+
+    private boolean isAllFieldCheck() {
+
+        if (null == parentModel) {
+            Log.d(TAG, "isAllFieldCheck: null");
+            return false;
+        } else if (profileBinding.editTextTextPersonName.getText().toString().isEmpty()) {
+            Toast.makeText(requireActivity(), "Enter name", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (profileBinding.editTextTextPersonEmail.getText().toString().isEmpty()) {
+            Toast.makeText(requireActivity(), "Enter email address", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!isEmailValid(profileBinding.editTextTextPersonEmail.getText().toString())) {
+            Toast.makeText(requireActivity(), "Enter valid email address", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (profileBinding.editTextTextPersonNumber.getText().toString().isEmpty()) {
+            Toast.makeText(requireActivity(), "Enter mobile number", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (profileBinding.editTextTextPersonAddress.getText().toString().isEmpty()) {
+            Toast.makeText(requireActivity(), "Enter address", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            parentModel.setName(profileBinding.editTextTextPersonName.getText().toString());
+            parentModel.setAddress(profileBinding.editTextTextPersonAddress.getText().toString());
+            parentModel.setEmail(profileBinding.editTextTextPersonEmail.getText().toString());
+            return true;
+        }
     }
 }

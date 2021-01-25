@@ -1,7 +1,6 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +23,8 @@ import com.mytuition.adapters.DashboardPatientAdapter1;
 import com.mytuition.adapters.MainSliderAdapter;
 import com.mytuition.databinding.FragmentParentDashboardBinding;
 import com.mytuition.models.Banner;
-import com.mytuition.models.BannerModel;
 import com.mytuition.models.CoachingModel;
 import com.mytuition.models.DashboardModel1;
-import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.PicassoImageLoadingService;
 import com.mytuition.utility.Utils;
@@ -37,19 +34,19 @@ import com.mytuition.views.activity.ParentScreen;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
 import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
 
-public class ParentDashboardFragment extends Fragment {
+public class ParentDashboardFragment extends Fragment  {
 
     public static final String DASHBOARD = "Dashboard";
     public static final String BANNER = "Banner";
     public static final String BANNER_SLIDER = "SliderBanner";
     private static final String TAG = "ParentDashboardFragment";
+
     //aamirr.3212@gmail.com
     FragmentParentDashboardBinding parentDashboardBinding;
     DashboardPatientAdapter1 adapter1;
@@ -115,6 +112,23 @@ public class ParentDashboardFragment extends Fragment {
         });
 
 
+        setStepper();
+
+    }
+
+    private void setStepper() {
+
+        /*String[] mySteps = {"Name", "Email", "Phone Number"};
+        int colorPrimary = ContextCompat.getColor(requireContext(), R.color.colorPrimary);
+        int colorPrimaryDark = ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark);
+
+
+        // Setting up and initializing the form
+        VerticalStepperFormLayout.Builder.newInstance(parentDashboardBinding.verticalStepperForm, mySteps, this, requireActivity())
+                .primaryColor(colorPrimary)
+                .primaryDarkColor(colorPrimaryDark)
+                .displayBottomNavigation(true) // It is true by default, so in this case this line is not necessary
+                .init();*/
     }
 
     private void loadBigBannerImage() {

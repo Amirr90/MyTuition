@@ -46,7 +46,8 @@
             android:gravity="center"
             android:text="@{`your appointment is Booked with `+appointment.doctorName+` on `+appointment.visitDate+` at `+appointment.visitTime+``}"
             android:textColor="#3F4E6E"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView8"

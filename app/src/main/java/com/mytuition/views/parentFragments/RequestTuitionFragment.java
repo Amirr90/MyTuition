@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.mytuition.R;
 import com.mytuition.databinding.FragmentRequestTuitionBinding;
 import com.mytuition.models.ParentModel;
@@ -27,7 +28,10 @@ import com.mytuition.utility.AppUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.Utils.getFirebaseReference;
+import static com.mytuition.utility.Utils.getParentModel;
+import static com.mytuition.views.parentFragments.SelectTimeSlotsFragment.TEACHER;
 
 public class RequestTuitionFragment extends Fragment {
     private static final String TAG = "RequestTuitionFragment";
@@ -39,6 +43,7 @@ public class RequestTuitionFragment extends Fragment {
     public static final String REQUEST_STATUS_REJECTED = "Rejected";
     public static final String PARENT_ID = "parentId";
     public static final String TEACHER_ID = "teacherId";
+
     FragmentRequestTuitionBinding requestTuitionBinding;
     NavController navController;
 
@@ -61,8 +66,12 @@ public class RequestTuitionFragment extends Fragment {
 
         if (getArguments() == null)
             return;
-        parentModel = getParentModel();
-        teacherModel = getTeacherModel();
+        parentModel = getParentModel(requireActivity());
+
+        String jsonString = getArguments().getString(TEACHER);
+        Gson gson = new Gson();
+
+        teacherModel = gson.fromJson(jsonString, TeacherModel.class);
 
         requestTuitionBinding.setParent(parentModel);
         requestTuitionBinding.setTeacher(teacherModel);
@@ -81,18 +90,18 @@ public class RequestTuitionFragment extends Fragment {
     private void requestTuition() {
 
         final TuitionModel tuitionModel = new TuitionModel();
-        tuitionModel.setParentModel(getParentModel());
-        tuitionModel.setTeacherModel(getTeacherModel());
+        tuitionModel.setParentModel(parentModel);
+        tuitionModel.setTeacherModel(teacherModel);
         tuitionModel.setRequestStatus(REQUEST_STATUS_PENDING);
         tuitionModel.setRequestTimeSLot(timeSlot);
-        tuitionModel.setParentId(getParentModel().getId());
-        tuitionModel.setTeacherId(getTeacherModel().getId());
+        tuitionModel.setParentId(getUid());
+        tuitionModel.setTeacherId(teacherModel.getId());
 
         //check for tuition request
         AppUtils.showRequestDialog(requireActivity());
         AppUtils.getFirestoreReference().collection(REQUEST_TUITION)
-                .whereEqualTo(PARENT_ID, getParentModel().getId())
-                .whereEqualTo(TEACHER_ID, getTeacherModel().getId())
+                .whereEqualTo(PARENT_ID, getUid())
+                .whereEqualTo(TEACHER_ID, teacherModel.getId())
                 .whereEqualTo("requestStatus", REQUEST_STATUS_PENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -104,51 +113,27 @@ public class RequestTuitionFragment extends Fragment {
                             Toast.makeText(requireActivity(), "You already requested to this Teacher", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        AppUtils.getFirestoreReference().collection(REQUEST_TUITION).add(tuitionModel)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        AppUtils.hideDialog();
-                                        navController.navigate(R.id.action_requestTuitonFragment_to_requestTuitionSuccessfullyFragment);
+                        if (null != getUid())
+                            AppUtils.getFirestoreReference().collection(REQUEST_TUITION).document(getUid())
+                                    .set(tuitionModel)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            AppUtils.hideDialog();
+                                            navController.navigate(R.id.action_requestTuitonFragment_to_requestTuitionSuccessfullyFragment);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    AppUtils.hideDialog();
+                                    Toast.makeText(requireActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                AppUtils.hideDialog();
-                                Toast.makeText(requireActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     }
                 });
 
 
-    }
-
-    private TeacherModel getTeacherModel() {
-        TeacherModel teacherModel = new TeacherModel();
-        teacherModel.setName("Teacher Name");
-        teacherModel.setExperience("5");
-        teacherModel.setSpeciality("Computer");
-        teacherModel.setFee("500");
-        teacherModel.setRating("5");
-        teacherModel.setReview("500");
-        teacherModel.setId("987654321");
-        teacherModel.setImage("https://img.pngio.com/hd-teach-blogger-round-logo-png-transparent-png-image-download-teach-png-533_533.png");
-        return teacherModel;
-    }
-
-    private ParentModel getParentModel() {
-        ParentModel parentModel = new ParentModel();
-        parentModel.setAddress("RajajiPuram");
-        parentModel.setGender("male");
-        parentModel.setImage("https://img.pngio.com/hd-teach-blogger-round-logo-png-transparent-png-image-download-teach-png-533_533.png");
-        parentModel.setMobile("9044865611");
-        parentModel.setName("Amir");
-        parentModel.setDob("12/12/2000");
-        parentModel.setEmail("aamirr.1232@gmail.com");
-        parentModel.setId("123456789");
-        return parentModel;
     }
 
 

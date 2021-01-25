@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="25dp"
+    android:paddingBottom="10dp"
     tools:context=".views.parentFragments.ParentDashboardFragment">
 
 
@@ -59,6 +59,7 @@
                     android:textSize="8sp" />
             </RelativeLayout>
 
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
@@ -98,6 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -110,13 +112,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="40dp"
             android:fontFamily="@font/poppins_semibold"
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="Top Teachers"
             android:textColor="#2B3344"
-            android:textSize="15sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/banner_slider1" />
@@ -125,7 +127,6 @@
             android:id="@+id/rec2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:nestedScrollingEnabled="false"
             android:orientation="horizontal"
             android:padding="@dimen/_10sdp"
@@ -141,13 +142,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:fontFamily="@font/poppins_semibold"
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_100sdp"
             android:text="Find Top Coaching near you"
             android:textColor="#2B3344"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -157,7 +158,6 @@
             android:id="@+id/rec3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:nestedScrollingEnabled="false"
             android:orientation="horizontal"
             android:padding="@dimen/_10sdp"

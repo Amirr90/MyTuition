@@ -9,13 +9,6 @@
             name="user"
             type="com.mytuition.models.ParentModel" />
 
-        <variable
-            name="mobile"
-            type="String" />
-
-        <variable
-            name="dialogInterface"
-            type="com.mytuition.interfaces.MyDialogInterface" />
 
     </data>
 
@@ -199,8 +192,7 @@
                             android:fontFamily="@font/poppins_medium"
                             android:hint="@string/mobile_number"
                             android:inputType="phone"
-                            android:maxLength="10"
-                            android:text="@{mobile}"
+                            android:text="@{user.mobile}"
                             android:textColor="#262E3F"
                             android:textColorHint="#BCBCBC"
                             android:textSize="14sp" />
@@ -221,8 +213,8 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
-                        android:onClick="@{()->dialogInterface.onAgeItemClick()}"
-                        android:padding="5dp">
+                        android:padding="5dp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/ivDob"
@@ -280,8 +272,8 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
-                        android:onClick="@{()->dialogInterface.onGenderItemClick()}"
-                        android:padding="5dp">
+                        android:padding="5dp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/ivGender"
@@ -382,7 +374,6 @@
 
 
                     <Button
-
                         android:id="@+id/btnUpdateProfile"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"

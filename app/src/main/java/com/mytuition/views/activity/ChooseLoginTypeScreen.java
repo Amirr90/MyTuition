@@ -9,22 +9,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.mytuition.R;
 import com.mytuition.databinding.ActivityChooseLoginTypeScreen2Binding;
+import com.mytuition.models.ParentModel;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mytuition.utility.AppConstant.TIMESTAMP;
-import static com.mytuition.utility.AppConstant.UID;
+import static com.mytuition.utility.AppConstant.USERS;
 import static com.mytuition.utility.AppUtils.fadeIn;
+import static com.mytuition.utility.AppUtils.getFirestoreReference;
 import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.AppUtils.setString;
 import static com.mytuition.utility.Utils.LOGIN_TYPE;
 import static com.mytuition.utility.Utils.LOGIN_TYPE_PARENT;
 import static com.mytuition.utility.Utils.LOGIN_TYPE_TEACHER;
+import static com.mytuition.utility.Utils.getFirebaseReference;
+import static com.mytuition.utility.Utils.setParentModel;
 
 public class ChooseLoginTypeScreen extends AppCompatActivity {
     private static final String TAG = "ChooseLoginTypeScreen";
@@ -93,15 +98,29 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
                 if (loginType.equalsIgnoreCase(LOGIN_TYPE_TEACHER)) {
                     startActivity(new Intent(ChooseLoginTypeScreen.this, RegistrationActivity.class)
                             .putExtra(LOGIN_TYPE, loginType));
-                } else
-                    startActivity(new Intent(ChooseLoginTypeScreen.this, ParentScreen.class)
-                            .putExtra(LOGIN_TYPE, loginType));
+                } else {
+                    updateParentModel();
+                }
                 finish();
             } else {
                 Toast.makeText(ChooseLoginTypeScreen.this, "sign in failed", Toast.LENGTH_SHORT).show();
 
             }
         }
+    }
+
+    private void updateParentModel() {
+        if (null != getUid())
+            getFirestoreReference().collection(USERS)
+                    .document(getUid())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
+                            setParentModel(ChooseLoginTypeScreen.this, parentModel);
+                        }
+                    });
     }
 
 

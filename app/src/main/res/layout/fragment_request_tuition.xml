@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="Tuition Book for"
+                    android:text="@string/tuition_book_for"
                     android:textColor="#262E3F"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -82,7 +82,7 @@
                     android:paddingTop="10dp"
                     android:text="@{parent.name}"
                     android:textColor="#00000D"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvBookAppointmentTimeDate"
@@ -110,7 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="User's Information"
+                    android:text="@string/parent_s_information"
                     android:textColor="#262E3F"
                     android:textSize="17sp"
                     android:textStyle="bold" />

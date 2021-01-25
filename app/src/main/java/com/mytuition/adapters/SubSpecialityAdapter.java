@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.mytuition.R;
 import com.mytuition.databinding.SubSpecialityViewBinding;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.Utils;
 import com.mytuition.views.activity.ParentScreen;
 
 import org.json.JSONException;
@@ -42,6 +43,7 @@ public class SubSpecialityAdapter extends ListAdapter<TeacherModel, SubSpecialit
         final TeacherModel teacherModel = getItem(position);
         holder.subSpecialityViewBinding.setTeacher(teacherModel);
 
+        holder.subSpecialityViewBinding.tvFreeDemoTag.setVisibility(teacherModel.isDemoClassFree() ? View.VISIBLE : View.GONE);
         holder.subSpecialityViewBinding.btnBookAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,9 +67,14 @@ public class SubSpecialityAdapter extends ListAdapter<TeacherModel, SubSpecialit
                 Bundle bundle = new Bundle();
                 bundle.putString("docModel", teacherModel.toString());
                 ParentScreen.getInstance().navigate(R.id.action_teachersListBySubjectFragment_to_teacherProfileFragment, bundle);
+                //addNewTeacher(teacherModel);
             }
         });
 
+    }
+
+    private void addNewTeacher(TeacherModel teacherModel) {
+        Utils.getFirebaseReference("Teachers").child(String.valueOf(System.currentTimeMillis())).setValue(teacherModel);
     }
 
     public class SubSpecialityVH extends RecyclerView.ViewHolder {

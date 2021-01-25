@@ -1,5 +1,7 @@
 package com.mytuition.utility;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 
@@ -13,8 +15,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.gson.Gson;
 import com.mytuition.adapters.SpecialityAdapter;
 import com.mytuition.interfaces.DatabaseCallbackInterface;
+import com.mytuition.models.ParentModel;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
 
@@ -29,10 +33,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
+import static android.provider.MediaStore.Files.FileColumns.PARENT;
 import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 import static com.mytuition.utility.AppConstant.USERS;
+import static com.mytuition.utility.AppUtils.MY_PREFS_NAME;
 import static com.mytuition.utility.AppUtils.getDateInDMYFormatFromTimestamp;
 import static com.mytuition.utility.AppUtils.getFirestoreReference;
+import static com.mytuition.utility.AppUtils.getString;
 import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.AppUtils.sdfFromTimeStamp;
 import static com.mytuition.views.activity.ChooseLoginTypeScreen.getUserMap;
@@ -328,5 +336,24 @@ public class Utils {
         public List<String> getTimeSlots() {
             return timeSlots;
         }
+    }
+
+
+    public static ParentModel getParentModel(Activity activity) {
+        SharedPreferences pref = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = pref.getString(PARENT, "");
+        return gson.fromJson(json, ParentModel.class);
+
+    }
+
+
+    public static void setParentModel(Activity activity, ParentModel myObject) {
+        SharedPreferences pref = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(myObject);
+        prefsEditor.putString(PARENT, json);
+        prefsEditor.commit();
     }
 }

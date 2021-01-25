@@ -43,6 +43,7 @@ import static com.mytuition.views.parentFragments.RequestTuitionFragment.TIME_SL
 public class SelectTimeSlotsFragment extends Fragment implements AdapterInterface {
 
 
+    public static final String TEACHER = "teacher";
     TeacherModel teacherModel = new TeacherModel();
     FragmentSelectTimeSlotsBinding slotsBinding;
     NavController navController;
@@ -74,6 +75,7 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
         teacherModel = gson.fromJson(jsonString, TeacherModel.class);
 
         slotsBinding.setTeacher(teacherModel);
+
         // AddTimeSlot(teacherModel.getId());
         getTimeSlots(0);
         slotsBinding.tvCurrentDate.setText(getCurrentDateInWeekMonthDayFormat());
@@ -137,8 +139,6 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
         for (int i = 0; i < count; i++) {
 
             String day1 = sdf.format(calendar.getTime());
-
-            // add 15 minutes to the current time; the hour adjusts automatically!
             calendar.add(Calendar.MINUTE, duration);
 
             String day2 = sdf.format(calendar.getTime());
@@ -171,6 +171,7 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
         String timeSlot = (String) o;
         Bundle bundle = new Bundle();
         bundle.putString(TIME_SLOT, timeSlot);
+        bundle.putString(TEACHER, teacherModel.toString());
         navController.navigate(R.id.action_selectTimeSlotsFragment_to_requestTuitonFragment, bundle);
     }
 }
