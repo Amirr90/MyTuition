@@ -1,18 +1,32 @@
 package com.mytuition.views.activity;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.mytuition.R;
 import com.mytuition.adapters.NavAdapter;
 import com.mytuition.databinding.ActivityParentScreenBinding;
@@ -20,19 +34,16 @@ import com.mytuition.interfaces.NavigationInterface;
 import com.mytuition.models.NavModel;
 import com.mytuition.models.TuitionModel;
 import com.mytuition.utility.AppUtils;
-import com.mytuition.views.parentFragments.RequestTuitionFragment;
+import com.mytuition.utility.GetAddressIntentService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static com.mytuition.utility.AppUtils.getFirestoreReference;
 import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.Utils.LOGIN_TYPE;
-import static com.mytuition.utility.Utils.getFirebaseReference;
 import static com.mytuition.utility.Utils.updateUI;
-import static com.mytuition.views.parentFragments.RequestTuitionFragment.PARENT_ID;
 import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_ACCEPTED;
 import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_PENDING;
 import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_REJECTED;
@@ -41,12 +52,22 @@ import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST
 public class ParentScreen extends AppCompatActivity implements NavigationInterface {
     private static final String TAG = "ParentScreen";
     private static final String REQUEST_STATUS_CONFIRMED = "confirmed";
+    public static final int LOCATION_PERMISSION_REQUEST_CODE = 2020;
 
     ActivityParentScreenBinding mainBinding;
     NavController navController;
 
     NavAdapter navAdapter;
     List<NavModel> navModels;
+
+    public String cityName;
+    public String areaName;
+
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationAddressResultReceiver addressResultReceiver;
+    private Location currentLocation;
+    private LocationCallback locationCallback;
+
 
     public static ParentScreen instance;
 
@@ -67,10 +88,38 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         navController = Navigation.findNavController(this, R.id.nav_host_parent);
         NavigationUI.setupActionBarWithNavController(this, navController);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        addressResultReceiver = new LocationAddressResultReceiver(new Handler());
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                currentLocation = locationResult.getLocations().get(0);
+                getAddress();
+            }
+        };
+        startLocationUpdates();
+
+
         updateUI(getIntent().getStringExtra(LOGIN_TYPE));
         setNavAdapter();
 
         updateRequestView();
+    }
+
+    private void startLocationUpdates() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new
+                            String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            LocationRequest locationRequest = new LocationRequest();
+            locationRequest.setInterval(10000);
+            locationRequest.setFastestInterval(1000);
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+        }
     }
 
     private void updateRequestView() {
@@ -126,6 +175,83 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         navAdapter.notifyDataSetChanged();
     }
 
+
+    private class LocationAddressResultReceiver extends ResultReceiver {
+        LocationAddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            if (resultCode == 0) {
+                Log.d("Address", "Location null retrying");
+                getAddress();
+            }
+
+            if (resultCode == 1) {
+                Toast.makeText(ParentScreen.this, "Address not found, ", Toast.LENGTH_SHORT).show();
+            }
+
+            String currentAdd = resultData.getString("address_result");
+            String lat = resultData.getString("lat");
+            String lng = resultData.getString("lng");
+            showResults(currentAdd, lat, lng);
+
+        }
+    }
+
+    private void getAddress() {
+        if (!Geocoder.isPresent()) {
+            Toast.makeText(ParentScreen.this, "Can't find current address, ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(this, GetAddressIntentService.class);
+        intent.putExtra("add_receiver", addressResultReceiver);
+        intent.putExtra("add_location", currentLocation);
+        startService(intent);
+    }
+
+
+    public void showResults(String currentAdd, String lat, String lng) {
+
+        Log.d(TAG, "showResults: " + currentAdd);
+        final String[] address = currentAdd.split(",");
+
+        try {
+         /*   dashboard2Binding.tvLocation.setText(address[1]);
+            dashboard2Binding.tvCity.setText(address[0]);
+
+            setLat(lat);
+            setLng(lng);*/
+
+            setAreaName(address[1]);
+            setCityName(address[0]);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getCityName() {
+        if (cityName == null)
+            return "";
+        else return cityName;
+
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getAreaName() {
+        if (areaName == null)
+            return "";
+        else return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
 
     @Override
     public boolean onSupportNavigateUp() {

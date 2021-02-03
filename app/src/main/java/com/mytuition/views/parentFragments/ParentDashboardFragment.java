@@ -40,7 +40,7 @@ import java.util.Objects;
 import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
 
-public class ParentDashboardFragment extends Fragment  {
+public class ParentDashboardFragment extends Fragment {
 
     public static final String DASHBOARD = "Dashboard";
     public static final String BANNER = "Banner";
@@ -114,6 +114,18 @@ public class ParentDashboardFragment extends Fragment  {
 
         setStepper();
 
+
+        setLocation();
+
+    }
+
+    private void setLocation() {
+        try {
+            parentDashboardBinding.tvLocation.setText(ParentScreen.getInstance().getAreaName());
+            parentDashboardBinding.tvCity.setText(ParentScreen.getInstance().getCityName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setStepper() {
