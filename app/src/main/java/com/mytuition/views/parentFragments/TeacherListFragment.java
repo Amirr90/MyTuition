@@ -1,6 +1,7 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +35,15 @@ import static com.mytuition.utility.Utils.getTeacherModel;
 public class TeacherListFragment extends Fragment implements AdapterInterface {
     FragmentTeacherListBinding teacherListBinding;
     NavController navController;
+    private static final String TAG = "TeacherListFragment";
 
 
     RecommendedTeachersAdapter doctorsAdapter;
     PopularTeachersAdapter popularDoctorsAdapter;
 
     String specialityId = null;
+
+    List<String> classIds;
 
 
     @Override
@@ -58,7 +62,16 @@ public class TeacherListFragment extends Fragment implements AdapterInterface {
         if (null == getArguments())
             return;
 
-        specialityId = getArguments().getString(SPECIALITY);
+        classIds = new ArrayList<>();
+        specialityId = getArguments().getString("id");
+        classIds = new ArrayList<>();
+        String[] ids = specialityId.split(",");
+        for (String a : ids) {
+            Log.d(TAG, "specialityId: " + a);
+            classIds.add(a);
+        }
+
+
         doctorsAdapter = new RecommendedTeachersAdapter(this);
         popularDoctorsAdapter = new PopularTeachersAdapter(this);
 
@@ -66,7 +79,7 @@ public class TeacherListFragment extends Fragment implements AdapterInterface {
         teacherListBinding.popularRec.setAdapter(popularDoctorsAdapter);
 
 
-        DatabaseUtils.getPopularTeacher(specialityId, new DatabaseCallbackInterface() {
+        DatabaseUtils.getPopularTeacher(classIds, new DatabaseCallbackInterface() {
             @Override
             public void onSuccess(Object obj) {
                 List<TeacherModel> teacherModelList = (List<TeacherModel>) obj;

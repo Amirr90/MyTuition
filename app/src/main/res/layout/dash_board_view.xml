@@ -20,7 +20,7 @@
         <ImageView
             android:id="@+id/imageView21"
             android:layout_width="68dp"
-            android:layout_height="68dp"
+            android:layout_height="78dp"
             android:layout_marginStart="10dp"
             android:elevation="5dp"
             app:layout_constraintBottom_toTopOf="@+id/cv1"

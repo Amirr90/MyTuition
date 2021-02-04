@@ -56,10 +56,17 @@ public class ParentDashboardFragment extends Fragment {
     ParentViewHolder viewModel;
     ImageLoadingService imageLoadingService;
 
+    public static ParentDashboardFragment instance;
+
+    public static ParentDashboardFragment getInstance() {
+        return instance;
+    }
+
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         parentDashboardBinding = FragmentParentDashboardBinding.inflate(getLayoutInflater());
+        instance = this;
         return parentDashboardBinding.getRoot();
     }
 
@@ -115,17 +122,6 @@ public class ParentDashboardFragment extends Fragment {
         setStepper();
 
 
-        setLocation();
-
-    }
-
-    private void setLocation() {
-        try {
-            parentDashboardBinding.tvLocation.setText(ParentScreen.getInstance().getAreaName());
-            parentDashboardBinding.tvCity.setText(ParentScreen.getInstance().getCityName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void setStepper() {
@@ -176,6 +172,15 @@ public class ParentDashboardFragment extends Fragment {
             coachingModels.add(coachingModel);
         }
         return coachingModels;
+    }
+
+    public void updateLocation(String city, String area) {
+        try {
+            parentDashboardBinding.tvLocation.setText(area);
+            parentDashboardBinding.tvCity.setText(city);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private List<DashboardModel1> getFirstAdapterData() {

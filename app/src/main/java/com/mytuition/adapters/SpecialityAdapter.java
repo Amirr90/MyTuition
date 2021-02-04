@@ -37,7 +37,7 @@ public class SpecialityAdapter extends ListAdapter<SpecialityModel, SpecialityAd
         SpecialityModel symptomModel = getItem(position);
         holder.symptomsViewBinding.setSymptoms(symptomModel);
         if (null != specialitiesIds)
-            holder.symptomsViewBinding.radioButton5.setChecked(specialitiesIds.contains(String.valueOf(symptomModel.getId())) ? true : false);
+            holder.symptomsViewBinding.radioButton5.setChecked(specialitiesIds.contains(String.valueOf(symptomModel.getId())));
 
     }
 

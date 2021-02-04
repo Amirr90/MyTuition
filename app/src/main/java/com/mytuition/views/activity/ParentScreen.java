@@ -35,6 +35,7 @@ import com.mytuition.models.NavModel;
 import com.mytuition.models.TuitionModel;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.GetAddressIntentService;
+import com.mytuition.views.parentFragments.ParentDashboardFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +96,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 currentLocation = locationResult.getLocations().get(0);
+                Log.d(TAG, "onLocationResult: " + currentLocation);
                 getAddress();
             }
         };
@@ -195,6 +197,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             String currentAdd = resultData.getString("address_result");
             String lat = resultData.getString("lat");
             String lng = resultData.getString("lng");
+            Log.d(TAG, "onReceiveResult: " + currentAdd);
             showResults(currentAdd, lat, lng);
 
         }
@@ -209,26 +212,23 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         intent.putExtra("add_receiver", addressResultReceiver);
         intent.putExtra("add_location", currentLocation);
         startService(intent);
+
     }
 
 
     public void showResults(String currentAdd, String lat, String lng) {
 
-        Log.d(TAG, "showResults: " + currentAdd);
         final String[] address = currentAdd.split(",");
 
         try {
-         /*   dashboard2Binding.tvLocation.setText(address[1]);
-            dashboard2Binding.tvCity.setText(address[0]);
-
-            setLat(lat);
-            setLng(lng);*/
-
             setAreaName(address[1]);
             setCityName(address[0]);
+            ParentDashboardFragment.getInstance().updateLocation(address[0], address[1]);
+            Log.d(TAG, "showResults: " + address[0]);
 
         } catch (Exception e) {
             e.printStackTrace();
+            Log.d(TAG, "showResults: Exception " + e.getLocalizedMessage());
         }
     }
 

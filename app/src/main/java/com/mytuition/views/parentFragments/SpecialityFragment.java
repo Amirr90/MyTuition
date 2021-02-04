@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
+import static com.mytuition.utility.AppUtils.getClassData;
 import static com.mytuition.utility.DatabaseUtils.getSubjectData;
 import static com.mytuition.utility.Utils.getFirebaseReference;
 
@@ -40,7 +41,7 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
     FragmentSpecialityBinding specialityBinding;
     NavController navController;
     SpecialityAdapter specialityAdapter;
-    public static List<String> specialitiesIds = new ArrayList<>();
+    public static List<String> specialitiesIds;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -56,6 +57,7 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
         navController = Navigation.findNavController(view);
         specialityBinding.symptomsRec.setAdapter(specialityAdapter);
 
+        specialitiesIds = new ArrayList<>();
 
         specialityAdapter = new SpecialityAdapter(this);
 
@@ -88,30 +90,6 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
         });
     }
 
-    private List<SpecialityModel> getClassData() {
-        List<SpecialityModel> specialityModels = new ArrayList<>();
-
-        specialityModels.add(new SpecialityModel("","Class 1","1",false));
-        specialityModels.add(new SpecialityModel("","Class 2","2",false));
-        specialityModels.add(new SpecialityModel("","Class 3","3",false));
-        specialityModels.add(new SpecialityModel("","Class 4","4",false));
-        specialityModels.add(new SpecialityModel("","Class 5","5",false));
-        specialityModels.add(new SpecialityModel("","Class 6","6",false));
-        specialityModels.add(new SpecialityModel("","Class 7","7",false));
-        specialityModels.add(new SpecialityModel("","Class 8","8",false));
-        specialityModels.add(new SpecialityModel("","Class 9 (UP Board)","9",false));
-        specialityModels.add(new SpecialityModel("","Class 10 (UP Board)","10",false));
-        specialityModels.add(new SpecialityModel("","Class 10 (ICSE Board)","11",false));
-        specialityModels.add(new SpecialityModel("","Class 10 (ICSE Board)","12",false));
-        specialityModels.add(new SpecialityModel("","Class 11 (UP Board)","13",false));
-        specialityModels.add(new SpecialityModel("","Class 11 (UP Board)","14",false));
-        specialityModels.add(new SpecialityModel("","Class 12 (ISE Board)","15",false));
-        specialityModels.add(new SpecialityModel("","Class 12 (ISE Board)","16",false));
-        AppUtils.hideDialog();
-        return specialityModels;
-
-    }
-
 
     @Override
     public void onResume() {
@@ -125,7 +103,7 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
         SpecialityModel specialityModel = (SpecialityModel) o;
         if (null == specialityModel)
             return;
-        String id = String.valueOf(specialityModel.getId());
+        String id = String.valueOf(specialityModel.getName());
         if (specialitiesIds.contains(id)) {
             specialitiesIds.remove(id);
         } else specialitiesIds.add(id);

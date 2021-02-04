@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.mytuition.R;
+import com.mytuition.models.SpecialityModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -95,6 +97,29 @@ public class AppUtils {
 
     }
 
+
+    public static List<SpecialityModel> getClassData() {
+        List<SpecialityModel> specialityModels = new ArrayList<>();
+        specialityModels.add(new SpecialityModel("","Class 1","1",false));
+        specialityModels.add(new SpecialityModel("","Class 2","2",false));
+        specialityModels.add(new SpecialityModel("","Class 3","3",false));
+        specialityModels.add(new SpecialityModel("","Class 4","4",false));
+        specialityModels.add(new SpecialityModel("","Class 5","5",false));
+        specialityModels.add(new SpecialityModel("","Class 6","6",false));
+        specialityModels.add(new SpecialityModel("","Class 7","7",false));
+        specialityModels.add(new SpecialityModel("","Class 8","8",false));
+        specialityModels.add(new SpecialityModel("","Class 9 (UP Board)","9",false));
+        specialityModels.add(new SpecialityModel("","Class 10 (UP Board)","10",false));
+        specialityModels.add(new SpecialityModel("","Class 10 (ICSE Board)","11",false));
+        specialityModels.add(new SpecialityModel("","Class 10 (ICSE Board)","12",false));
+        specialityModels.add(new SpecialityModel("","Class 11 (UP Board)","13",false));
+        specialityModels.add(new SpecialityModel("","Class 11 (UP Board)","14",false));
+        specialityModels.add(new SpecialityModel("","Class 12 (ISE Board)","15",false));
+        specialityModels.add(new SpecialityModel("","Class 12 (ISE Board)","16",false));
+        AppUtils.hideDialog();
+        return specialityModels;
+
+    }
 
     public static void hideDialog() {
         try {

@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class GetAddressIntentService extends IntentService {
+    private static final String TAG = "GetAddressIntentService";
     private static final String IDENTIFIER = "GetAddressIntentService";
     private ResultReceiver addressResultReceiver;
 
@@ -49,6 +50,7 @@ public class GetAddressIntentService extends IntentService {
             sendResultsToReceiver(1, msg, "0", "0");
         } else {
             Address address = addresses.get(0);
+
         /*    String addressDetails = address.getFeatureName() + "\n" + address.getThoroughfare() + "\n" +
                     "Locality: " + address.getLocality() + "\n" + "County: " + address.getSubAdminArea() + "\n" +
                     "State: " + address.getAdminArea() + "\n" + "Country: " + address.getCountryName() + "\n" +
@@ -56,6 +58,7 @@ public class GetAddressIntentService extends IntentService {
 
 
             String addressDetails = address.getLocality() + "," + address.getSubLocality();
+
             sendResultsToReceiver(2, addressDetails,
                     String.valueOf(location.getLatitude()),
                     String.valueOf(location.getLongitude()));
@@ -67,6 +70,7 @@ public class GetAddressIntentService extends IntentService {
         bundle.putString("address_result", message);
         bundle.putString("lat", lat);
         bundle.putString("lng", lng);
+
         addressResultReceiver.send(resultCode, bundle);
     }
 }
