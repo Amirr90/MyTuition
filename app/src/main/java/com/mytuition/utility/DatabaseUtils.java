@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mytuition.interfaces.Api;
 import com.mytuition.interfaces.DatabaseCallbackInterface;
+import com.mytuition.models.RequestModel;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.responseModel.ApiResponse;
@@ -53,41 +54,6 @@ public class DatabaseUtils {
         });
     }
 
-    public static void getPopularTeacher(List<String> classList, final DatabaseCallbackInterface databaseCallbackInterface) {
-/*        final List<TeacherModel> specialityModels = new ArrayList<>();
-        Utils.getFirebaseReference(TEACHERS)
-                .limitToFirst(40)
-                .equalTo(CLASS, Arrays.asList(speciality))
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (null == dataSnapshot || dataSnapshot.getChildrenCount() == 0) {
-                            databaseCallbackInterface.onFailed("No Teacher Found");
-                            return;
-                        }
-
-                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            TeacherModel specialityModel = postSnapshot.getValue(TeacherModel.class);
-                            specialityModels.add(specialityModel);
-                        }
-                        databaseCallbackInterface.onSuccess(specialityModels);
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        databaseCallbackInterface.onFailed(databaseError.getMessage());
-                    }
-                });*/
-
-
-    }
-
-
-    public static Call<ApiResponse> getTeacherListByClass(User model) {
-        return URLUtils.getAPIServiceForParent().getTeacherListByClass(model);
-    }
-
 
     public static void getResponse(Call<ApiResponse> call, final DatabaseCallbackInterface demoAoiInterface) {
         call.enqueue(new Callback<ApiResponse>() {
@@ -102,8 +68,8 @@ public class DatabaseUtils {
                         demoAoiInterface.onSuccess(responseModel);
                     } else demoAoiInterface.onFailed(responseModel.getResponseMessage());
 
-                } else demoAoiInterface.onFailed(String.valueOf(response.code()));
-
+                } else
+                    demoAoiInterface.onFailed("Failed to read Data " + response.code());
 
             }
 
@@ -113,6 +79,12 @@ public class DatabaseUtils {
                 demoAoiInterface.onFailed(t.getLocalizedMessage());
             }
         });
+
+
+    }
+
+    public static Call<ApiResponse> getTeacherListByClass(RequestModel model) {
+        return URLUtils.getAPIServiceForParent().getTeacherListByClass(model);
     }
 
 

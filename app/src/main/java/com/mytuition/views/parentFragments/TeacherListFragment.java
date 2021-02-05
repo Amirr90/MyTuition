@@ -19,6 +19,7 @@ import com.mytuition.adapters.RecommendedTeachersAdapter;
 import com.mytuition.databinding.FragmentTeacherListBinding;
 import com.mytuition.interfaces.AdapterInterface;
 import com.mytuition.interfaces.DatabaseCallbackInterface;
+import com.mytuition.models.RequestModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.DatabaseUtils;
 
@@ -27,8 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 import static com.mytuition.utility.AppConstant.TEACHER_ID;
+import static com.mytuition.utility.DatabaseUtils.getResponse;
 import static com.mytuition.utility.Utils.getTeacherModel;
 
 
@@ -79,19 +80,26 @@ public class TeacherListFragment extends Fragment implements AdapterInterface {
         teacherListBinding.popularRec.setAdapter(popularDoctorsAdapter);
 
 
-        DatabaseUtils.getPopularTeacher(classIds, new DatabaseCallbackInterface() {
+        RequestModel requestModel = new RequestModel();
+        requestModel.getTeacherModel().setId(specialityId);
+
+        getResponse(DatabaseUtils.getTeacherListByClass(requestModel), new DatabaseCallbackInterface() {
             @Override
             public void onSuccess(Object obj) {
                 List<TeacherModel> teacherModelList = (List<TeacherModel>) obj;
                 popularDoctorsAdapter.submitList(teacherModelList);
                 doctorsAdapter.submitList(getPopularTeacherData());
+                popularDoctorsAdapter.submitList(getPopularTeacherData());
+
             }
 
             @Override
             public void onFailed(String msg) {
                 Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+
             }
         });
+
     }
 
     private List<TeacherModel> getPopularTeacherData() {

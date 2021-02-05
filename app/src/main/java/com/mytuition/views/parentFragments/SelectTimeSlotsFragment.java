@@ -52,6 +52,7 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
     TimeSlotsAdapter slotsAdapter;
     List<TimeSlotModel> timeSlotsModelList;
     private static final String TAG = "SelectTimeSlotsFragment";
+    String classId = null;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -70,9 +71,14 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
         if (null == getArguments())
             return;
 
-        String jsonString = getArguments().getString("docModel");
-        Gson gson = new Gson();
-        teacherModel = gson.fromJson(jsonString, TeacherModel.class);
+        if (null != getArguments().getString("docModel")) {
+            String jsonString = getArguments().getString("docModel");
+            Gson gson = new Gson();
+            teacherModel = gson.fromJson(jsonString, TeacherModel.class);
+        }
+        if (null != getArguments().getString("class")) {
+            classId = getArguments().getString("class");
+        }
 
         slotsBinding.setTeacher(teacherModel);
 
@@ -167,11 +173,17 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
 
     @Override
     public void onItemClicked(Object o) {
-
-        String timeSlot = (String) o;
         Bundle bundle = new Bundle();
+        String timeSlot = (String) o;
         bundle.putString(TIME_SLOT, timeSlot);
-        bundle.putString(TEACHER, teacherModel.toString());
+        if (null == classId) {
+            bundle.putString(TEACHER, teacherModel.toString());
+        } else {
+            bundle.putString("class", classId);
+
+        }
         navController.navigate(R.id.action_selectTimeSlotsFragment_to_requestTuitonFragment, bundle);
+
+
     }
 }

@@ -1,14 +1,23 @@
 package com.mytuition.models;
 
 public class TuitionModel {
-    public static TeacherModel teacherModel;
-    public static ParentModel parentModel;
-    public static String parentId;
-    public static String teacherId;
-    public static long timestamp;
-    public static String requestStatus;
-    public static String requestActionTimestamp;
-    public static String requestTimeSLot;
+    public TeacherModel teacherModel;
+    public ParentModel parentModel;
+    public String parentId;
+    public String teacherId;
+    public long timestamp;
+    public String requestStatus;
+    public String requestActionTimestamp;
+    public String requestTimeSLot;
+    public String classIds;
+
+    public String getClassIds() {
+        return classIds;
+    }
+
+    public void setClassIds(String classIds) {
+        this.classIds = classIds;
+    }
 
     public String getParentId() {
         return parentId;

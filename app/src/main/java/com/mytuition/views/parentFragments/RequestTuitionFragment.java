@@ -51,6 +51,7 @@ public class RequestTuitionFragment extends Fragment {
     TeacherModel teacherModel;
 
     String timeSlot = null;
+    String classId = null;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -68,15 +69,19 @@ public class RequestTuitionFragment extends Fragment {
             return;
         parentModel = getParentModel(requireActivity());
 
-        String jsonString = getArguments().getString(TEACHER);
-        Gson gson = new Gson();
+        if (null != getArguments().getString(TEACHER)) {
+            String jsonString = getArguments().getString(TEACHER);
+            Gson gson = new Gson();
+            teacherModel = gson.fromJson(jsonString, TeacherModel.class);
+            requestTuitionBinding.setTeacher(teacherModel);
+        }
 
-        teacherModel = gson.fromJson(jsonString, TeacherModel.class);
+
+        if (null != getArguments().getString("class"))
+            classId = getArguments().getString("class");
+
 
         requestTuitionBinding.setParent(parentModel);
-        requestTuitionBinding.setTeacher(teacherModel);
-
-
         timeSlot = getArguments().getString(TIME_SLOT);
         requestTuitionBinding.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,48 +95,70 @@ public class RequestTuitionFragment extends Fragment {
     private void requestTuition() {
 
         final TuitionModel tuitionModel = new TuitionModel();
-        tuitionModel.setParentModel(parentModel);
-        tuitionModel.setTeacherModel(teacherModel);
-        tuitionModel.setRequestStatus(REQUEST_STATUS_PENDING);
         tuitionModel.setRequestTimeSLot(timeSlot);
         tuitionModel.setParentId(getUid());
-        tuitionModel.setTeacherId(teacherModel.getId());
+        tuitionModel.setRequestStatus(REQUEST_STATUS_PENDING);
+        tuitionModel.setParentModel(parentModel);
+        if (classId == null) {
+            tuitionModel.setTeacherModel(teacherModel);
+            tuitionModel.setTeacherId(teacherModel.getId());
+            AppUtils.showRequestDialog(requireActivity());
+            AppUtils.getFirestoreReference().collection(REQUEST_TUITION)
+                    .whereEqualTo(PARENT_ID, getUid())
+                    .whereEqualTo(TEACHER_ID, teacherModel.getId())
+                    .whereEqualTo("requestStatus", REQUEST_STATUS_PENDING)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            Log.d(TAG, "onSuccess: " + queryDocumentSnapshots.getDocuments());
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                AppUtils.hideDialog();
+                                Toast.makeText(requireActivity(), "You already requested to this Teacher", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (null != getUid())
+                                AppUtils.getFirestoreReference().collection(REQUEST_TUITION).document(getUid())
+                                        .set(tuitionModel)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                AppUtils.hideDialog();
+                                                navController.navigate(R.id.action_requestTuitonFragment_to_requestTuitionSuccessfullyFragment);
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        AppUtils.hideDialog();
+                                        Toast.makeText(requireActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
-        //check for tuition request
-        AppUtils.showRequestDialog(requireActivity());
-        AppUtils.getFirestoreReference().collection(REQUEST_TUITION)
-                .whereEqualTo(PARENT_ID, getUid())
-                .whereEqualTo(TEACHER_ID, teacherModel.getId())
-                .whereEqualTo("requestStatus", REQUEST_STATUS_PENDING)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        Log.d(TAG, "onSuccess: " + queryDocumentSnapshots.getDocuments());
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            AppUtils.hideDialog();
-                            Toast.makeText(requireActivity(), "You already requested to this Teacher", Toast.LENGTH_SHORT).show();
-                            return;
                         }
-                        if (null != getUid())
-                            AppUtils.getFirestoreReference().collection(REQUEST_TUITION).document(getUid())
-                                    .set(tuitionModel)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            AppUtils.hideDialog();
-                                            navController.navigate(R.id.action_requestTuitonFragment_to_requestTuitionSuccessfullyFragment);
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    AppUtils.hideDialog();
-                                    Toast.makeText(requireActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                    });
 
+        }
+        else {
+            tuitionModel.setClassIds(classId);
+            if (null != getUid())
+                AppUtils.getFirestoreReference().collection(REQUEST_TUITION).document(getUid())
+                        .set(tuitionModel)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                AppUtils.hideDialog();
+                                navController.navigate(R.id.action_requestTuitonFragment_to_requestTuitionSuccessfullyFragment);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        AppUtils.hideDialog();
+                        Toast.makeText(requireActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+        }
+
+        //check for tuition request
 
 
     }

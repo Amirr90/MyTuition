@@ -1,5 +1,8 @@
 package com.mytuition.interfaces;
 
+import com.mytuition.models.RequestModel;
+import com.mytuition.responseModel.ApiResponse;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -9,6 +12,6 @@ import retrofit2.http.Query;
 public interface Api {
 
     @GET("getTeacherListByClass")
-    Call<Api> getTeacherListByClass(
-            @Query("") Dashboard dashboard);
+    Call<ApiResponse> getTeacherListByClass(
+            @Query("") RequestModel requestModel);
 }

@@ -30,6 +30,7 @@ import java.util.Objects;
 
 import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 import static com.mytuition.utility.AppUtils.getClassData;
+import static com.mytuition.utility.AppUtils.getJSONFromModel;
 import static com.mytuition.utility.DatabaseUtils.getSubjectData;
 import static com.mytuition.utility.Utils.getFirebaseReference;
 
@@ -79,9 +80,13 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
                 for (String id : specialitiesIds)
                     ids.append(id + ",");
                 try {
-                    Bundle bundle = new Bundle();
+                  /*  Bundle bundle = new Bundle();
                     bundle.putString("id", ids.toString());
-                    navController.navigate(R.id.action_specialityFragment_to_teacherListFragment, bundle);
+                    navController.navigate(R.id.action_specialityFragment_to_teacherListFragment, bundle);*/
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("class", specialitiesIds.toString());
+                    navController.navigate(R.id.action_specialityFragment_to_selectTimeSlotsFragment, bundle);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d(TAG, "onItemClicked: " + e.getLocalizedMessage());
