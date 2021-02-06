@@ -110,7 +110,7 @@ public class ParentProfileFragment extends Fragment {
     }
 
     private void selectImage(int tag) {
-        ImagePicker.Companion.with(requireActivity())
+        ImagePicker.Companion.with(this)
                 .crop(4f, 4f)                    //Crop image(Optional), Check Customization for more option
                 .compress(512)            //Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
