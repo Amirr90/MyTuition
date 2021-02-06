@@ -39,7 +39,6 @@ public class DatabaseUtils {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    // TODO: handle the post
                     SpecialityModel specialityModel = postSnapshot.getValue(SpecialityModel.class);
                     specialityModels.add(specialityModel);
                 }
