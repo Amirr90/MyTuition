@@ -197,7 +197,6 @@ public class TeacherModel extends BaseObservable {
         }
     };
 
-
     @Override
     public String toString() {
         return "{" +

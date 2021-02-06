@@ -1,6 +1,7 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,12 @@ import com.mytuition.adapters.CoachingAdapter;
 import com.mytuition.adapters.DashboardPatientAdapter1;
 import com.mytuition.adapters.MainSliderAdapter;
 import com.mytuition.databinding.FragmentParentDashboardBinding;
+import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.Banner;
 import com.mytuition.models.CoachingModel;
 import com.mytuition.models.DashboardModel1;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.DatabaseUtils;
 import com.mytuition.utility.PicassoImageLoadingService;
 import com.mytuition.utility.Utils;
 import com.mytuition.viewHolder.ParentViewHolder;
@@ -97,7 +100,7 @@ public class ParentDashboardFragment extends Fragment {
 
 
         //Binding Second Adapter
-        adapter2.submitList(getTopTeacherData());
+        getTopTeacherData();
 
 
         //Binding Third Adapter
@@ -119,24 +122,9 @@ public class ParentDashboardFragment extends Fragment {
         });
 
 
-        setStepper();
 
 
-    }
 
-    private void setStepper() {
-
-        /*String[] mySteps = {"Name", "Email", "Phone Number"};
-        int colorPrimary = ContextCompat.getColor(requireContext(), R.color.colorPrimary);
-        int colorPrimaryDark = ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark);
-
-
-        // Setting up and initializing the form
-        VerticalStepperFormLayout.Builder.newInstance(parentDashboardBinding.verticalStepperForm, mySteps, this, requireActivity())
-                .primaryColor(colorPrimary)
-                .primaryDarkColor(colorPrimaryDark)
-                .displayBottomNavigation(true) // It is true by default, so in this case this line is not necessary
-                .init();*/
     }
 
     private void loadBigBannerImage() {
@@ -192,15 +180,20 @@ public class ParentDashboardFragment extends Fragment {
         return dashboardModel1s;
     }
 
-    private List<TeacherModel> getTopTeacherData() {
-        List<TeacherModel> teacherModels = new ArrayList<>();
-        for (int a = 0; a < 10; a++) {
-            TeacherModel teacherModel = new TeacherModel();
-            teacherModel.setName("Teacher Name");
-            teacherModel.setImage("https://cdn2.iconfinder.com/data/icons/school-flat-circle/512/Guy_hipster_jumper_man_teacher_sir-512.png");
-            teacherModels.add(teacherModel);
-        }
-        return teacherModels;
+    private void getTopTeacherData() {
+        DatabaseUtils.getTopTeacherData(new DatabaseCallbackInterface() {
+            @Override
+            public void onSuccess(Object obj) {
+                List<TeacherModel> teacherModels = (List<TeacherModel>) obj;
+                adapter2.submitList(teacherModels);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                Log.d(TAG, "onFailed: " + msg);
+            }
+        });
+
     }
 
     private List<Banner> getSliderData() {

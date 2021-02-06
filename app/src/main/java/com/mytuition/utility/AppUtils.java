@@ -27,7 +27,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.mytuition.R;
+import com.mytuition.models.CalendarModel;
 import com.mytuition.models.SpecialityModel;
+import com.mytuition.models.TimeSlotModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -73,6 +76,55 @@ public class AppUtils {
         return mimeType;
     }
 
+
+    public static List<TimeSlotModel.TimeDetails> getSlots(boolean b, int i, int i1) {
+        List<TimeSlotModel.TimeDetails> s1 = new ArrayList<>();
+        ArrayList<String> results = getTimeSet(b, i, i1, 60);
+        for (String s : results)
+            s1.add(new TimeSlotModel.TimeDetails(s, false));
+        return s1;
+    }
+
+    public static ArrayList<String> getTimeSet(boolean isCurrentDay, int from, int to, int duration) {
+        double hrs = (float) duration / 60;
+        Log.d(TAG, "getTimeSet: hrs " + (int) ((to - from) / hrs));
+        ArrayList results = new ArrayList<String>();
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+        Calendar calendar = new GregorianCalendar();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);// what should be the default?
+        if (!isCurrentDay)
+            calendar.set(Calendar.HOUR_OF_DAY, from);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        int count = (int) ((to - from) / hrs);
+        for (int i = 0; i < count; i++) {
+
+            String day1 = sdf.format(calendar.getTime());
+            calendar.add(Calendar.MINUTE, duration);
+
+            String day2 = sdf.format(calendar.getTime());
+
+            String day = day1 + " - " + day2;
+
+            results.add(i, day);
+
+        }
+        return results;
+    }
+
+
+    public static List<CalendarModel> getNextWeekDays() {
+        List<CalendarModel> calendarModelList = new ArrayList<>();
+        ArrayList<HashMap<String, String>> getNextWeekDays = getNextWeekDay();
+        for (int a = 1; a < getNextWeekDays.size(); a++) {
+            calendarModelList.add(new CalendarModel(
+                    getNextWeekDays.get(a).get("date"),
+                    getNextWeekDays.get(a).get("day"),
+                    getNextWeekDays.get(a).get("dateSend")));
+        }
+        return calendarModelList;
+    }
+
     public static void showRequestDialog(Activity activity) {
 
 
@@ -100,22 +152,22 @@ public class AppUtils {
 
     public static List<SpecialityModel> getClassData() {
         List<SpecialityModel> specialityModels = new ArrayList<>();
-        specialityModels.add(new SpecialityModel("","Class 1","1",false));
-        specialityModels.add(new SpecialityModel("","Class 2","2",false));
-        specialityModels.add(new SpecialityModel("","Class 3","3",false));
-        specialityModels.add(new SpecialityModel("","Class 4","4",false));
-        specialityModels.add(new SpecialityModel("","Class 5","5",false));
-        specialityModels.add(new SpecialityModel("","Class 6","6",false));
-        specialityModels.add(new SpecialityModel("","Class 7","7",false));
-        specialityModels.add(new SpecialityModel("","Class 8","8",false));
-        specialityModels.add(new SpecialityModel("","Class 9 (UP Board)","9",false));
-        specialityModels.add(new SpecialityModel("","Class 10 (UP Board)","10",false));
-        specialityModels.add(new SpecialityModel("","Class 10 (ICSE Board)","11",false));
-        specialityModels.add(new SpecialityModel("","Class 10 (ICSE Board)","12",false));
-        specialityModels.add(new SpecialityModel("","Class 11 (UP Board)","13",false));
-        specialityModels.add(new SpecialityModel("","Class 11 (UP Board)","14",false));
-        specialityModels.add(new SpecialityModel("","Class 12 (ISE Board)","15",false));
-        specialityModels.add(new SpecialityModel("","Class 12 (ISE Board)","16",false));
+        specialityModels.add(new SpecialityModel("", "Class 1", "1", false));
+        specialityModels.add(new SpecialityModel("", "Class 2", "2", false));
+        specialityModels.add(new SpecialityModel("", "Class 3", "3", false));
+        specialityModels.add(new SpecialityModel("", "Class 4", "4", false));
+        specialityModels.add(new SpecialityModel("", "Class 5", "5", false));
+        specialityModels.add(new SpecialityModel("", "Class 6", "6", false));
+        specialityModels.add(new SpecialityModel("", "Class 7", "7", false));
+        specialityModels.add(new SpecialityModel("", "Class 8", "8", false));
+        specialityModels.add(new SpecialityModel("", "Class 9 (UP Board)", "9", false));
+        specialityModels.add(new SpecialityModel("", "Class 10 (UP Board)", "10", false));
+        specialityModels.add(new SpecialityModel("", "Class 10 (ICSE Board)", "11", false));
+        specialityModels.add(new SpecialityModel("", "Class 10 (ICSE Board)", "12", false));
+        specialityModels.add(new SpecialityModel("", "Class 11 (UP Board)", "13", false));
+        specialityModels.add(new SpecialityModel("", "Class 11 (UP Board)", "14", false));
+        specialityModels.add(new SpecialityModel("", "Class 12 (ISE Board)", "15", false));
+        specialityModels.add(new SpecialityModel("", "Class 12 (ISE Board)", "16", false));
         AppUtils.hideDialog();
         return specialityModels;
 
@@ -319,7 +371,7 @@ public class AppUtils {
         return pref.getBoolean(key, true);
     }
 
-    public static ArrayList<HashMap<String, String>> getNextWeekDays() {
+    public static ArrayList<HashMap<String, String>> getNextWeekDay() {
         ArrayList<HashMap<String, String>> list = new ArrayList<>();
         HashMap<String, String> hashMap = new HashMap<>();
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd", Locale.getDefault());

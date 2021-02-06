@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import static com.mytuition.utility.AppUtils.getCurrentDateInWeekMonthDayFormat;
+import static com.mytuition.utility.AppUtils.getNextWeekDays;
+import static com.mytuition.utility.AppUtils.getSlots;
 import static com.mytuition.utility.AppUtils.sdfFromTimeStamp;
 import static com.mytuition.views.parentFragments.RequestTuitionFragment.TIME_SLOT;
 
@@ -80,6 +82,7 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
             classId = getArguments().getString("class");
         }
 
+        slotsBinding.layout1.setVisibility(null != classId ? View.GONE : View.VISIBLE);
         slotsBinding.setTeacher(teacherModel);
 
         // AddTimeSlot(teacherModel.getId());
@@ -114,62 +117,22 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
     private void setSlots() {
         boolean b = false;
         timeSlotsModelList = new ArrayList<>();
-        timeSlotsModelList.add(new TimeSlotModel("Morning", getSlots(b, 7, 10)));
-        timeSlotsModelList.add(new TimeSlotModel("Noon", getSlots(b, 14, 17)));
-        timeSlotsModelList.add(new TimeSlotModel("Evening", getSlots(b, 18, 21)));
-        timeSlotsModelList.add(new TimeSlotModel("Night", getSlots(b, 21, 24)));
+        if (null != classId) {
+            timeSlotsModelList.add(new TimeSlotModel("Morning", getSlots(b, 7, 12)));
+            timeSlotsModelList.add(new TimeSlotModel("Noon", getSlots(b, 12, 17)));
+            timeSlotsModelList.add(new TimeSlotModel("Evening", getSlots(b, 17, 21)));
+            timeSlotsModelList.add(new TimeSlotModel("Night", getSlots(b, 21, 24)));
+        } else {
+            timeSlotsModelList.add(new TimeSlotModel("Morning", getSlots(b, 7, 10)));
+            timeSlotsModelList.add(new TimeSlotModel("Noon", getSlots(b, 14, 17)));
+            timeSlotsModelList.add(new TimeSlotModel("Evening", getSlots(b, 18, 21)));
+            timeSlotsModelList.add(new TimeSlotModel("Night", getSlots(b, 21, 24)));
+        }
+
         slotsAdapter = new TimeSlotsAdapter(timeSlotsModelList, this);
         slotsBinding.timingRec.setAdapter(slotsAdapter);
     }
 
-    private List<TimeSlotModel.TimeDetails> getSlots(boolean b, int i, int i1) {
-        List<TimeSlotModel.TimeDetails> s1 = new ArrayList<>();
-        ArrayList<String> results = getTimeSet(b, i, i1, 65);
-        for (String s : results)
-            s1.add(new TimeSlotModel.TimeDetails(s, false));
-        return s1;
-    }
-
-    private ArrayList<String> getTimeSet(boolean isCurrentDay, int from, int to, int duration) {
-        double hrs = (float) duration / 60;
-        Log.d(TAG, "getTimeSet: hrs " + (int) ((to - from) / hrs));
-        ArrayList results = new ArrayList<String>();
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-        Calendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);// what should be the default?
-        if (!isCurrentDay)
-            calendar.set(Calendar.HOUR_OF_DAY, from);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        int count = (int) ((to - from) / hrs);
-        for (int i = 0; i < count; i++) {
-
-            String day1 = sdf.format(calendar.getTime());
-            calendar.add(Calendar.MINUTE, duration);
-
-            String day2 = sdf.format(calendar.getTime());
-
-            String day = day1 + " - " + day2;
-
-            results.add(i, day);
-
-        }
-        return results;
-    }
-
-
-    private List<CalendarModel> getNextWeekDays() {
-        List<CalendarModel> calendarModelList = new ArrayList<>();
-        ArrayList<HashMap<String, String>> getNextWeekDays = AppUtils.getNextWeekDays();
-        for (int a = 1; a < getNextWeekDays.size(); a++) {
-            calendarModelList.add(new CalendarModel(
-                    getNextWeekDays.get(a).get("date"),
-                    getNextWeekDays.get(a).get("day"),
-                    getNextWeekDays.get(a).get("dateSend")));
-        }
-
-        return calendarModelList;
-    }
 
     @Override
     public void onItemClicked(Object o) {

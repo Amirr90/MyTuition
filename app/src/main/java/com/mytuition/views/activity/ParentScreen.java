@@ -12,11 +12,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -25,6 +28,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.mytuition.R;
@@ -106,6 +110,26 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         updateUI(getIntent().getStringExtra(LOGIN_TYPE));
         setNavAdapter();
 
+
+        mainBinding.constraintLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                navController.navigate(R.id.DetailsFragment2);
+            }
+        });
+
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                mainBinding.constraintLayout.setVisibility(destination.getId() == R.id.DetailsFragment2 ? View.GONE : View.VISIBLE);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         updateRequestView();
     }
 
@@ -125,6 +149,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     }
 
     private void updateRequestView() {
+
         if (null != getUid())
             getFirestoreReference().collection(REQUEST_TUITION)
                     .document(getUid())
@@ -134,28 +159,33 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()) {
                                 TuitionModel tuitionModel = documentSnapshot.toObject(TuitionModel.class);
-                                if (null != tuitionModel)
+                                if (null != tuitionModel) {
                                     if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_CONFIRMED)) {
                                         mainBinding.constraintLayout.setVisibility(View.GONE);
-                                    } else {
-                                        mainBinding.constraintLayout.setVisibility(View.VISIBLE);
-                                        if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_PENDING)) {
-                                            mainBinding.textView9.setText("Waiting for Teacher to accept your Demo Class");
-                                        } else if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_ACCEPTED)) {
-                                            mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Accepted your tuition request");
-                                            mainBinding.btLoading.setAnimation(R.raw.accepted);
-                                            mainBinding.btLoading.playAnimation();
-                                        } else if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_REJECTED)) {
-                                            mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Rejected your tuition request");
-                                            mainBinding.btLoading.setAnimation(R.raw.rejected);
-                                            mainBinding.btLoading.playAnimation();
-                                        }
                                     }
+                                } else {
+                                    if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_PENDING)) {
+                                        mainBinding.textView9.setText("Waiting for Teacher to accept your Demo Class");
+                                    } else if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_ACCEPTED)) {
+                                        mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Accepted your tuition request");
+                                        mainBinding.btLoading.setAnimation(R.raw.accepted);
+                                        mainBinding.btLoading.playAnimation();
+                                    } else if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_REJECTED)) {
+                                        mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Rejected your tuition request");
+                                        mainBinding.btLoading.setAnimation(R.raw.rejected);
+                                        mainBinding.btLoading.playAnimation();
+                                    }
+                                }
 
 
                             }
                         }
-                    });
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    mainBinding.constraintLayout.setVisibility(View.GONE);
+                }
+            });
 
     }
 

@@ -103,7 +103,7 @@
     <string name="near_you">Near you</string>
     <string name="proceed">Proceed</string>
     <string name="search_speciality_here">Search Speciality Here</string>
-    <string name="select_speciality">Speciality</string>
+    <string name="select_speciality">Please Select at-least one Class</string>
     <string name="sorry">Sorry!</string>
     <string name="recommended_teachers">Recommended Teachers</string>
     <string name="popular_teachers">Popular Teachers</string>
@@ -134,4 +134,9 @@
     <string name="per_visit">per visit</string>
     <string name="tuition_book_for">Tuition Book for</string>
     <string name="parent_s_information">Parent\'s Information</string>
+    <string name="view_profile">View Profile</string>
+    <string name="request_time">Request Time</string>
+    <string name="accepted_time">Accepted at</string>
+    <string name="change_teacher">Change Teacher</string>
+    <string name="try_again">try again</string>
 </resources>

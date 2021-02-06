@@ -1,6 +1,7 @@
 package com.mytuition.utility;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.databinding.BindingAdapter;
@@ -8,6 +9,9 @@ import androidx.databinding.BindingAdapter;
 import com.bumptech.glide.Glide;
 import com.mytuition.R;
 import com.mytuition.views.activity.ParentScreen;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public class CustomLoadImage {
 
@@ -225,5 +229,17 @@ public class CustomLoadImage {
     public static void loadNavImage(ImageView imageView, int imagePath) {
         imageView.setImageResource(imagePath);
         Log.d(TAG, "loadNavImage: " + imagePath);
+    }
+
+    @BindingAdapter("android:setCustomVisibility")
+    public static void setCustomVisibility(View view, String text) {
+        if (null == text || text.isEmpty())
+            view.setVisibility(GONE);
+        else view.setVisibility(VISIBLE);
+    }
+
+    @BindingAdapter("android:setCustomVisibility")
+    public static void setCustomVisibility(View view, Boolean value) {
+        view.setVisibility(value ? View.VISIBLE : View.GONE);
     }
 }

@@ -5,9 +5,9 @@ public class TuitionModel {
     public ParentModel parentModel;
     public String parentId;
     public String teacherId;
-    public long timestamp;
+    public Long timestamp;
     public String requestStatus;
-    public String requestActionTimestamp;
+    public Long requestActionTimestamp;
     public String requestTimeSLot;
     public String classIds;
 
@@ -43,11 +43,11 @@ public class TuitionModel {
         this.requestTimeSLot = requestTimeSLot;
     }
 
-    public String getRequestActionTimestamp() {
+    public Long getRequestActionTimestamp() {
         return requestActionTimestamp;
     }
 
-    public void setRequestActionTimestamp(String requestActionTimestamp) {
+    public void setRequestActionTimestamp(Long requestActionTimestamp) {
         this.requestActionTimestamp = requestActionTimestamp;
     }
 
@@ -76,10 +76,28 @@ public class TuitionModel {
     }
 
     public long getTimestamp() {
-        return System.currentTimeMillis();
+        if (null == timestamp)
+            return System.currentTimeMillis();
+        else return timestamp;
     }
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+
+    @Override
+    public String toString() {
+        return "TuitionModel{" +
+                "teacherModel=" + teacherModel +
+                ", parentModel=" + parentModel +
+                ", parentId='" + parentId + '\'' +
+                ", teacherId='" + teacherId + '\'' +
+                ", timestamp=" + timestamp +
+                ", requestStatus='" + requestStatus + '\'' +
+                ", requestActionTimestamp='" + requestActionTimestamp + '\'' +
+                ", requestTimeSLot='" + requestTimeSLot + '\'' +
+                ", classIds='" + classIds + '\'' +
+                '}';
     }
 }

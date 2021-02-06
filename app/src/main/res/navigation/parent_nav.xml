@@ -45,6 +45,14 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_parentDashboardFragment2_to_teacherProfileFragment"
+            app:destination="@id/teacherProfileFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+
     </fragment>
     <fragment
         android:id="@+id/specialityFragment"
@@ -171,12 +179,16 @@
         android:label="Congratulation"
         tools:layout="@layout/fragment_request_tuition_successfully">
         <action
-            android:id="@+id/action_requestTuitionSuccessfullyFragment_to_requestedTuitionDetailFragment"
-            app:destination="@id/requestedTuitionDetailFragment" />
+            android:id="@+id/action_requestTuitionSuccessfullyFragment_to_requestMyTuitionDetailFragment"
+            app:destination="@id/DetailsFragment2" />
     </fragment>
     <fragment
-        android:id="@+id/requestedTuitionDetailFragment"
-        android:name="com.mytuition.views.parentFragments.RequestedTuitionDetailFragment"
-        android:label="fragment_requested_tuition_detail"
-        tools:layout="@layout/fragment_requested_tuition_detail" />
+        android:id="@+id/DetailsFragment2"
+        android:name="com.mytuition.RequestTuitionDetailFragment"
+        android:label="@string/tuition_details"
+        tools:layout="@layout/fragment_request_tuition_detail" >
+        <action
+            android:id="@+id/action_DetailsFragment2_to_teacherProfileFragment"
+            app:destination="@id/teacherProfileFragment" />
+    </fragment>
 </navigation>

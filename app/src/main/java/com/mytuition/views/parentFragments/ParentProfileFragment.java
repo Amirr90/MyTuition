@@ -1,5 +1,8 @@
 package com.mytuition.views.parentFragments;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mytuition.BR;
@@ -23,9 +27,12 @@ import com.mytuition.databinding.FragmentTeacherProfileBinding;
 import com.mytuition.models.ParentModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.AppUtils;
+import com.mytuition.utility.FileUtil;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +54,9 @@ public class ParentProfileFragment extends Fragment {
     NavController navController;
 
     ParentModel parentModel;
+
+
+    boolean isPicChange = false;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -77,7 +87,7 @@ public class ParentProfileFragment extends Fragment {
                                 public void onSuccess(Void aVoid) {
                                     AppUtils.hideDialog();
                                     Toast.makeText(requireActivity(), "Profile Updated !!", Toast.LENGTH_SHORT).show();
-                                    setParentModel(requireActivity(),parentModel);
+                                    setParentModel(requireActivity(), parentModel);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -89,6 +99,50 @@ public class ParentProfileFragment extends Fragment {
                 }
             }
         });
+
+        profileBinding.tvChangeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int tag = (int) profileBinding.tvChangeProfile.getTag();
+                selectImage(tag);
+            }
+        });
+    }
+
+    private void selectImage(int tag) {
+        ImagePicker.Companion.with(requireActivity())
+                .crop(4f, 4f)                    //Crop image(Optional), Check Customization for more option
+                .compress(512)            //Final image size will be less than 1 MB(Optional)
+                .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
+                .start();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (null != data) {
+
+                try {
+                    Log.d(TAG, "onActivityResult: "+data.getData());
+                    Uri uri = data.getData();
+                    profileBinding.profileImage.setImageURI(uri);
+                    isPicChange = true;
+                    File file = FileUtil.from(requireActivity(), uri);
+                    uploadImage(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "onActivityResult: "+e.getLocalizedMessage());
+                }
+            }
+
+        }
+
+
+    }
+
+    private void uploadImage(File file) {
+        Log.d(TAG, "uploadImage: " + file);
     }
 
     private Map<String, Object> getUserMap(ParentModel parentModel) {

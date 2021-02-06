@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="teacher"
+            type="com.mytuition.models.TeacherModel" />
+
+        <variable
+            name="tuition"
+            type="com.mytuition.models.TuitionModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".RequestTuitionDetailFragment">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/border_rectangle"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingBottom="23dp"
+                android:visibility="@{tuition.requestStatus.equals(`Pending`)?View.GONE:View.VISIBLE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:id="@+id/textView26"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="26dp"
+                    android:layout_toEndOf="@id/llImage"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@{teacher.name}"
+                    android:textColor="#262E3F"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textView26"
+                    android:layout_toEndOf="@id/llImage"
+                    android:fontFamily="@font/poppins"
+                    android:text="@{teacher.speciality}"
+                    android:textColor="#3F4E6E"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <LinearLayout
+                    android:id="@+id/llImage"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="21dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/round_circle"
+                    android:backgroundTint="#EAF2FD"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerHorizontal="true"
+                        android:loadCustomTeacherImage="@{teacher.image}"
+                        android:src="@drawable/tuitor_image"
+                        app:civ_border_color="@color/colorPrimary" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/llImage"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginRight="13dp"
+                    android:background="#EEEEEE" />
+
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="19dp"
+                    android:layout_height="18dp"
+                    android:layout_below="@id/view1"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="13dp"
+                    android:setCustomVisibility="@{teacher.degree}"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="@color/GreyColo" />
+
+                <TextView
+                    android:id="@+id/textView22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/view1"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_toEndOf="@+id/imageView9"
+                    android:fontFamily="@font/poppins"
+                    android:setCustomVisibility="@{teacher.degree}"
+                    android:text="@{teacher.degree}"
+                    android:textColor="#3F4E6E"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="19dp"
+                    android:layout_height="18dp"
+                    android:layout_below="@id/imageView9"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="22dp"
+                    android:src="@drawable/ic_calendar" />
+
+                <TextView
+                    android:id="@+id/textView23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/imageView9"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="22dp"
+                    android:layout_toEndOf="@+id/imageView10"
+                    android:fontFamily="@font/poppins"
+                    android:text="@{teacher.degree}"
+                    android:textColor="#3F4E6E"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvViewProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/imageView9"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:fontFamily="@font/poppins"
+                    android:text="@string/view_profile"
+                    android:textColor="#3F4E6E"
+                    android:textSize="14sp"
+                    app:drawableRightCompat="@drawable/ic_baseline_arrow_right_alt_24" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlViewFile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/border_rectangle"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingBottom="23dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+
+
+                <TextView
+                    android:id="@+id/tcPhysicalExamination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="26dp"
+                    android:layout_toEndOf="@id/llImage2"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@{tuition.requestTimeSLot}"
+                    android:textColor="#262E3F"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSpec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tcPhysicalExamination"
+                    android:layout_marginTop="1dp"
+                    android:layout_toEndOf="@id/llImage2"
+                    android:fontFamily="@font/poppins"
+                    android:text="@{tuition.requestStatus}"
+                    android:textColor="#3F4E6E"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/tvViewImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvSpec"
+                    android:layout_marginTop="17dp"
+                    android:layout_toEndOf="@id/llImage2"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:drawablePadding="10dp"
+                    android:focusable="true"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center"
+                    android:paddingEnd="20dp"
+                    android:text="@string/view_profile"
+                    android:textColor="#0A586C"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:visibility="gone"
+                    app:drawableRightCompat="@drawable/ic_baseline_arrow_right_alt_24" />
+
+
+                <LinearLayout
+                    android:id="@+id/llImage2"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="21dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/round_circle"
+                    android:backgroundTint="#EAF2FD"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/btLoading"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/rlViewFile"
+                app:layout_constraintStart_toStartOf="@+id/rlViewFile"
+                app:layout_constraintTop_toBottomOf="@+id/rlViewFile">
+
+                <!--   Request Time-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="38dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/request_time"
+                    android:textColor="#262E3F"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:autoSizeTextType="uniform" />
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="38dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="#3F4E6E"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:autoSizeTextType="uniform" />
+                <!--   Request Action Time-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="38dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/accepted_time"
+                    android:textColor="#262E3F"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:autoSizeTextType="uniform" />
+
+                <TextView
+                    android:id="@+id/tvTimeAccepted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="38dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="#3F4E6E"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:autoSizeTextType="uniform" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnChangeTeacher"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:fontFamily="@font/poppins"
+                android:text="@string/change_teacher"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:visibility="@{tuition.requestStatus.equals(`Pending`)?View.GONE:View.VISIBLE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </FrameLayout>
+</layout>

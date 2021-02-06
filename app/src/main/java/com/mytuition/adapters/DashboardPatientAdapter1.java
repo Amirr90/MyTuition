@@ -62,12 +62,15 @@ public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, Dashb
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_subjectListFragment);
                 else if (position == 1)
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_specialityFragment);
-                else if (position == 2)
+                else if (position == 2 || position == 3)
+                    Toast.makeText(ParentScreen.getInstance(), "Coming Soon", Toast.LENGTH_SHORT).show();
+               /* else if (position == 2 || position==3)
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_tuitorByClassFragment);
                 else if (position == 3) {
                     ParentScreen.getInstance().navigate(R.id.action_parentDashboardFragment2_to_tuitorByClassFragment);
-                    createSpecialityData();
-                }
+                  */
+                createSpecialityData();
+            
             }
         });
 

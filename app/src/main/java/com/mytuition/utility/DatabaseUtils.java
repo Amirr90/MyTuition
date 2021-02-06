@@ -30,8 +30,9 @@ import static com.mytuition.adapters.DashboardPatientAdapter1.TEACHERS;
 import static com.mytuition.utility.Utils.getTeacherModel;
 
 public class DatabaseUtils {
-    private static final String TAG = "DatabaseUtils";
-    private static final String CLASS = "class";
+    public static final String TAG = "DatabaseUtils";
+    public static final String CLASS = "class";
+    public static final String PRIORITY = "priority";
 
     public static void getSubjectData(final DatabaseCallbackInterface databaseCallbackInterface) {
         final List<SpecialityModel> specialityModels = new ArrayList<>();
@@ -117,5 +118,27 @@ public class DatabaseUtils {
                 });
     }
 
+    public static void getTopTeacherData(final DatabaseCallbackInterface databaseCallbackInterface) {
+        final List<TeacherModel> models = new ArrayList<>();
+        Utils.getFirebaseReference(TEACHERS)
+                .orderByChild(PRIORITY)
+                .limitToFirst(15)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            TeacherModel value = postSnapshot.getValue(TeacherModel.class);
+                            models.add(value);
+                            Log.d(TAG, "onDataChange: " + value.getName());
+                        }
+                        databaseCallbackInterface.onSuccess(models);
 
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        databaseCallbackInterface.onFailed(databaseError.getMessage());
+                    }
+                });
+    }
 }

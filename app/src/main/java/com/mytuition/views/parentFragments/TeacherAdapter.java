@@ -1,6 +1,8 @@
 package com.mytuition.views.parentFragments;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -13,7 +15,7 @@ import com.mytuition.models.TeacherModel;
 
 import java.util.Random;
 
-public class TeacherAdapter extends ListAdapter<TeacherModel, TeacherAdapter.DashboadVH2> {
+public class TeacherAdapter extends ListAdapter<TeacherModel, TeacherAdapter.DashBoardVH2> {
     Integer[] cards = new Integer[]{R.drawable.box_one,
             R.drawable.box_two,
             R.drawable.box_three,
@@ -27,28 +29,37 @@ public class TeacherAdapter extends ListAdapter<TeacherModel, TeacherAdapter.Das
 
     @NonNull
     @Override
-    public DashboadVH2 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DashBoardVH2 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         DashBoardViewHorizontal1Binding dashBoardViewBinding = DashBoardViewHorizontal1Binding.inflate(inflater, parent, false);
-        return new DashboadVH2(dashBoardViewBinding);
+        return new DashBoardVH2(dashBoardViewBinding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DashboadVH2 holder, int position) {
+    public void onBindViewHolder(@NonNull DashBoardVH2 holder, int position) {
 
-        TeacherModel healthProductDetailsModel = getItem(position);
-        holder.dashBoardViewBinding.setDashboard2(healthProductDetailsModel);
+        final TeacherModel teacherModel = getItem(position);
+        holder.dashBoardViewBinding.setDashboard2(teacherModel);
 
         Random rand = new Random();
-        int pos = rand.nextInt(5);
-        //holder.dashBoardViewBinding.imageView22.setBackgroundResource(cards[pos]);
+/*        int pos = rand.nextInt(5);
+        holder.dashBoardViewBinding.imageView22.setBackgroundResource(cards[pos]);*/
+        holder.dashBoardViewBinding.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("docModel", teacherModel.toString());
+                ParentDashboardFragment.getInstance().navController.navigate(R.id.action_parentDashboardFragment2_to_teacherProfileFragment, bundle);
+
+            }
+        });
 
     }
 
-    public class DashboadVH2 extends RecyclerView.ViewHolder {
+    public class DashBoardVH2 extends RecyclerView.ViewHolder {
         DashBoardViewHorizontal1Binding dashBoardViewBinding;
 
-        public DashboadVH2(DashBoardViewHorizontal1Binding dashBoardViewBinding) {
+        public DashBoardVH2(DashBoardViewHorizontal1Binding dashBoardViewBinding) {
             super(dashBoardViewBinding.getRoot());
             this.dashBoardViewBinding = dashBoardViewBinding;
         }

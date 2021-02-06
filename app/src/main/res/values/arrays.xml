@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="choices">
+        <item>Less experience</item>
+        <item>Less educated</item>
+        <item>Timing issue</item>
+        <item>Fee Issue</item>
+    </string-array>
+
+</resources>
