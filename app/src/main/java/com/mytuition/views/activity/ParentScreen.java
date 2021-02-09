@@ -1,6 +1,8 @@
 package com.mytuition.views.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -23,13 +26,16 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.mytuition.R;
 import com.mytuition.adapters.NavAdapter;
@@ -39,6 +45,7 @@ import com.mytuition.models.NavModel;
 import com.mytuition.models.TuitionModel;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.GetAddressIntentService;
+import com.mytuition.views.SplashScreen;
 import com.mytuition.views.parentFragments.ParentDashboardFragment;
 
 import java.util.ArrayList;
@@ -47,6 +54,7 @@ import java.util.Objects;
 
 import static com.mytuition.utility.AppUtils.getFirestoreReference;
 import static com.mytuition.utility.AppUtils.getUid;
+import static com.mytuition.utility.AppUtils.hideDialog;
 import static com.mytuition.utility.Utils.LOGIN_TYPE;
 import static com.mytuition.utility.Utils.updateUI;
 import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_ACCEPTED;
@@ -197,13 +205,12 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     }
 
     private void loadNavData() {
+        navModels.add(new NavModel(getString(R.string.tuition_reqiest), R.drawable.ic_launcher_foreground));
         navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
         navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
-        navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
-        navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
-        navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
-        navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
-
+        navModels.add(new NavModel(getString(R.string.about_us), R.drawable.ic_launcher_foreground));
+        navModels.add(new NavModel(getString(R.string.share_app), R.drawable.ic_launcher_foreground));
+        navModels.add(new NavModel(getString(R.string.logout), R.drawable.ic_launcher_foreground));
         navAdapter.notifyDataSetChanged();
     }
 
@@ -306,5 +313,46 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     public void onNavigationItemClicked(int pos) {
         mainBinding.drawerLayout.close();
         Toast.makeText(instance, "Position " + pos, Toast.LENGTH_SHORT).show();
+        if (pos == 5)
+            showLogoutDialog();
+        else if (pos == 4) {
+
+        }
+    }
+
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(ParentScreen.this)
+                .setMessage("Do you really want to logout?")
+                .setIcon(R.drawable.ic_launcher_foreground)
+                .setPositiveButton("YES",
+                        new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                logout();
+                            }
+                        })
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @TargetApi(11)
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).show();
+
+    }
+
+    private void logout() {
+        AppUtils.showRequestDialog(ParentScreen.this);
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        hideDialog();
+                        Intent intent = new Intent(ParentScreen.this, SplashScreen.class);
+                        startActivity(intent);
+                        Toast.makeText(ParentScreen.this, "logged out successfully", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
     }
 }

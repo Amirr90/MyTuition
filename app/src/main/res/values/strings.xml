@@ -139,4 +139,8 @@
     <string name="accepted_time">Accepted at</string>
     <string name="change_teacher">Change Teacher</string>
     <string name="try_again">try again</string>
+    <string name="logout">Logout</string>
+    <string name="share_app">Share App</string>
+    <string name="about_us">About Us</string>
+    <string name="tuition_reqiest">Tuition Request</string>
 </resources>
