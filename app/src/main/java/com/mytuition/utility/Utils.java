@@ -344,7 +344,6 @@ public class Utils {
         Gson gson = new Gson();
         String json = pref.getString(PARENT, "");
         return gson.fromJson(json, ParentModel.class);
-
     }
 
 

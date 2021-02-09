@@ -133,12 +133,21 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                 mainBinding.constraintLayout.setVisibility(destination.getId() == R.id.DetailsFragment2 ? View.GONE : View.VISIBLE);
             }
         });
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         updateRequestView();
+    }
+
+    public void openDrawer() {
+        mainBinding.drawerLayout.open();
+    }
+
+    public void closeDrawer() {
+        mainBinding.drawerLayout.close();
     }
 
     private void startLocationUpdates() {
@@ -312,13 +321,13 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     @Override
     public void onNavigationItemClicked(int pos) {
         mainBinding.drawerLayout.close();
-        Toast.makeText(instance, "Position " + pos, Toast.LENGTH_SHORT).show();
         if (pos == 5)
             showLogoutDialog();
-        else if (pos == 4) {
-
+        else if (pos == 0) {
+            navController.navigate(R.id.DetailsFragment2);
         }
     }
+
 
     private void showLogoutDialog() {
         new AlertDialog.Builder(ParentScreen.this)

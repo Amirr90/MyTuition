@@ -122,8 +122,12 @@ public class ParentDashboardFragment extends Fragment {
         });
 
 
-
-
+        parentDashboardBinding.imageView7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParentScreen.getInstance().openDrawer();
+            }
+        });
 
     }
 

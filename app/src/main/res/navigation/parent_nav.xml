@@ -186,7 +186,7 @@
         android:id="@+id/DetailsFragment2"
         android:name="com.mytuition.RequestTuitionDetailFragment"
         android:label="@string/tuition_details"
-        tools:layout="@layout/fragment_request_tuition_detail" >
+        tools:layout="@layout/fragment_request_tuition_detail">
         <action
             android:id="@+id/action_DetailsFragment2_to_teacherProfileFragment"
             app:destination="@id/teacherProfileFragment" />

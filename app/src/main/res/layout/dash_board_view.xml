@@ -25,8 +25,7 @@
             android:elevation="5dp"
             app:layout_constraintBottom_toTopOf="@+id/cv1"
             app:layout_constraintStart_toStartOf="@+id/cv1"
-            app:layout_constraintTop_toTopOf="@+id/cv1"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            app:layout_constraintTop_toTopOf="@+id/cv1" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv1"

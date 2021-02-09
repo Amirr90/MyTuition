@@ -1,7 +1,10 @@
 package com.mytuition.views.parentFragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,20 +21,26 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.mytuition.BR;
-import com.mytuition.R;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mytuition.databinding.FragmentParentProfileBinding;
-import com.mytuition.databinding.FragmentTeacherProfileBinding;
 import com.mytuition.models.ParentModel;
-import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.AppUtils;
-import com.mytuition.utility.FileUtil;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +59,8 @@ public class ParentProfileFragment extends Fragment {
     private static final String NAME = "name";
     private static final String ADDRESS = "address";
     private static final String EMAIL = "email";
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
     FragmentParentProfileBinding profileBinding;
     NavController navController;
 
@@ -57,6 +68,8 @@ public class ParentProfileFragment extends Fragment {
 
 
     boolean isPicChange = false;
+    ProgressDialog progressDialog;
+
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -70,6 +83,9 @@ public class ParentProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+
+
+        progressDialog = new ProgressDialog(requireActivity());
 
         parentModel = getParentModel(requireActivity());
 
@@ -112,7 +128,7 @@ public class ParentProfileFragment extends Fragment {
     private void selectImage(int tag) {
         ImagePicker.Companion.with(this)
                 .crop(4f, 4f)                    //Crop image(Optional), Check Customization for more option
-                .compress(512)            //Final image size will be less than 1 MB(Optional)
+                .compress(512)//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                 .start();
     }
@@ -122,27 +138,87 @@ public class ParentProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (null != data) {
-
+                Uri uri = data.getData();
+                profileBinding.profileImage.setImageURI(uri);
+                isPicChange = true;
+                Log.d(TAG, "onActivityResult: Uri" + data.getData());
                 try {
-                    Log.d(TAG, "onActivityResult: "+data.getData());
-                    Uri uri = data.getData();
-                    profileBinding.profileImage.setImageURI(uri);
-                    isPicChange = true;
-                    File file = FileUtil.from(requireActivity(), uri);
-                    uploadImage(file);
-                } catch (IOException e) {
+                    uploadImageToFirebase(uri);
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    Log.d(TAG, "onActivityResult: "+e.getLocalizedMessage());
                 }
-            }
-
-        }
+            } else Log.d(TAG, "onActivityResult: No Data ");
+        } else Log.d(TAG, "onActivityResult: resultCode not matched");
 
 
     }
 
-    private void uploadImage(File file) {
-        Log.d(TAG, "uploadImage: " + file);
+    private void uploadImageToFirebase(Uri uri) throws FileNotFoundException {
+
+
+        progressDialog.show();
+        progressDialog.setMessage("Updating profile image,please wait...");
+        final DocumentReference uploadImageUriRef = firestore.collection("Users").document(getUid());
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        final StorageReference storageRef = storage.getReference();
+
+
+        final String STORAGE_PATH = "profile_image/" + getUid() + "/" + System.currentTimeMillis() + ".jpg";
+        StorageReference spaceRef = storageRef.child(STORAGE_PATH);
+
+        Bitmap bitmap2 = ((BitmapDrawable) profileBinding.profileImage.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] compressData = baos.toByteArray();
+        UploadTask uploadTask = spaceRef.putBytes(compressData);
+
+        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                progressDialog.setProgress((int) progress);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                storageRef.child(STORAGE_PATH).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Map<String, Object> imageMap = new HashMap<>();
+                        imageMap.put("image", uri.toString());
+                        uploadImageUriRef.update(imageMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                progressDialog.dismiss();
+                                Toast.makeText(requireActivity(), " Image Uploaded", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        uploadImageUriRef.update(imageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                            }
+                        })
+                    }
+                });
+
+            }
+        }).addOnCanceledListener(new OnCanceledListener() {
+            @Override
+            public void onCanceled() {
+                progressDialog.dismiss();
+                Toast.makeText(requireActivity(), "Upload cancelled, try again", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+
+                Toast.makeText(requireActivity(), "failed to upload Image " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     private Map<String, Object> getUserMap(ParentModel parentModel) {
