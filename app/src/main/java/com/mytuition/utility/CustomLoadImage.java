@@ -194,13 +194,13 @@ public class CustomLoadImage {
                 Glide.with(ParentScreen.getInstance())
                         .load(imagePath)
                         .centerCrop()
-                        .placeholder(R.drawable.ic_launcher_background)
+                        .placeholder(R.drawable.profile_demo_image)
                         .into(imageView);
 
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(TAG, "loadImage: " + e.getLocalizedMessage());
-                imageView.setImageResource(R.drawable.ic_launcher_foreground);
+                imageView.setImageResource(R.drawable.profile_demo_image);
             }
         }
 

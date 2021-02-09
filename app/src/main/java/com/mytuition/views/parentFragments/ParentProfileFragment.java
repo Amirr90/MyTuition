@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -191,14 +192,10 @@ public class ParentProfileFragment extends Fragment {
                             public void onSuccess(Void aVoid) {
                                 progressDialog.dismiss();
                                 Toast.makeText(requireActivity(), " Image Uploaded", Toast.LENGTH_SHORT).show();
+                                setProfile();
                             }
                         });
-                        uploadImageUriRef.update(imageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
 
-                            }
-                        })
                     }
                 });
 
@@ -219,6 +216,17 @@ public class ParentProfileFragment extends Fragment {
         });
 
 
+    }
+
+    private void setProfile() {
+        AppUtils.getFirestoreReference().collection("Users").document(getUid()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
+                        setParentModel(requireActivity(), parentModel);
+                    }
+                });
     }
 
     private Map<String, Object> getUserMap(ParentModel parentModel) {

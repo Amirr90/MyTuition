@@ -215,8 +215,10 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
 
     private void loadNavData() {
         navModels.add(new NavModel(getString(R.string.tuition_reqiest), R.drawable.ic_launcher_foreground));
-        navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
-        navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
+
+      /*  navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
+        navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));*/
+
         navModels.add(new NavModel(getString(R.string.about_us), R.drawable.ic_launcher_foreground));
         navModels.add(new NavModel(getString(R.string.share_app), R.drawable.ic_launcher_foreground));
         navModels.add(new NavModel(getString(R.string.logout), R.drawable.ic_launcher_foreground));

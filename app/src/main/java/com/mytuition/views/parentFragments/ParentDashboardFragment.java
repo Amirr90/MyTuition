@@ -43,6 +43,8 @@ import java.util.Objects;
 import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
 
+import static com.mytuition.utility.Utils.getParentModel;
+
 public class ParentDashboardFragment extends Fragment {
 
     public static final String DASHBOARD = "Dashboard";
@@ -79,6 +81,7 @@ public class ParentDashboardFragment extends Fragment {
 
         navController = Navigation.findNavController(view);
 
+        parentDashboardBinding.setParent(getParentModel(requireActivity()));
         adapter1 = new DashboardPatientAdapter1();
         adapter2 = new TeacherAdapter();
         adapter3 = new CoachingAdapter();
