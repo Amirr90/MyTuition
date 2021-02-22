@@ -102,17 +102,11 @@ public class RequestTuitionDetailFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 hideDialog();
-                if (null != dataSnapshot) {
-
-                    TeacherModel teacherModel = dataSnapshot.getValue(TeacherModel.class);
-                    if (teacherModel != null) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("docModel", teacherModel.toString());
-                        navController.navigate(R.id.action_DetailsFragment2_to_teacherProfileFragment, bundle);
-                    } else {
-                        Log.d(TAG, "onDataChange: " + dataSnapshot.toString());
-                        Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
-                    }
+                TeacherModel teacherModel = dataSnapshot.getValue(TeacherModel.class);
+                if (teacherModel != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("docModel", teacherModel.toString());
+                    navController.navigate(R.id.action_DetailsFragment2_to_teacherProfileFragment, bundle);
                 } else {
                     Log.d(TAG, "onDataChange: " + dataSnapshot.toString());
                     Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
@@ -157,12 +151,16 @@ public class RequestTuitionDetailFragment extends Fragment {
     }
 
     private void updateRequestStatus(TuitionModel tuitionModel) {
-        if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_PENDING)) {
-            requestTuitionBinding.btLoading.setAnimation(R.raw.waiting);
-        } else if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_ACCEPTED)) {
-            requestTuitionBinding.btLoading.setAnimation(R.raw.accepted);
-        } else if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_REJECTED)) {
-            requestTuitionBinding.btLoading.setAnimation(R.raw.rejected);
+        switch (tuitionModel.getRequestStatus()) {
+            case REQUEST_STATUS_PENDING:
+                requestTuitionBinding.btLoading.setAnimation(R.raw.waiting);
+                break;
+            case REQUEST_STATUS_ACCEPTED:
+                requestTuitionBinding.btLoading.setAnimation(R.raw.accepted);
+                break;
+            case REQUEST_STATUS_REJECTED:
+                requestTuitionBinding.btLoading.setAnimation(R.raw.rejected);
+                break;
         }
         requestTuitionBinding.btLoading.playAnimation();
 

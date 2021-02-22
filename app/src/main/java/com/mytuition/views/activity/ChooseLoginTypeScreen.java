@@ -88,8 +88,6 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
         if (requestCode == 10) {
             loginTypeScreenBinding.progressBar.setVisibility(View.GONE);
             if (resultCode == RESULT_OK) {

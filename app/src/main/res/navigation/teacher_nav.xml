@@ -8,6 +8,19 @@
     <fragment
         android:id="@+id/teacherDashboardFragment"
         android:name="com.mytuition.views.parentFragments.TeacherDashboardFragment"
-        android:label="fragment_teacher_dashboard"
-        tools:layout="@layout/fragment_teacher_dashboard" />
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_teacher_dashboard">
+        <action
+            android:id="@+id/action_teacherDashboardFragment_to_TProfileFragment"
+            app:destination="@id/TProfileFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/TProfileFragment"
+        android:name="com.mytuition.teacherView.TProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_t_profile" />
 </navigation>

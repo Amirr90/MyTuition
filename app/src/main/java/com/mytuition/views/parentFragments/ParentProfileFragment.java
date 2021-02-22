@@ -187,6 +187,7 @@ public class ParentProfileFragment extends Fragment {
                     public void onSuccess(Uri uri) {
                         Map<String, Object> imageMap = new HashMap<>();
                         imageMap.put("image", uri.toString());
+
                         uploadImageUriRef.update(imageMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -219,14 +220,16 @@ public class ParentProfileFragment extends Fragment {
     }
 
     private void setProfile() {
-        AppUtils.getFirestoreReference().collection("Users").document(getUid()).get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
-                        setParentModel(requireActivity(), parentModel);
-                    }
-                });
+        if (null != getUid())
+            AppUtils.getFirestoreReference().collection("Users").document(getUid()).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
+                            setParentModel(requireActivity(), parentModel);
+                        }
+                    });
+        else Toast.makeText(requireActivity(), "User not found !!", Toast.LENGTH_SHORT).show();
     }
 
     private Map<String, Object> getUserMap(ParentModel parentModel) {

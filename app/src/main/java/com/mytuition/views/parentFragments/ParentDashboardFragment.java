@@ -28,6 +28,7 @@ import com.mytuition.models.Banner;
 import com.mytuition.models.CoachingModel;
 import com.mytuition.models.DashboardModel1;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.DatabaseUtils;
 import com.mytuition.utility.PicassoImageLoadingService;
 import com.mytuition.utility.Utils;
@@ -251,6 +252,8 @@ public class ParentDashboardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).hide();
+        AppUtils.showToolbar(requireActivity());
     }
+
+
 }

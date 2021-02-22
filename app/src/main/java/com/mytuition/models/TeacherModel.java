@@ -25,10 +25,20 @@ public class TeacherModel extends BaseObservable {
     String collegeName;
     String address;
     String description;
+    String mobile;
     String id;
     Integer priority;
     Integer tuition;
     boolean isDemoClassFree;
+
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public boolean isDemoClassFree() {
         return isDemoClassFree;

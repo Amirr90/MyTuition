@@ -22,6 +22,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -45,6 +47,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -539,5 +542,13 @@ public class AppUtils {
         String LANGUAGE = "en";
         return NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(number);
 
+    }
+
+    public static void showToolbar(Activity activity) {
+        Objects.requireNonNull(((AppCompatActivity) activity).getSupportActionBar()).show();
+    }
+
+    public static void hideToolbar(Activity activity) {
+        Objects.requireNonNull(((AppCompatActivity) activity).getSupportActionBar()).hide();
     }
 }
