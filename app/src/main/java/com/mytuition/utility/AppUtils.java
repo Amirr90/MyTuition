@@ -65,6 +65,22 @@ public class AppUtils {
 
     public static final String MY_PREFS_NAME = "myPref";
 
+
+    public static List<String> getAllSpeciality() {
+        List<String> speciality = new ArrayList<>();
+        speciality.add("English");
+        speciality.add("Hindi");
+        speciality.add("Maths");
+        speciality.add("Science");
+        speciality.add("Computer");
+        speciality.add("Java");
+        speciality.add("Physics");
+        speciality.add("Hindi");
+        speciality.add("Chemistry");
+        speciality.add("All Subject");
+        return speciality;
+    }
+
     public static String getMimeType(Context context, Uri uri) {
         String mimeType = null;
         if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {

@@ -2,6 +2,7 @@ package com.mytuition.models;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.HashMap;
@@ -13,6 +14,8 @@ import static com.mytuition.utility.AppUtils.getCurrencyFormat;
 public class TeacherModel extends BaseObservable {
     public static String image;
     String name;
+    String fatherName;
+    String email;
     String experience;
     String rating;
     String review;
@@ -31,7 +34,23 @@ public class TeacherModel extends BaseObservable {
     Integer tuition;
     boolean isDemoClassFree;
 
+    public String getFatherName() {
+        return fatherName;
+    }
 
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Bindable
     public String getMobile() {
         return mobile;
     }
@@ -40,6 +59,7 @@ public class TeacherModel extends BaseObservable {
         this.mobile = mobile;
     }
 
+    @Bindable
     public boolean isDemoClassFree() {
         return isDemoClassFree;
     }
@@ -48,6 +68,7 @@ public class TeacherModel extends BaseObservable {
         isDemoClassFree = demoClassFree;
     }
 
+    @Bindable
     public String getPerVisit() {
         return perVisit;
     }
@@ -56,6 +77,7 @@ public class TeacherModel extends BaseObservable {
         this.perVisit = perVisit;
     }
 
+    @Bindable
     public String getPerVisitFeeInInstance() {
         if (null == perVisit)
             return getCurrencyFormat(0);
@@ -63,6 +85,7 @@ public class TeacherModel extends BaseObservable {
 
     }
 
+    @Bindable
     public Integer getTuition() {
         return tuition;
     }
@@ -77,6 +100,7 @@ public class TeacherModel extends BaseObservable {
         else return getCurrencyFormat(fee);
     }
 
+    @Bindable
     public Integer getPriority() {
         return null == priority ? 10 : priority;
     }
@@ -85,6 +109,7 @@ public class TeacherModel extends BaseObservable {
         this.priority = priority;
     }
 
+    @Bindable
     public String getId() {
         return id;
     }
@@ -93,6 +118,7 @@ public class TeacherModel extends BaseObservable {
         this.id = id;
     }
 
+    @Bindable
     public String getDescription() {
         return description;
     }
@@ -101,6 +127,7 @@ public class TeacherModel extends BaseObservable {
         this.description = description;
     }
 
+    @Bindable
     public String getAddress() {
         return address;
     }
@@ -109,6 +136,7 @@ public class TeacherModel extends BaseObservable {
         this.address = address;
     }
 
+    @Bindable
     public String getCollegeName() {
         return collegeName;
     }
@@ -117,6 +145,7 @@ public class TeacherModel extends BaseObservable {
         this.collegeName = collegeName;
     }
 
+    @Bindable
     public String getDegree() {
         return degree;
     }
@@ -125,6 +154,7 @@ public class TeacherModel extends BaseObservable {
         this.degree = degree;
     }
 
+    @Bindable
     public String getFee() {
         return fee;
     }
@@ -133,6 +163,7 @@ public class TeacherModel extends BaseObservable {
         this.fee = fee;
     }
 
+    @Bindable
     public String getSpeciality() {
         return speciality;
     }
@@ -141,6 +172,7 @@ public class TeacherModel extends BaseObservable {
         this.speciality = speciality;
     }
 
+    @Bindable
     public String getRating() {
         return rating;
     }
@@ -149,6 +181,7 @@ public class TeacherModel extends BaseObservable {
         this.rating = rating;
     }
 
+    @Bindable
     public String getReview() {
         return review;
     }
@@ -157,6 +190,7 @@ public class TeacherModel extends BaseObservable {
         this.review = review;
     }
 
+    @Bindable
     public String getExperience() {
         return experience;
     }
@@ -165,6 +199,7 @@ public class TeacherModel extends BaseObservable {
         this.experience = experience;
     }
 
+    @Bindable
     public String getImage() {
         return image;
     }
@@ -173,6 +208,7 @@ public class TeacherModel extends BaseObservable {
         this.image = image;
     }
 
+    @Bindable
     public String getName() {
         return name;
     }
