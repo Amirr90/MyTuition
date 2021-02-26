@@ -13,26 +13,86 @@ import static com.mytuition.utility.AppUtils.getCurrencyFormat;
 
 public class TeacherModel extends BaseObservable {
     public static String image;
-    String name;
-    String fatherName;
-    String email;
-    String experience;
-    String rating;
-    String review;
-    String speciality;
-    String fee;
-    String perVisit;
-    String feeInInstance;
-    String perVisitFeeInInstance;
-    String degree;
-    String collegeName;
-    String address;
-    String description;
-    String mobile;
-    String id;
-    Integer priority;
-    Integer tuition;
-    boolean isDemoClassFree;
+    public static String name;
+    public static String fatherName;
+    public static String email;
+    public static String experience;
+    public static String rating;
+    public static String review;
+    public static String speciality;
+    public static String fee;
+    public static String perVisit;
+    public static String feeInInstance;
+    public static String perVisitFeeInInstance;
+    public static String degree;
+    public static String collegeName;
+    public static String address;
+    public static String description;
+    public static String mobile;
+    public static String id;
+    public static Integer priority;
+    public static Integer tuition;
+    public static boolean isDemoClassFree;
+    public static String landMark;
+    public static String city;
+    public static String state;
+    public static String schoolName;
+    public static String aadharFrontImage;
+    public static String aadharBackImage;
+
+    @Bindable
+    public String getAadharFrontImage() {
+        return aadharFrontImage;
+    }
+
+    public void setAadharFrontImage(String aadharFrontImage) {
+        this.aadharFrontImage = aadharFrontImage;
+    }
+
+    @Bindable
+    public String getAadharBackImage() {
+        return aadharBackImage;
+    }
+
+    public void setAadharBackImage(String aadharBackImage) {
+        this.aadharBackImage = aadharBackImage;
+    }
+
+    @Bindable
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    @Bindable
+    public String getLandMark() {
+        return landMark;
+    }
+
+    public void setLandMark(String landMark) {
+        this.landMark = landMark;
+    }
+
+    @Bindable
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Bindable
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public String getFatherName() {
         return fatherName;

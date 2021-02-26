@@ -8,6 +8,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -22,20 +24,33 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.mytuition.R;
+import com.mytuition.interfaces.ApiInterface;
+import com.mytuition.interfaces.UploadImageInterface;
 import com.mytuition.models.CalendarModel;
 import com.mytuition.models.SpecialityModel;
+import com.mytuition.models.TeacherModel;
 import com.mytuition.models.TimeSlotModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -47,6 +62,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -213,6 +229,110 @@ public class AppUtils {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public static void updateTeacherProfile(TeacherModel teacherModel, final ApiInterface apiInterface) {
+        getFirestoreReference().collection("Users").document(getUid()).update(getTeacherProfileMap(teacherModel))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        apiInterface.onSuccess("Profile Updated Successfully !!");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                apiInterface.onFailed("failed to upload Image, try again !!");
+                Log.d(TAG, "onFailureUpdateProfile: " + e.getLocalizedMessage());
+            }
+        }).addOnCanceledListener(new OnCanceledListener() {
+            @Override
+            public void onCanceled() {
+                apiInterface.onFailed("cancel to update profile, try again !!");
+            }
+        });
+    }
+
+    private static Map<String, Object> getTeacherProfileMap(TeacherModel teacherModel) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(TeacherModel.image, teacherModel.getImage());
+        map.put(TeacherModel.name, teacherModel.getName());
+        map.put(TeacherModel.fatherName, teacherModel.getFatherName());
+        map.put(TeacherModel.email, teacherModel.getEmail());
+        map.put(TeacherModel.experience, teacherModel.getExperience());
+        map.put(TeacherModel.rating, teacherModel.getRating());
+        map.put(TeacherModel.review, teacherModel.getReview());
+        map.put(TeacherModel.speciality, teacherModel.getSpeciality());
+        map.put(TeacherModel.fee, teacherModel.getFee());
+        map.put(TeacherModel.perVisit, teacherModel.getPerVisit());
+        map.put(TeacherModel.degree, teacherModel.getDegree());
+        map.put(TeacherModel.collegeName, teacherModel.getCollegeName());
+        map.put(TeacherModel.address, teacherModel.getAddress());
+        map.put(TeacherModel.landMark, teacherModel.getLandMark());
+        map.put(TeacherModel.city, teacherModel.getCity());
+        map.put(TeacherModel.state, teacherModel.getState());
+        map.put(TeacherModel.aadharFrontImage, teacherModel.getAadharFrontImage());
+        map.put(TeacherModel.aadharBackImage, teacherModel.getAadharBackImage());
+        return map;
+    }
+
+    public static void uploadImages(final List<Bitmap> bitmaps, final UploadImageInterface uploadImageInterface) {
+
+        final List<String> uploadedImageUrl = new ArrayList<>();
+        final int uploadImageCounter = 0;
+        final DocumentReference uploadImageUriRef = getFirestoreReference().collection("Users").document(getUid());
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        final StorageReference storageRef = storage.getReference();
+
+
+        final String STORAGE_PATH = "aadhar_image/" + getUid() + "/" + System.currentTimeMillis() + ".jpg";
+        StorageReference spaceRef = storageRef.child(STORAGE_PATH);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        for (int a = uploadImageCounter; a < bitmaps.size(); a++) {
+            bitmaps.get(a).compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] compressData = baos.toByteArray();
+            UploadTask uploadTask = spaceRef.putBytes(compressData);
+
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                    //  double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    storageRef.child(STORAGE_PATH).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Map<String, Object> imageMap = new HashMap<>();
+                            uploadedImageUrl.add(uri.toString());
+                            uploadImageUriRef.update(imageMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    if (uploadImageCounter == (bitmaps.size() - 1))
+                                        uploadImageInterface.onSuccess(uploadedImageUrl);
+                                }
+                            });
+
+                        }
+                    });
+
+                }
+            }).addOnCanceledListener(new OnCanceledListener() {
+                @Override
+                public void onCanceled() {
+                    uploadImageInterface.onFailed("Upload cancelled, try again");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    uploadImageInterface.onFailed("failed to upload Image " + e.getLocalizedMessage());
+                }
+            });
+
+        }
+
+
     }
 
 

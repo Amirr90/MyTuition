@@ -128,10 +128,10 @@ public class ParentProfileFragment extends Fragment {
 
     private void selectImage(int tag) {
         ImagePicker.Companion.with(this)
-                .crop(4f, 4f)                    //Crop image(Optional), Check Customization for more option
-                .compress(512)//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                .start();
+                .crop(4f, 4f)
+                .compress(512)
+                .maxResultSize(1080, 1080)
+                .start(tag);
     }
 
     @Override
@@ -143,18 +143,15 @@ public class ParentProfileFragment extends Fragment {
                 profileBinding.profileImage.setImageURI(uri);
                 isPicChange = true;
                 Log.d(TAG, "onActivityResult: Uri" + data.getData());
-                try {
-                    uploadImageToFirebase(uri);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                uploadImageToFirebase(uri);
+
             } else Log.d(TAG, "onActivityResult: No Data ");
         } else Log.d(TAG, "onActivityResult: resultCode not matched");
 
 
     }
 
-    private void uploadImageToFirebase(Uri uri) throws FileNotFoundException {
+    private void uploadImageToFirebase(Uri uri)  {
 
 
         progressDialog.show();
