@@ -252,7 +252,7 @@ public class ParentDashboardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        AppUtils.showToolbar(requireActivity());
+        AppUtils.hideToolbar(requireActivity());
     }
 
 

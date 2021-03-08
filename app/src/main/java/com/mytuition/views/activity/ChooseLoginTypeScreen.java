@@ -52,7 +52,9 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
         loginTypeScreenBinding.btnLoginAsTeacher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginUi(LOGIN_TYPE_TEACHER);
+                Toast.makeText(ChooseLoginTypeScreen.this, "Registration for Teachers is currently closed !!", Toast.LENGTH_SHORT).show();
+
+                // loginUi(LOGIN_TYPE_TEACHER);
             }
         });
 

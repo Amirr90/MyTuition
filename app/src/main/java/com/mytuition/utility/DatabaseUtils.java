@@ -9,10 +9,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mytuition.interfaces.Api;
+import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.RequestModel;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.models.TuitionModel;
 import com.mytuition.responseModel.ApiResponse;
 
 import org.jetbrains.annotations.NotNull;
@@ -140,5 +142,39 @@ public class DatabaseUtils {
                         databaseCallbackInterface.onFailed(databaseError.getMessage());
                     }
                 });
+    }
+
+    public static void requestTuition(TuitionModel model, String timeSlots, final ApiInterface apiCallbackInterface) {
+        try {
+            final Api api = URLUtils.getAPIServiceForParent();
+            Call<ApiResponse> dashBoardResCall = api.requestTuition(
+                    model.getParentModel().getId(),
+                    model.getTeacherModel().getId(),
+                    model.getParentModel().getName(),
+                    timeSlots,
+                    model.getRequestTimeSLot(),
+                    model.getClassIds());
+            dashBoardResCall.enqueue(new Callback<ApiResponse>() {
+                @Override
+                public void onResponse(@NotNull Call<ApiResponse> call, @NotNull Response<ApiResponse> response) {
+                    if (response.code() == 200 && null != response.body()) {
+                        if (response.body().getResponseCode() == 1) {
+                            apiCallbackInterface.onSuccess(response.body().getResponseMessage());
+                        } else {
+                            apiCallbackInterface.onFailed(response.body().getResponseMessage());
+                        }
+                    } else apiCallbackInterface.onFailed(response.message());
+
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<ApiResponse> call, @NotNull Throwable t) {
+                    apiCallbackInterface.onFailed(t.getLocalizedMessage());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

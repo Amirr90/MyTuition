@@ -16,15 +16,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.mytuition.R;
 import com.mytuition.databinding.FragmentRequestTuitionBinding;
+import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.models.ParentModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.models.TuitionModel;
 import com.mytuition.utility.AppUtils;
+import com.mytuition.utility.DatabaseUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -87,9 +88,34 @@ public class RequestTuitionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 requestTuition();
+                makeTuitionRequest();
             }
         });
 
+    }
+
+    private void makeTuitionRequest() {
+        final TuitionModel tuitionModel = new TuitionModel();
+        tuitionModel.setRequestTimeSLot(timeSlot);
+        tuitionModel.setParentId(getUid());
+        tuitionModel.setRequestStatus(REQUEST_STATUS_PENDING);
+        tuitionModel.setParentModel(parentModel);
+        tuitionModel.setTeacherModel(teacherModel);
+        tuitionModel.setTeacherId(teacherModel.getId());
+        tuitionModel.setClassIds(classId);
+        DatabaseUtils.requestTuition(tuitionModel, timeSlot, new ApiInterface() {
+            @Override
+            public void onSuccess(Object obj) {
+                AppUtils.hideDialog();
+                navController.navigate(R.id.action_requestTuitonFragment_to_requestTuitionSuccessfullyFragment);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                AppUtils.hideDialog();
+                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void requestTuition() {
@@ -137,8 +163,7 @@ public class RequestTuitionFragment extends Fragment {
                         }
                     });
 
-        }
-        else {
+        } else {
             tuitionModel.setClassIds(classId);
             if (null != getUid())
                 AppUtils.getFirestoreReference().collection(REQUEST_TUITION).document(getUid())

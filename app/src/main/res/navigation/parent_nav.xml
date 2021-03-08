@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/parentDashboardFragment2"
         android:name="com.mytuition.views.parentFragments.ParentDashboardFragment"
-        android:label="fragment_parent_dashboard"
+        android:label="Dashhboard"
         tools:layout="@layout/fragment_parent_dashboard">
         <action
             android:id="@+id/action_parentDashboardFragment2_to_specialityFragment"
