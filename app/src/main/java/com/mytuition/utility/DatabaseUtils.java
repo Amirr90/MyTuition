@@ -157,11 +157,13 @@ public class DatabaseUtils {
             dashBoardResCall.enqueue(new Callback<ApiResponse>() {
                 @Override
                 public void onResponse(@NotNull Call<ApiResponse> call, @NotNull Response<ApiResponse> response) {
-                    if (response.code() == 200 && null != response.body()) {
-                        if (response.body().getResponseCode() == 1) {
-                            apiCallbackInterface.onSuccess(response.body().getResponseMessage());
+
+                    if (response.code() == 200) {
+                        ApiResponse apiResponse = response.body();
+                        if (apiResponse.getResponseCode() == 1) {
+                            apiCallbackInterface.onSuccess(apiResponse.getResponseMessage());
                         } else {
-                            apiCallbackInterface.onFailed(response.body().getResponseMessage());
+                            apiCallbackInterface.onFailed(apiResponse.getResponseMessage());
                         }
                     } else apiCallbackInterface.onFailed(response.message());
 

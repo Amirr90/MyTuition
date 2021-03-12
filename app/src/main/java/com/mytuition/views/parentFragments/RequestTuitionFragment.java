@@ -30,6 +30,8 @@ import com.mytuition.utility.DatabaseUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static com.mytuition.utility.AppUtils.getUid;
+import static com.mytuition.utility.AppUtils.objectToJSONArray;
+import static com.mytuition.utility.AppUtils.objectToJSONObject;
 import static com.mytuition.utility.Utils.getFirebaseReference;
 import static com.mytuition.utility.Utils.getParentModel;
 import static com.mytuition.views.parentFragments.SelectTimeSlotsFragment.TEACHER;
@@ -88,7 +90,7 @@ public class RequestTuitionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 requestTuition();
-                makeTuitionRequest();
+                //makeTuitionRequest();
             }
         });
 
@@ -103,6 +105,7 @@ public class RequestTuitionFragment extends Fragment {
         tuitionModel.setTeacherModel(teacherModel);
         tuitionModel.setTeacherId(teacherModel.getId());
         tuitionModel.setClassIds(classId);
+        Log.d(TAG, "makeTuitionRequest: " + objectToJSONArray(tuitionModel));
         DatabaseUtils.requestTuition(tuitionModel, timeSlot, new ApiInterface() {
             @Override
             public void onSuccess(Object obj) {
@@ -116,6 +119,9 @@ public class RequestTuitionFragment extends Fragment {
                 Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
             }
         });
+        Log.d(TAG, "makeTuitionRequest: " + objectToJSONObject(tuitionModel));
+
+
     }
 
     private void requestTuition() {

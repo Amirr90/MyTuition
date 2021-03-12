@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -30,7 +31,6 @@ import com.mytuition.utility.AppUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,8 +99,8 @@ public class TProfileFragment extends Fragment {
     private void selectImage(int tag) {
         ImagePicker.Companion.with(this)
                 .crop(4f, 4f)
-                .compress(512)
-                .maxResultSize(1080, 1080)
+                .compress(256)
+                .maxResultSize(540, 540)
                 .start(tag);
     }
 
@@ -213,10 +213,20 @@ public class TProfileFragment extends Fragment {
         binding.specialitySpinner.setAdapter(adapter);
 
         //Highest Education Spinner
-        String[] items = new String[]{"High School", "Intermediate", "Graduate", "Post Graduate", "P.hd"};
+        final String[] items = new String[]{"High School", "Intermediate", "Graduate", "Post Graduate", "P.hd"};
         ArrayAdapter<String> highestEducationAdapter = new ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, items);
         binding.highestEducationSpinner.setAdapter(highestEducationAdapter);
+        binding.highestEducationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                higherEducation = items[position];
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //Monthly Fee Spinner
         String[] fee = new String[]{"₹1000-₹2000", "₹2000-₹2500", "₹2500-₹3000", "₹3000-₹3500", "₹3500-₹4000", "₹4000-₹4500", "₹5000-₹5500", "₹6000-₹6500", "₹6500-₹7000", "₹10,000"};

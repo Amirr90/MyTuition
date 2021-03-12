@@ -115,7 +115,7 @@ public class ParentModel extends BaseObservable {
 
     @Override
     public String toString() {
-        return "ParentModel{" +
+        return "{" +
                 "user='" + user + '\'' +
                 ", lastRequestStatus='" + lastRequestStatus + '\'' +
                 ", email='" + email + '\'' +

@@ -172,7 +172,7 @@
                                 android:paddingStart="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_10sdp"
                                 android:singleLine="true"
-                                android:text="@{teacherProfile.fatherName}"
+                                android:text="@={teacherProfile.fatherName}"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/_11sdp"
@@ -499,7 +499,7 @@
                                 android:fontFamily="@font/
 "
                                 android:gravity="center"
-                                android:text="Aadhare Front"
+                                android:text="Aadhar Front"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="16sp"
                                 app:layout_constraintEnd_toEndOf="parent"

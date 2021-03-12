@@ -47,8 +47,10 @@ import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.models.TimeSlotModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
@@ -69,6 +71,7 @@ import java.util.regex.Pattern;
 
 import static android.content.Context.MODE_PRIVATE;
 
+
 public class AppUtils {
     private static final String TAG = "AppUtils";
     public static Toast mToast;
@@ -80,6 +83,7 @@ public class AppUtils {
     static ProgressDialog progressDialog;
 
     public static final String MY_PREFS_NAME = "myPref";
+    static int uploadImageCounter = 0;
 
 
     public static List<String> getAllSpeciality() {
@@ -232,6 +236,7 @@ public class AppUtils {
     }
 
     public static void updateTeacherProfile(TeacherModel teacherModel, final ApiInterface apiInterface) {
+        Log.d(TAG, "getUid: " + getUid());
         getFirestoreReference().collection("Users").document(getUid()).update(getTeacherProfileMap(teacherModel))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -254,42 +259,43 @@ public class AppUtils {
 
     private static Map<String, Object> getTeacherProfileMap(TeacherModel teacherModel) {
         Map<String, Object> map = new HashMap<>();
-        map.put(TeacherModel.image, teacherModel.getImage());
-        map.put(TeacherModel.name, teacherModel.getName());
-        map.put(TeacherModel.fatherName, teacherModel.getFatherName());
-        map.put(TeacherModel.email, teacherModel.getEmail());
-        map.put(TeacherModel.experience, teacherModel.getExperience());
-        map.put(TeacherModel.rating, teacherModel.getRating());
-        map.put(TeacherModel.review, teacherModel.getReview());
-        map.put(TeacherModel.speciality, teacherModel.getSpeciality());
-        map.put(TeacherModel.fee, teacherModel.getFee());
-        map.put(TeacherModel.perVisit, teacherModel.getPerVisit());
-        map.put(TeacherModel.degree, teacherModel.getDegree());
-        map.put(TeacherModel.collegeName, teacherModel.getCollegeName());
-        map.put(TeacherModel.address, teacherModel.getAddress());
-        map.put(TeacherModel.landMark, teacherModel.getLandMark());
-        map.put(TeacherModel.city, teacherModel.getCity());
-        map.put(TeacherModel.state, teacherModel.getState());
-        map.put(TeacherModel.aadharFrontImage, teacherModel.getAadharFrontImage());
-        map.put(TeacherModel.aadharBackImage, teacherModel.getAadharBackImage());
+        map.put("image", teacherModel.getImage());
+        map.put("name", teacherModel.getName());
+        map.put("fatherName", teacherModel.getFatherName());
+        map.put("email", teacherModel.getEmail());
+        map.put("experience", teacherModel.getExperience());
+        map.put("rating", teacherModel.getRating());
+        map.put("review", teacherModel.getReview());
+        map.put("speciality", teacherModel.getSpeciality());
+        map.put("fee", teacherModel.getFee());
+        map.put("perVisit", teacherModel.getPerVisit());
+        map.put("degree", teacherModel.getDegree());
+        map.put("collegeName", teacherModel.getCollegeName());
+        map.put("address", teacherModel.getAddress());
+        map.put("landMark", teacherModel.getLandMark());
+        map.put("city", teacherModel.getCity());
+        map.put("state", teacherModel.getState());
+        map.put("aadharFrontImage", teacherModel.getAadharFrontImage());
+        map.put("aadharBackImage", teacherModel.getAadharBackImage());
+        Log.d(TAG, "getTeacherProfileMap: " + map);
         return map;
     }
 
     public static void uploadImages(final List<Bitmap> bitmaps, final UploadImageInterface uploadImageInterface) {
 
         final List<String> uploadedImageUrl = new ArrayList<>();
-        final int uploadImageCounter = 0;
-        final DocumentReference uploadImageUriRef = getFirestoreReference().collection("Users").document(getUid());
         FirebaseStorage storage = FirebaseStorage.getInstance();
         final StorageReference storageRef = storage.getReference();
 
 
-        final String STORAGE_PATH = "aadhar_image/" + getUid() + "/" + System.currentTimeMillis() + ".jpg";
-        StorageReference spaceRef = storageRef.child(STORAGE_PATH);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        for (uploadImageCounter = 0; uploadImageCounter < bitmaps.size(); uploadImageCounter++) {
 
-        for (int a = uploadImageCounter; a < bitmaps.size(); a++) {
-            bitmaps.get(a).compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            final String STORAGE_PATH = "aadhar_image/" + getUid() + "/" + System.currentTimeMillis() + ".jpg";
+            StorageReference spaceRef = storageRef.child(STORAGE_PATH);
+
+            Log.d(TAG, "uploadImages: " + uploadImageCounter);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmaps.get(uploadImageCounter).compress(Bitmap.CompressFormat.JPEG, 75, baos);
             byte[] compressData = baos.toByteArray();
             UploadTask uploadTask = spaceRef.putBytes(compressData);
 
@@ -304,15 +310,11 @@ public class AppUtils {
                     storageRef.child(STORAGE_PATH).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            Map<String, Object> imageMap = new HashMap<>();
                             uploadedImageUrl.add(uri.toString());
-                            uploadImageUriRef.update(imageMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    if (uploadImageCounter == (bitmaps.size() - 1))
-                                        uploadImageInterface.onSuccess(uploadedImageUrl);
-                                }
-                            });
+                            if (uploadImageCounter == (bitmaps.size())) {
+                                Log.d(TAG, "onSuccessEqual: " + uploadImageCounter);
+                                uploadImageInterface.onSuccess(uploadedImageUrl);
+                            } else Log.d(TAG, "onSuccess: notEqual " + uploadImageCounter);
 
                         }
                     });
@@ -329,7 +331,7 @@ public class AppUtils {
                     uploadImageInterface.onFailed("failed to upload Image " + e.getLocalizedMessage());
                 }
             });
-
+            
         }
 
 
@@ -554,6 +556,34 @@ public class AppUtils {
         return str;
     }
 
+
+    public static JSONObject objectToJSONObject(Object object){
+        Object json = null;
+        JSONObject jsonObject = null;
+        try {
+            json = new JSONTokener(object.toString()).nextValue();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (json instanceof JSONObject) {
+            jsonObject = (JSONObject) json;
+        }
+        return jsonObject;
+    }
+
+    public static JSONArray objectToJSONArray(Object object){
+        Object json = null;
+        JSONArray jsonArray = null;
+        try {
+            json = new JSONTokener(object.toString()).nextValue();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (json instanceof JSONArray) {
+            jsonArray = (JSONArray) json;
+        }
+        return jsonArray;
+    }
 
     public static String sdfFromTimeStamp(String outPattern) {
         Date date = new Date();

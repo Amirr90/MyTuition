@@ -5,7 +5,6 @@ public class ApiResponse {
     Integer responseCode;
     String responseMessage;
 
-
     public Integer getResponseCode() {
         return responseCode;
     }

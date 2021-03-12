@@ -85,17 +85,16 @@ public class TuitionModel {
         this.timestamp = timestamp;
     }
 
-
     @Override
     public String toString() {
-        return "TuitionModel{" +
+        return "{" +
                 "teacherModel=" + teacherModel +
                 ", parentModel=" + parentModel +
                 ", parentId='" + parentId + '\'' +
                 ", teacherId='" + teacherId + '\'' +
                 ", timestamp=" + timestamp +
                 ", requestStatus='" + requestStatus + '\'' +
-                ", requestActionTimestamp='" + requestActionTimestamp + '\'' +
+                ", requestActionTimestamp=" + requestActionTimestamp +
                 ", requestTimeSLot='" + requestTimeSLot + '\'' +
                 ", classIds='" + classIds + '\'' +
                 '}';

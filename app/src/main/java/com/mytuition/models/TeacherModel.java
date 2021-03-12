@@ -12,33 +12,33 @@ import java.util.Objects;
 import static com.mytuition.utility.AppUtils.getCurrencyFormat;
 
 public class TeacherModel extends BaseObservable {
-    public static String image;
-    public static String name;
-    public static String fatherName;
-    public static String email;
-    public static String experience;
-    public static String rating;
-    public static String review;
-    public static String speciality;
-    public static String fee;
-    public static String perVisit;
-    public static String feeInInstance;
-    public static String perVisitFeeInInstance;
-    public static String degree;
-    public static String collegeName;
-    public static String address;
-    public static String description;
-    public static String mobile;
-    public static String id;
-    public static Integer priority;
-    public static Integer tuition;
-    public static boolean isDemoClassFree;
-    public static String landMark;
-    public static String city;
-    public static String state;
-    public static String schoolName;
-    public static String aadharFrontImage;
-    public static String aadharBackImage;
+    public  String image;
+    public  String name;
+    public  String fatherName;
+    public  String email;
+    public  String experience;
+    public  String rating;
+    public  String review;
+    public  String speciality;
+    public  String fee;
+    public  String perVisit;
+    public  String feeInInstance;
+    public  String perVisitFeeInInstance;
+    public  String degree;
+    public  String collegeName;
+    public  String address;
+    public  String description;
+    public  String mobile;
+    public  String id;
+    public  Integer priority;
+    public  Integer tuition;
+    public  boolean isDemoClassFree;
+    public  String landMark;
+    public  String city;
+    public  String state;
+    public  String schoolName;
+    public  String aadharFrontImage;
+    public  String aadharBackImage;
 
     @Bindable
     public String getAadharFrontImage() {
@@ -303,10 +303,14 @@ public class TeacherModel extends BaseObservable {
         }
     };
 
+
     @Override
     public String toString() {
         return "{" +
-                "name='" + name + '\'' +
+                "image='" + image + '\'' +
+                ", name='" + name + '\'' +
+                ", fatherName='" + fatherName + '\'' +
+                ", email='" + email + '\'' +
                 ", experience='" + experience + '\'' +
                 ", rating='" + rating + '\'' +
                 ", review='" + review + '\'' +
@@ -319,10 +323,17 @@ public class TeacherModel extends BaseObservable {
                 ", collegeName='" + collegeName + '\'' +
                 ", address='" + address + '\'' +
                 ", description='" + description + '\'' +
+                ", mobile='" + mobile + '\'' +
                 ", id='" + id + '\'' +
                 ", priority=" + priority +
                 ", tuition=" + tuition +
                 ", isDemoClassFree=" + isDemoClassFree +
+                ", landMark='" + landMark + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", schoolName='" + schoolName + '\'' +
+                ", aadharFrontImage='" + aadharFrontImage + '\'' +
+                ", aadharBackImage='" + aadharBackImage + '\'' +
                 '}';
     }
 }

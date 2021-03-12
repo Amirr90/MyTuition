@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.mytuition.R;
 import com.mytuition.databinding.FragmentTProfileBinding;
+import com.mytuition.databinding.FragmentTeacherDashboardBinding;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.AppUtils;
@@ -26,14 +27,14 @@ import org.jetbrains.annotations.NotNull;
 public class TeacherDashboardFragment extends Fragment {
 
 
-    FragmentTProfileBinding binding;
+    FragmentTeacherDashboardBinding binding;
     NavController navController;
 
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentTProfileBinding.inflate(getLayoutInflater());
+        binding = FragmentTeacherDashboardBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }
 
@@ -53,7 +54,7 @@ public class TeacherDashboardFragment extends Fragment {
                 AppUtils.hideDialog();
                 TeacherModel teacherModel = (TeacherModel) obj;
                 if (null != teacherModel) {
-                    if (teacherModel.getName().isEmpty()) {
+                    if (!teacherModel.getName().isEmpty()) {
                         Toast.makeText(requireActivity(), "incomplete profile !!", Toast.LENGTH_SHORT).show();
                         navController.navigate(R.id.action_teacherDashboardFragment_to_TProfileFragment);
                     }
