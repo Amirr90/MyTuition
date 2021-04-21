@@ -1,6 +1,9 @@
 package com.mytuition.views.commonFragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,14 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.google.gson.Gson;
 import com.mytuition.R;
 import com.mytuition.databinding.FragmentTeacherProfileBinding;
-import com.mytuition.databinding.FragmentTuitorByClassBinding;
 import com.mytuition.models.TeacherModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.mytuition.utility.AppUtils.getJSONFromModel;
 
 public class TeacherProfileFragment extends Fragment {
+    private static final String TAG = "TeacherProfileFragment";
 
     FragmentTeacherProfileBinding teacherProfileBinding;
     NavController navController;

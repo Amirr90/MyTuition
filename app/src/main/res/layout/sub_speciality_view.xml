@@ -4,6 +4,10 @@
 
     <data>
 
+        <import type="com.mytuition.utility.AppUtils" />
+
+        <import type="android.view.View" />
+
         <variable
             name="teacher"
             type="com.mytuition.models.TeacherModel" />
@@ -70,7 +74,7 @@
                     android:lineSpacingExtra="0dp"
                     android:lineSpacingMultiplier="1"
                     android:singleLine="true"
-                    android:text="@{teacher.degree,default=`M.sc`}"
+                    android:text="@{teacher.academicInformation.highestEducation,default=`M.sc`}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />
 
@@ -87,7 +91,7 @@
                     android:lineSpacingExtra="0dp"
                     android:lineSpacingMultiplier="1"
                     android:singleLine="true"
-                    android:text="@{teacher.collegeName,default=`College Name`}"
+                    android:text="@{teacher.academicInformation.collegeName,default=`College Name`}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />
 
@@ -133,7 +137,7 @@
                         android:lineSpacingMultiplier="1"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
-                        android:text="@{String.valueOf(teacher.experience)+` Years of Experiance`}"
+                        android:text="@{String.valueOf(teacher.teachingProfile.experience)+` Years of Experiance`}"
                         android:textColor="#3F4E6E"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -191,7 +195,7 @@
                         android:lineSpacingMultiplier="1"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
-                        android:text="@{teacher.address,default=`Rajajipuram, Lucknow`}"
+                        android:text="@{teacher.profile.address,default=`Rajajipuram, Lucknow`}"
                         android:textColor="#3F4E6E"
                         android:textSize="12sp" />
                 </RelativeLayout>
@@ -225,7 +229,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/poppins_bold"
-                        android:text="@{teacher.feeInInstance}"
+                        android:text="@{AppUtils.getCurrencyFormat(teacher.teachingProfile.perVisitFee)}"
                         android:textColor="#262E3F"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -255,7 +259,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/poppins_bold"
-                        android:text="@{teacher.perVisitFeeInInstance}"
+                        android:text="@{AppUtils.getCurrencyFormat(teacher.teachingProfile.monthlyFee)}"
                         android:textColor="#262E3F"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -290,7 +294,8 @@
                     android:text="Free Demo Class Available"
                     android:textColor="#58d68d "
                     android:textSize="12sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:visibility="@{teacher.teachingProfile.demoClass?View.VISIBLE:View.GONE}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

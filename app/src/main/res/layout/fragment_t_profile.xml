@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.google.firebase.auth.FirebaseAuth"/>
+        <import type="com.mytuition.utility.AppUtils"/>
         <variable
             name="teacherProfile"
             type="com.mytuition.models.TeacherModel" />
@@ -172,7 +174,7 @@
                                 android:paddingStart="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_10sdp"
                                 android:singleLine="true"
-                                android:text="@={teacherProfile.fatherName}"
+                                android:text="@={teacherProfile.profile.fatherName}"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/_11sdp"
@@ -208,7 +210,6 @@
                                 android:paddingStart="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_10sdp"
                                 android:singleLine="true"
-                                android:text="@{teacherProfile.mobile}"
                                 android:textColor="@color/colorPrimary"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/_11sdp"
@@ -242,7 +243,6 @@
                                 android:paddingStart="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_10sdp"
                                 android:singleLine="true"
-                                android:text="@={teacherProfile.email}"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/_11sdp"
@@ -275,7 +275,7 @@
                                 android:paddingStart="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_10sdp"
                                 android:singleLine="true"
-                                android:text="@={teacherProfile.address}"
+                                android:text="@={teacherProfile.profile.address}"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/_11sdp"
@@ -308,7 +308,7 @@
                                 android:paddingStart="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_10sdp"
                                 android:singleLine="true"
-                                android:text="@={teacherProfile.landMark}"
+                                android:text="@={teacherProfile.profile.address}"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/_11sdp"
@@ -341,7 +341,7 @@
                                 android:paddingStart="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_10sdp"
                                 android:singleLine="true"
-                                android:text="@={teacherProfile.city}"
+                                android:text="@={teacherProfile.profile.city}"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/_11sdp"
@@ -374,7 +374,7 @@
                                 android:paddingStart="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_10sdp"
                                 android:singleLine="true"
-                                android:text="@={teacherProfile.state}"
+                                android:text="@={teacherProfile.profile.state}"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/_11sdp"
@@ -470,7 +470,7 @@
                                 android:paddingStart="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_10sdp"
                                 android:singleLine="true"
-                                android:text="@={teacherProfile.schoolName}"
+                                android:text="@={teacherProfile.academicInformation.schoolName}"
                                 android:textColor="@android:color/black"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/_11sdp"

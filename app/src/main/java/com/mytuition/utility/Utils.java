@@ -83,11 +83,11 @@ public class Utils {
     public static TeacherModel getTeacherModel(String id) {
         TeacherModel teacherModel = new TeacherModel();
         teacherModel.setName("Teacher Name");
-        teacherModel.setExperience("5");
+     /*   teacherModel.setExperience("5");*/
         teacherModel.setSpeciality("Computer");
-        teacherModel.setFee("500");
+      /*  teacherModel.setFee("500");
         teacherModel.setRating("5");
-        teacherModel.setReview("500");
+        teacherModel.setReview("500");*/
         teacherModel.setId(id);
         teacherModel.setImage("https://img.pngio.com/hd-teach-blogger-round-logo-png-transparent-png-image-download-teach-png-533_533.png");
         return teacherModel;

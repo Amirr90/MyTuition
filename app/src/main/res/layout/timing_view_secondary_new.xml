@@ -6,12 +6,11 @@
         <import type="android.graphics.Color"/>
         <variable
             name="timeDetailsModel"
-            type="com.mytuition.models.TimeSlotModel.TimeDetails" />
+            type="String" />
     </data>
 
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_5sdp"
@@ -25,8 +24,7 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:padding="10dp"
-            android:text="@{timeDetailsModel.slotTime}"
-            android:textColor="@{Color.parseColor(timeDetailsModel.booked?`#F44336`:`#32CD32`)}"
+            android:text="@{timeDetailsModel}"
             android:textSize="12sp" />
     </LinearLayout>
     <!--    android:textColor="@{timeDetailsModel.booked?`#F44336`:`#3F4E6E`}"-->

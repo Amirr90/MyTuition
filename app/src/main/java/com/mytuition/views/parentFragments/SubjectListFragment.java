@@ -1,28 +1,26 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.mytuition.adapters.SubjectAdapter;
 import com.mytuition.databinding.FragmentSubjectListBinding;
-import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.SpecialityModel;
-import com.mytuition.models.SubjectModel;
 import com.mytuition.utility.AppUtils;
-import com.mytuition.utility.DatabaseUtils;
+import com.mytuition.viewHolder.ParentViewHolder;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +28,9 @@ public class SubjectListFragment extends Fragment {
 
     FragmentSubjectListBinding subjectListBinding;
     SubjectAdapter subjectAdapter;
+
+    ParentViewHolder viewModel;
+    private static final String TAG = "SubjectListFragment";
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -48,19 +49,17 @@ public class SubjectListFragment extends Fragment {
 
 
         AppUtils.showRequestDialog(requireActivity());
-        DatabaseUtils.getSubjectData(new DatabaseCallbackInterface() {
-            @Override
-            public void onSuccess(Object obj) {
-                AppUtils.hideDialog();
-                subjectAdapter.submitList((List<SpecialityModel>) obj);
-            }
 
+        viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
+        viewModel.getSpecialityList().observe(getViewLifecycleOwner(), new Observer<List<SpecialityModel>>() {
             @Override
-            public void onFailed(String msg) {
+            public void onChanged(List<SpecialityModel> specialityModels) {
                 AppUtils.hideDialog();
-                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+                subjectAdapter.submitList(specialityModels);
+                Log.d(TAG, "onChanged: " + specialityModels.size());
             }
         });
+
     }
 
     @Override

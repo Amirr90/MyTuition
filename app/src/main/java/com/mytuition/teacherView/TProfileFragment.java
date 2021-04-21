@@ -22,7 +22,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.firebase.auth.FirebaseAuth;
 import com.mytuition.databinding.FragmentTProfileBinding;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.interfaces.UploadImageInterface;
@@ -65,8 +64,8 @@ public class TProfileFragment extends Fragment {
 
 
         teacherModel = new TeacherModel();
-        if (null != FirebaseAuth.getInstance().getCurrentUser())
-            teacherModel.setMobile(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+       /* if (null != FirebaseAuth.getInstance().getCurrentUser())
+            teacherModel.setMobile(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());*/
         binding.setTeacherProfile(teacherModel);
 
 
@@ -137,8 +136,11 @@ public class TProfileFragment extends Fragment {
             public void onSuccess(Object msg) {
                 List<String> uploadedImageUri = (List<String>) msg;
                 if (!uploadedImageUri.isEmpty()) {
-                    teacherModel.setAadharFrontImage(uploadedImageUri.get(0));
-                    teacherModel.setAadharBackImage(uploadedImageUri.get(1));
+                    TeacherModel.Profile profile = new TeacherModel.Profile();
+                    profile.setAadharFrontImage(uploadedImageUri.get(0));
+                    profile.setAadharBackImage(uploadedImageUri.get(1));
+                    teacherModel.setProfile(profile);
+
                 }
 
                 AppUtils.updateTeacherProfile(teacherModel, new ApiInterface() {
@@ -168,7 +170,7 @@ public class TProfileFragment extends Fragment {
 
     private boolean allFieldIsFilled() {
         teacherModel = binding.getTeacherProfile();
-        if (null == teacherModel.getName() || teacherModel.getName().isEmpty()) {
+        /*if (null == teacherModel.getName() || teacherModel.getName().isEmpty()) {
             Toast.makeText(requireActivity(), "Name required !!", Toast.LENGTH_SHORT).show();
             return false;
         } else if (null == teacherModel.getFatherName() || teacherModel.getFatherName().isEmpty()) {
@@ -201,7 +203,7 @@ public class TProfileFragment extends Fragment {
         } else if (null == teacherModel.getSchoolName() || teacherModel.getSchoolName().isEmpty()) {
             Toast.makeText(requireActivity(), "School/College Name required !!", Toast.LENGTH_SHORT).show();
             return false;
-        }
+        }*/
         return true;
     }
 

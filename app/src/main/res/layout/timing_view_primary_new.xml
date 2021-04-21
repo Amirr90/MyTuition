@@ -9,7 +9,7 @@
 
         <variable
             name="timing"
-            type="com.mytuition.models.TimeSlotModel" />
+            type="com.mytuition.models.TeacherModel.TimeSlotModel" />
     </data>
 
     <RelativeLayout
@@ -31,7 +31,7 @@
                 android:paddingLeft="@dimen/_5sdp"
                 android:paddingTop="@dimen/_5sdp"
                 android:paddingRight="@dimen/_5sdp"
-                android:text="@{timing.slotType}"
+                android:text="@{timing.type}"
                 android:textColor="#262E3F"
                 android:textSize="16sp"
                 android:textStyle="bold" />

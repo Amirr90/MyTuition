@@ -105,7 +105,7 @@
                     android:layout_below="@id/view1"
                     android:layout_marginStart="28dp"
                     android:layout_marginTop="13dp"
-                    android:setCustomVisibility="@{teacher.degree}"
+                    android:setCustomVisibility="@{teacher.academicInformation.highestEducation}"
                     android:src="@drawable/ic_calendar"
                     app:tint="@color/GreyColo" />
 
@@ -118,8 +118,8 @@
                     android:layout_marginTop="13dp"
                     android:layout_toEndOf="@+id/imageView9"
                     android:fontFamily="@font/poppins"
-                    android:setCustomVisibility="@{teacher.degree}"
-                    android:text="@{teacher.degree}"
+                    android:setCustomVisibility="@{teacher.academicInformation.highestEducation}"
+                    android:text="@{teacher.academicInformation.highestEducation}"
                     android:textColor="#3F4E6E"
                     android:textSize="14sp" />
 
@@ -141,7 +141,7 @@
                     android:layout_marginTop="22dp"
                     android:layout_toEndOf="@+id/imageView10"
                     android:fontFamily="@font/poppins"
-                    android:text="@{teacher.degree}"
+                    android:text="@{teacher.academicInformation.highestEducation}"
                     android:textColor="#3F4E6E"
                     android:textSize="14sp" />
 

@@ -1,9 +1,14 @@
 package com.mytuition.responseModel;
 
-public class ApiResponse {
+import com.mytuition.models.SpecialityModel;
+
+import java.util.List;
+
+public class SpecialityRes {
 
     Integer responseCode;
     String responseMessage;
+    List<SpecialityModel> responseValue;
 
     public Integer getResponseCode() {
         return responseCode;
@@ -11,5 +16,9 @@ public class ApiResponse {
 
     public String getResponseMessage() {
         return responseMessage;
+    }
+
+    public List<SpecialityModel> getResponseValue() {
+        return responseValue;
     }
 }

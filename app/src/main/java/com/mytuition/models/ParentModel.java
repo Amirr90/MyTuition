@@ -2,7 +2,6 @@ package com.mytuition.models;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
 
 public class ParentModel extends BaseObservable {
 
@@ -108,10 +107,7 @@ public class ParentModel extends BaseObservable {
     }
 
 
-    public void notifyAllFields() {
-        notifyPropertyChanged(BR._all);
 
-    }
 
     @Override
     public String toString() {

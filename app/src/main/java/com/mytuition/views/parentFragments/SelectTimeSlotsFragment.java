@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,26 +20,18 @@ import com.mytuition.databinding.FragmentSelectTimeSlotsBinding;
 import com.mytuition.interfaces.AdapterInterface;
 import com.mytuition.models.CalendarModel;
 import com.mytuition.models.TeacherModel;
-import com.mytuition.models.TimeSlotModel;
-import com.mytuition.utility.AppUtils;
+import com.mytuition.utility.AppConstant;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
 
+import static com.mytuition.RequestTuitionDetailFragment.TIME_SLOT;
 import static com.mytuition.utility.AppUtils.getCurrentDateInWeekMonthDayFormat;
 import static com.mytuition.utility.AppUtils.getNextWeekDays;
-import static com.mytuition.utility.AppUtils.getSlots;
-import static com.mytuition.utility.AppUtils.sdfFromTimeStamp;
-import static com.mytuition.views.parentFragments.RequestTuitionFragment.TIME_SLOT;
 
 public class SelectTimeSlotsFragment extends Fragment implements AdapterInterface {
 
@@ -52,9 +43,10 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
 
     CalendarAdapter calendarAdapter;
     TimeSlotsAdapter slotsAdapter;
-    List<TimeSlotModel> timeSlotsModelList;
+    List<TeacherModel.TimeSlotModel> timeSlotsModelList;
     private static final String TAG = "SelectTimeSlotsFragment";
     String classId = null;
+    String date;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -77,6 +69,7 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
             String jsonString = getArguments().getString("docModel");
             Gson gson = new Gson();
             teacherModel = gson.fromJson(jsonString, TeacherModel.class);
+            Log.d(TAG, "onViewCreated: " + teacherModel.toString());
         }
         if (null != getArguments().getString("class")) {
             classId = getArguments().getString("class");
@@ -86,6 +79,7 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
         slotsBinding.setTeacher(teacherModel);
 
         // AddTimeSlot(teacherModel.getId());
+        date = getNextWeekDays().get(0).getDateSend();
         getTimeSlots(0);
         slotsBinding.tvCurrentDate.setText(getCurrentDateInWeekMonthDayFormat());
 
@@ -94,6 +88,7 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
             @Override
             public void onItemClicked(CalendarModel calendarModel, int pos) {
                 getTimeSlots(pos);
+                date = calendarModel.getDateSend();
             }
         });
 
@@ -115,7 +110,7 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
     }
 
     private void setSlots() {
-        boolean b = false;
+        /*boolean b = false;
         timeSlotsModelList = new ArrayList<>();
         if (null != classId) {
             timeSlotsModelList.add(new TimeSlotModel("Morning", getSlots(b, 7, 12)));
@@ -127,8 +122,10 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
             timeSlotsModelList.add(new TimeSlotModel("Noon", getSlots(b, 14, 17)));
             timeSlotsModelList.add(new TimeSlotModel("Evening", getSlots(b, 18, 21)));
             timeSlotsModelList.add(new TimeSlotModel("Night", getSlots(b, 21, 24)));
-        }
+        }*/
 
+        timeSlotsModelList = new ArrayList<>();
+        timeSlotsModelList.addAll(teacherModel.getTimeSlots());
         slotsAdapter = new TimeSlotsAdapter(timeSlotsModelList, this);
         slotsBinding.timingRec.setAdapter(slotsAdapter);
     }
@@ -139,8 +136,19 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
         Bundle bundle = new Bundle();
         String timeSlot = (String) o;
         bundle.putString(TIME_SLOT, timeSlot);
+        bundle.putString(AppConstant.DATE, date);
+
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(teacherModel);
+
         if (null == classId) {
-            bundle.putString(TEACHER, teacherModel.toString());
+            try {
+                JSONObject request = new JSONObject(jsonString);
+                bundle.putString(AppConstant.TEACHER_MODEL, request.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         } else {
             bundle.putString("class", classId);
 

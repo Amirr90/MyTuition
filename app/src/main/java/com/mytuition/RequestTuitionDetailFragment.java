@@ -2,6 +2,11 @@ package com.mytuition;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,26 +16,18 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.mytuition.databinding.FragmentRequestTuitionBinding;
 import com.mytuition.databinding.FragmentRequestTuitionDetailBinding;
-import com.mytuition.databinding.FragmentRequestedTuitionDetailBinding;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.models.TuitionModel;
+import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.activity.ParentScreen;
-import com.mytuition.views.parentFragments.ParentDashboardFragment;
 import com.mytuition.views.parentFragments.RequestTuitionFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,18 +36,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.mytuition.utility.AppUtils.getFirestoreReference;
 import static com.mytuition.utility.AppUtils.getTimeFormat;
 import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.AppUtils.hideDialog;
-import static com.mytuition.utility.AppUtils.parseDate;
 import static com.mytuition.utility.AppUtils.showRequestDialog;
 import static com.mytuition.utility.Utils.getFirebaseReference;
-import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_ACCEPTED;
-import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_PENDING;
-import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_REJECTED;
-import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_TUITION;
-import static com.mytuition.views.parentFragments.SelectTimeSlotsFragment.TEACHER;
 
 
 public class RequestTuitionDetailFragment extends Fragment {
@@ -61,6 +51,12 @@ public class RequestTuitionDetailFragment extends Fragment {
     TuitionModel tuitionModel;
 
     int selectedPosition = -1;
+
+    public static final String REQUEST_TUITION = "TuitionRequest";
+    public static final String REQUEST_STATUS_PENDING = "Pending";
+    public static final String TIME_SLOT = "slot";
+    public static final String REQUEST_STATUS_ACCEPTED = "Accepted";
+    public static final String REQUEST_STATUS_REJECTED = "Rejected";
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -124,7 +120,7 @@ public class RequestTuitionDetailFragment extends Fragment {
 
     private void getTuitionDetails() {
         if (getUid() != null)
-            AppUtils.getFirestoreReference().collection(RequestTuitionFragment.REQUEST_TUITION).document(getUid())
+            AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION).document(getUid())
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 

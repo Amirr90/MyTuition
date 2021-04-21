@@ -12,7 +12,7 @@ import com.mytuition.R;
 import com.mytuition.databinding.TimingViewPrimaryNewBinding;
 import com.mytuition.databinding.TimingViewSecondaryNewBinding;
 import com.mytuition.interfaces.AdapterInterface;
-import com.mytuition.models.TimeSlotModel;
+import com.mytuition.models.TeacherModel;
 import com.mytuition.views.activity.ParentScreen;
 
 import java.util.List;
@@ -20,11 +20,11 @@ import java.util.List;
 import static com.mytuition.utility.AppUtils.fadeIn;
 
 public class TimeSlotsAdapter extends RecyclerView.Adapter<TimeSlotsAdapter.SlotVH> {
-    List<TimeSlotModel> timeSlotsModelList;
+    List<TeacherModel.TimeSlotModel> timeSlotsModelList;
     TimeSlotsAdapterSecondary adapterSecondary;
     AdapterInterface adapterInterface;
 
-    public TimeSlotsAdapter(List<TimeSlotModel> timeSlotsModelList, AdapterInterface adapterInterface) {
+    public TimeSlotsAdapter(List<TeacherModel.TimeSlotModel> timeSlotsModelList, AdapterInterface adapterInterface) {
         this.timeSlotsModelList = timeSlotsModelList;
         this.adapterInterface = adapterInterface;
     }
@@ -42,11 +42,11 @@ public class TimeSlotsAdapter extends RecyclerView.Adapter<TimeSlotsAdapter.Slot
     public void onBindViewHolder(@NonNull SlotVH holder, int position) {
 
 
-        TimeSlotModel timeSlotsModel = timeSlotsModelList.get(position);
+        TeacherModel.TimeSlotModel timeSlotsModel = timeSlotsModelList.get(position);
 
         holder.primaryNewBinding.setTiming(timeSlotsModel);
-        if (null != timeSlotsModel.getTimeDetails()) {
-            adapterSecondary = new TimeSlotsAdapterSecondary(timeSlotsModel.getTimeDetails(), new AdapterInterface() {
+        if (null != timeSlotsModel.getType()) {
+            adapterSecondary = new TimeSlotsAdapterSecondary(timeSlotsModel.getSlots(), new AdapterInterface() {
                 @Override
                 public void onItemClicked(Object o) {
                     adapterInterface.onItemClicked(o);
@@ -62,10 +62,10 @@ public class TimeSlotsAdapter extends RecyclerView.Adapter<TimeSlotsAdapter.Slot
 
     @Override
     public int getItemCount() {
-        return timeSlotsModelList.size();
+        return null == timeSlotsModelList ? 0 : timeSlotsModelList.size();
     }
 
-    public class SlotVH extends RecyclerView.ViewHolder {
+    public static class SlotVH extends RecyclerView.ViewHolder {
         TimingViewPrimaryNewBinding primaryNewBinding;
 
         public SlotVH(TimingViewPrimaryNewBinding primaryNewBinding) {
@@ -75,13 +75,13 @@ public class TimeSlotsAdapter extends RecyclerView.Adapter<TimeSlotsAdapter.Slot
     }
 
 
-    public class TimeSlotsAdapterSecondary extends RecyclerView.Adapter<TimeSlotsAdapterSecondary.SlotsSecondaryVH> {
+    public static class TimeSlotsAdapterSecondary extends RecyclerView.Adapter<TimeSlotsAdapterSecondary.SlotsSecondaryVH> {
 
-        List<TimeSlotModel.TimeDetails> timeDetailsModelList;
+        List<String> timeDetailsModelList;
         int subSelectedPosition = -1;
         AdapterInterface adapterInterface;
 
-        public TimeSlotsAdapterSecondary(List<TimeSlotModel.TimeDetails> timeDetailsModelList, AdapterInterface adapterInterface) {
+        public TimeSlotsAdapterSecondary(List<String> timeDetailsModelList, AdapterInterface adapterInterface) {
             this.timeDetailsModelList = timeDetailsModelList;
             this.adapterInterface = adapterInterface;
         }
@@ -97,7 +97,7 @@ public class TimeSlotsAdapter extends RecyclerView.Adapter<TimeSlotsAdapter.Slot
 
         @Override
         public void onBindViewHolder(@NonNull TimeSlotsAdapterSecondary.SlotsSecondaryVH holder, final int position) {
-            final TimeSlotModel.TimeDetails timeDetailsModel = timeDetailsModelList.get(position);
+            final String timeDetailsModel = timeDetailsModelList.get(position);
             holder.viewSecondaryNewBinding.setTimeDetailsModel(timeDetailsModel);
 
             if (subSelectedPosition == position) {
@@ -115,7 +115,7 @@ public class TimeSlotsAdapter extends RecyclerView.Adapter<TimeSlotsAdapter.Slot
                 public void onClick(View v) {
                     subSelectedPosition = position;
                     notifyDataSetChanged();
-                    adapterInterface.onItemClicked(timeDetailsModel.getSlotTime());
+                    adapterInterface.onItemClicked(timeDetailsModel);
                 }
             });
 
@@ -128,10 +128,10 @@ public class TimeSlotsAdapter extends RecyclerView.Adapter<TimeSlotsAdapter.Slot
 
         @Override
         public int getItemCount() {
-            return timeDetailsModelList.size();
+            return null == timeDetailsModelList ? 0 : timeDetailsModelList.size();
         }
 
-        public class SlotsSecondaryVH extends RecyclerView.ViewHolder {
+        public static class SlotsSecondaryVH extends RecyclerView.ViewHolder {
             TimingViewSecondaryNewBinding viewSecondaryNewBinding;
 
             public SlotsSecondaryVH(TimingViewSecondaryNewBinding viewSecondaryNewBinding) {

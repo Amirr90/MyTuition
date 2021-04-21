@@ -125,7 +125,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="@{String.valueOf(doctor.fee)}"
+                    android:text="@{String.valueOf(doctor.teachingProfile.monthlyFee)}"
                     android:textColor="#262E3F"
                     android:textSize="18sp"
                     android:textStyle="bold" />

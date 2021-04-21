@@ -2,338 +2,371 @@ package com.mytuition.models;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
 import androidx.recyclerview.widget.DiffUtil;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-
-import static com.mytuition.utility.AppUtils.getCurrencyFormat;
 
 public class TeacherModel extends BaseObservable {
-    public  String image;
-    public  String name;
-    public  String fatherName;
-    public  String email;
-    public  String experience;
-    public  String rating;
-    public  String review;
-    public  String speciality;
-    public  String fee;
-    public  String perVisit;
-    public  String feeInInstance;
-    public  String perVisitFeeInInstance;
-    public  String degree;
-    public  String collegeName;
-    public  String address;
-    public  String description;
-    public  String mobile;
-    public  String id;
-    public  Integer priority;
-    public  Integer tuition;
-    public  boolean isDemoClassFree;
-    public  String landMark;
-    public  String city;
-    public  String state;
-    public  String schoolName;
-    public  String aadharFrontImage;
-    public  String aadharBackImage;
 
-    @Bindable
-    public String getAadharFrontImage() {
-        return aadharFrontImage;
+
+    private AcademicInformation academicInformation;
+    private TeachingProfile teachingProfile;
+    private String speciality;
+    private boolean isActive;
+    private String name;
+    private String image;
+    private String id;
+    private List<TimeSlotModel> timeSlots;
+    private String about;
+    private Profile profile;
+
+    public void setTimeSlots(List<TimeSlotModel> timeSlots) {
+        this.timeSlots = timeSlots;
     }
 
-    public void setAadharFrontImage(String aadharFrontImage) {
-        this.aadharFrontImage = aadharFrontImage;
+    public List<TimeSlotModel> getTimeSlots() {
+        return timeSlots;
     }
 
-    @Bindable
-    public String getAadharBackImage() {
-        return aadharBackImage;
+    public void setAcademicInformation(AcademicInformation academicInformation) {
+        this.academicInformation = academicInformation;
     }
 
-    public void setAadharBackImage(String aadharBackImage) {
-        this.aadharBackImage = aadharBackImage;
-    }
-
-    @Bindable
-    public String getSchoolName() {
-        return schoolName;
-    }
-
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
-    }
-
-    @Bindable
-    public String getLandMark() {
-        return landMark;
-    }
-
-    public void setLandMark(String landMark) {
-        this.landMark = landMark;
-    }
-
-    @Bindable
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    @Bindable
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getFatherName() {
-        return fatherName;
-    }
-
-    public void setFatherName(String fatherName) {
-        this.fatherName = fatherName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Bindable
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    @Bindable
-    public boolean isDemoClassFree() {
-        return isDemoClassFree;
-    }
-
-    public void setDemoClassFree(boolean demoClassFree) {
-        isDemoClassFree = demoClassFree;
-    }
-
-    @Bindable
-    public String getPerVisit() {
-        return perVisit;
-    }
-
-    public void setPerVisit(String perVisit) {
-        this.perVisit = perVisit;
-    }
-
-    @Bindable
-    public String getPerVisitFeeInInstance() {
-        if (null == perVisit)
-            return getCurrencyFormat(0);
-        else return getCurrencyFormat(perVisit);
-
-    }
-
-    @Bindable
-    public Integer getTuition() {
-        return tuition;
-    }
-
-    public void setTuition(Integer tuition) {
-        this.tuition = tuition;
-    }
-
-    public String getFeeInInstance() {
-        if (null == fee)
-            return getCurrencyFormat(0);
-        else return getCurrencyFormat(fee);
-    }
-
-    @Bindable
-    public Integer getPriority() {
-        return null == priority ? 10 : priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority = priority;
-    }
-
-    @Bindable
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Bindable
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Bindable
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    @Bindable
-    public String getCollegeName() {
-        return collegeName;
-    }
-
-    public void setCollegeName(String collegeName) {
-        this.collegeName = collegeName;
-    }
-
-    @Bindable
-    public String getDegree() {
-        return degree;
-    }
-
-    public void setDegree(String degree) {
-        this.degree = degree;
-    }
-
-    @Bindable
-    public String getFee() {
-        return fee;
-    }
-
-    public void setFee(String fee) {
-        this.fee = fee;
-    }
-
-    @Bindable
-    public String getSpeciality() {
-        return speciality;
+    public void setTeachingProfile(TeachingProfile teachingProfile) {
+        this.teachingProfile = teachingProfile;
     }
 
     public void setSpeciality(String speciality) {
         this.speciality = speciality;
     }
 
-    @Bindable
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
-    @Bindable
-    public String getReview() {
-        return review;
-    }
-
-    public void setReview(String review) {
-        this.review = review;
-    }
-
-    @Bindable
-    public String getExperience() {
-        return experience;
-    }
-
-    public void setExperience(String experience) {
-        this.experience = experience;
-    }
-
-    @Bindable
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    @Bindable
-    public String getName() {
-        return name;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TeacherModel)) return false;
-        TeacherModel that = (TeacherModel) o;
-        return Objects.equals(getImage(), that.getImage()) &&
-                Objects.equals(getName(), that.getName());
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getImage(), getName());
+    public void setId(String id) {
+        this.id = id;
     }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public AcademicInformation getAcademicInformation() {
+        return academicInformation;
+    }
+
+    public TeachingProfile getTeachingProfile() {
+        return teachingProfile;
+    }
+
+    public String getSpeciality() {
+
+        return speciality;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public static class AcademicInformation {
+        private String collegeName;
+        private String graduation;
+        private String scoreClassXII;
+        private String postGraduation;
+        private String schoolName;
+        private String scoreClassX;
+        private String highestEducation;
+
+        public void setCollegeName(String collegeName) {
+            this.collegeName = collegeName;
+        }
+
+        public void setGraduation(String graduation) {
+            this.graduation = graduation;
+        }
+
+        public void setScoreClassXII(String scoreClassXII) {
+            this.scoreClassXII = scoreClassXII;
+        }
+
+        public void setPostGraduation(String postGraduation) {
+            this.postGraduation = postGraduation;
+        }
+
+        public void setSchoolName(String schoolName) {
+            this.schoolName = schoolName;
+        }
+
+        public void setScoreClassX(String scoreClassX) {
+            this.scoreClassX = scoreClassX;
+        }
+
+        public void setHighestEducation(String highestEducation) {
+            this.highestEducation = highestEducation;
+        }
+
+        public String getHighestEducation() {
+            return highestEducation;
+        }
+
+        public String getCollegeName() {
+            return collegeName;
+        }
+
+        public String getGraduation() {
+            return graduation;
+        }
+
+        public String getScoreClassXII() {
+            return scoreClassXII;
+        }
+
+        public String getPostGraduation() {
+            return postGraduation;
+        }
+
+        public String getSchoolName() {
+            return schoolName;
+        }
+
+        public String getScoreClassX() {
+            return scoreClassX;
+        }
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "collegeName='" + collegeName + '\'' +
+                    ", graduation='" + graduation + '\'' +
+                    ", scoreClassXII='" + scoreClassXII + '\'' +
+                    ", postGraduation='" + postGraduation + '\'' +
+                    ", schoolName='" + schoolName + '\'' +
+                    ", scoreClassX='" + scoreClassX + '\'' +
+                    ", highestEducation='" + highestEducation + '\'' +
+                    '}';
+        }
+    }
+
+    public static class TeachingProfile {
+        public String[] teachingSubject;
+        public long perVisitFee;
+        public long monthlyFee;
+        public String expertIn;
+        public String experience;
+        public Boolean demoClass;
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "teachingSubject=" + Arrays.toString(teachingSubject) +
+                    ", perVisitFee=" + perVisitFee +
+                    ", monthlyFee=" + monthlyFee +
+                    ", expertIn='" + expertIn + '\'' +
+                    ", experience='" + experience + '\'' +
+                    ", demoClass=" + demoClass +
+                    '}';
+        }
+
+        public String[] getTeachingSubject() {
+            return teachingSubject;
+        }
+
+        public long getPerVisitFee() {
+            return perVisitFee;
+        }
+
+        public long getMonthlyFee() {
+            return monthlyFee;
+        }
+
+        public String getExpertIn() {
+            return expertIn;
+        }
+
+        public String getExperience() {
+            return experience;
+        }
+    }
+
+    public static class Profile {
+        public String name;
+        public String address;
+        public String state;
+        public String mobile;
+        public String city;
+        public String fatherName;
+        public String aadharFrontImage;
+        public String aadharBackImage;
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "name='" + name + '\'' +
+                    ", address='" + address + '\'' +
+                    ", state='" + state + '\'' +
+                    ", mobile='" + mobile + '\'' +
+                    ", city='" + city + '\'' +
+                    ", fatherName='" + fatherName + '\'' +
+                    ", aadharFrontImage='" + aadharFrontImage + '\'' +
+                    ", aadharBackImage='" + aadharBackImage + '\'' +
+                    '}';
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+
+        public void setMobile(String mobile) {
+            this.mobile = mobile;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
+        public void setFatherName(String fatherName) {
+            this.fatherName = fatherName;
+        }
+
+        public String getAadharFrontImage() {
+            return aadharFrontImage;
+        }
+
+        public void setAadharFrontImage(String aadharFrontImage) {
+            this.aadharFrontImage = aadharFrontImage;
+        }
+
+        public String getAadharBackImage() {
+            return aadharBackImage;
+        }
+
+        public void setAadharBackImage(String aadharBackImage) {
+            this.aadharBackImage = aadharBackImage;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public String getMobile() {
+            return mobile;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public String getFatherName() {
+            return fatherName;
+        }
+    }
+
 
     public static DiffUtil.ItemCallback<TeacherModel> itemCallback = new DiffUtil.ItemCallback<TeacherModel>() {
         @Override
         public boolean areItemsTheSame(@NonNull TeacherModel oldItem, @NonNull TeacherModel newItem) {
-            return oldItem.getName().equals(newItem.getName());
+            return oldItem.name.equalsIgnoreCase(newItem.name);
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull TeacherModel oldItem, @NonNull TeacherModel newItem) {
-            return oldItem.equals(newItem);
+            return oldItem.speciality.equalsIgnoreCase(newItem.speciality);
         }
     };
-
 
     @Override
     public String toString() {
         return "{" +
-                "image='" + image + '\'' +
-                ", name='" + name + '\'' +
-                ", fatherName='" + fatherName + '\'' +
-                ", email='" + email + '\'' +
-                ", experience='" + experience + '\'' +
-                ", rating='" + rating + '\'' +
-                ", review='" + review + '\'' +
+                "academicInformation=" + academicInformation +
+                ", teachingProfile=" + teachingProfile +
                 ", speciality='" + speciality + '\'' +
-                ", fee='" + fee + '\'' +
-                ", perVisit='" + perVisit + '\'' +
-                ", feeInInstance='" + feeInInstance + '\'' +
-                ", perVisitFeeInInstance='" + perVisitFeeInInstance + '\'' +
-                ", degree='" + degree + '\'' +
-                ", collegeName='" + collegeName + '\'' +
-                ", address='" + address + '\'' +
-                ", description='" + description + '\'' +
-                ", mobile='" + mobile + '\'' +
+                ", isActive=" + isActive +
+                ", name='" + name + '\'' +
+                ", image='" + image + '\'' +
                 ", id='" + id + '\'' +
-                ", priority=" + priority +
-                ", tuition=" + tuition +
-                ", isDemoClassFree=" + isDemoClassFree +
-                ", landMark='" + landMark + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", schoolName='" + schoolName + '\'' +
-                ", aadharFrontImage='" + aadharFrontImage + '\'' +
-                ", aadharBackImage='" + aadharBackImage + '\'' +
+                ", timeSlots=" + timeSlots +
+                ", about='" + about + '\'' +
+                ", profile=" + profile +
                 '}';
+    }
+
+    public static class TimeSlotModel {
+
+        String type;
+        List<String> slots;
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "type='" + type + '\'' +
+                    ", slots=" + slots +
+                    '}';
+        }
+
+        public List<String> getSlots() {
+            return slots;
+        }
+
+        public void setSlots(List<String> slots) {
+            this.slots = slots;
+        }
     }
 }

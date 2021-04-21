@@ -72,7 +72,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
-                                android:text="@{teacher.speciality+`, `+teacher.degree}"
+                                android:text="@{teacher.speciality+`, `+teacher.academicInformation.highestEducation}"
                                 android:textColor="#3F4E6E"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -95,10 +95,10 @@
                                 app:srcCompat="@drawable/ic_baseline_location_on_24" />
 
                             <ImageView
-                                android:layout_below="@+id/textView94"
                                 android:id="@+id/ivLocationCollege"
                                 android:layout_width="@dimen/_15sdp"
                                 android:layout_height="@dimen/_15sdp"
+                                android:layout_below="@+id/textView94"
                                 android:layout_marginTop="4dp"
                                 app:srcCompat="@drawable/graduation_hat" />
 
@@ -109,7 +109,7 @@
                                 android:layout_marginStart="9dp"
                                 android:layout_toEndOf="@+id/ivLocationPin"
                                 android:fontFamily="@font/poppins_semibold"
-                                android:text="@{teacher.address}"
+                                android:text="@{teacher.profile.address}"
                                 android:textColor="#3F4E6E"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -124,7 +124,7 @@
                                 android:fontFamily="@font/poppins"
                                 android:paddingTop="5dp"
                                 android:paddingBottom="5dp"
-                                android:text="@{teacher.collegeName}"
+                                android:text="@{teacher.academicInformation.collegeName}"
                                 android:textColor="#3F4E6E"
                                 android:textSize="12sp" />
                         </RelativeLayout>
@@ -169,7 +169,6 @@
                                 android:layout_marginStart="12dp"
                                 android:layout_toEndOf="@id/imageView34"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="@{String.valueOf(teacher.tuition)+`\nTuitions`}"
                                 android:textAlignment="center"
                                 android:textColor="@android:color/white"
                                 android:textSize="15sp" />
@@ -206,7 +205,7 @@
                                 android:layout_marginStart="12dp"
                                 android:layout_toEndOf="@+id/rlImageView"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="@{teacher.experience+` Years\nExperiance`}"
+                                android:text="@{teacher.teachingProfile.experience+` Years\nExperiance`}"
                                 android:textAlignment="center"
                                 android:textColor="@android:color/white"
                                 android:textSize="15sp" />
@@ -240,7 +239,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/poppins"
-                            android:text="@{teacher.description}"
+                            android:text="@{teacher.about}"
                             android:textColor="#3F4E6E"
                             android:textSize="12sp" />
 

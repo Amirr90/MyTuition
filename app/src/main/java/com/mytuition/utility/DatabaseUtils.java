@@ -1,7 +1,6 @@
 package com.mytuition.utility;
 
 import android.util.Log;
-import android.webkit.URLUtil;
 
 import androidx.annotation.NonNull;
 
@@ -12,15 +11,18 @@ import com.mytuition.interfaces.Api;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.RequestModel;
+import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.models.TuitionModel;
 import com.mytuition.responseModel.ApiResponse;
+import com.mytuition.responseModel.SpecialityRes;
+import com.mytuition.responseModel.TeacherRequestModel;
+import com.mytuition.responseModel.TeacherRes;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,7 +31,6 @@ import retrofit2.Response;
 
 import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 import static com.mytuition.adapters.DashboardPatientAdapter1.TEACHERS;
-import static com.mytuition.utility.Utils.getTeacherModel;
 
 public class DatabaseUtils {
     public static final String TAG = "DatabaseUtils";
@@ -177,6 +178,106 @@ public class DatabaseUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+    public static void getSpecialityData(final ApiInterface apiCallbackInterface) {
+        try {
+            final Api api = URLUtils.getAPIServiceForParent();
+            Call<SpecialityRes> call = api.getAllSpecialityData();
+            call.enqueue(new Callback<SpecialityRes>() {
+                @Override
+                public void onResponse(@NotNull Call<SpecialityRes> call, @NotNull Response<SpecialityRes> response) {
+
+                    if (response.code() == 200) {
+                        SpecialityRes apiResponse = response.body();
+                        if (null != apiResponse) {
+                            if (apiResponse.getResponseCode() == 1) {
+                                apiCallbackInterface.onSuccess(apiResponse.getResponseValue());
+                            } else {
+                                apiCallbackInterface.onFailed(apiResponse.getResponseMessage());
+                            }
+                        } else apiCallbackInterface.onFailed(response.message());
+                    } else apiCallbackInterface.onFailed(response.message());
+
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<SpecialityRes> call, @NotNull Throwable t) {
+                    apiCallbackInterface.onFailed(t.getLocalizedMessage());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            apiCallbackInterface.onFailed(e.getLocalizedMessage());
+        }
+    }
+
+    public static void getTeacher(TeacherRequestModel model, final ApiInterface apiCallbackInterface) {
+        try {
+            final Api api = URLUtils.getAPIServiceForParent();
+            Call<TeacherRes> call = api.getTeacher(model);
+            call.enqueue(new Callback<TeacherRes>() {
+                @Override
+                public void onResponse(@NotNull Call<TeacherRes> call, @NotNull Response<TeacherRes> response) {
+
+                    if (response.code() == 200) {
+                        TeacherRes apiResponse = response.body();
+                        if (null != apiResponse) {
+                            if (apiResponse.getResponseCode() == 1) {
+                                apiCallbackInterface.onSuccess(apiResponse.getResponseValue());
+                            } else {
+                                apiCallbackInterface.onFailed(apiResponse.getResponseMessage());
+                            }
+                        } else apiCallbackInterface.onFailed(response.message());
+                    } else apiCallbackInterface.onFailed(response.message());
+
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<TeacherRes> call, @NotNull Throwable t) {
+                    apiCallbackInterface.onFailed(t.getLocalizedMessage());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            apiCallbackInterface.onFailed(e.getLocalizedMessage());
+        }
+    }
+
+    public static void reqTuition(RequestTuitionModel model, final ApiInterface apiCallbackInterface) {
+        try {
+            final Api api = URLUtils.getAPIServiceForParent();
+            Call<TeacherRes> call = api.reqTuition(model);
+            call.enqueue(new Callback<TeacherRes>() {
+                @Override
+                public void onResponse(@NotNull Call<TeacherRes> call, @NotNull Response<TeacherRes> response) {
+
+                    if (response.code() == 200) {
+                        TeacherRes apiResponse = response.body();
+                        if (null != apiResponse) {
+                            if (apiResponse.getResponseCode() == 1) {
+                                apiCallbackInterface.onSuccess(apiResponse.getResponseMessage());
+                            } else {
+                                apiCallbackInterface.onFailed(apiResponse.getResponseMessage());
+                            }
+                        } else apiCallbackInterface.onFailed(response.message());
+                    } else apiCallbackInterface.onFailed(response.message());
+
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<TeacherRes> call, @NotNull Throwable t) {
+                    apiCallbackInterface.onFailed(t.getLocalizedMessage());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            apiCallbackInterface.onFailed(e.getLocalizedMessage());
         }
     }
 }

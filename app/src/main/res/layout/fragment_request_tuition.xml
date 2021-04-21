@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:paddingStart="5dp"
-                    android:text="@{teacher.speciality+`, `+teacher.degree}"
+                    android:text="@{teacher.speciality+`, `+teacher.academicInformation.highestEducation}"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
                     tools:ignore="RtlSymmetry" />

@@ -5,26 +5,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.mytuition.R;
 import com.mytuition.adapters.SubSpecialityAdapter;
 import com.mytuition.databinding.FragmentTeachersListBySubjectBinding;
-import com.mytuition.interfaces.DatabaseCallbackInterface;
-import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.responseModel.TeacherRequestModel;
 import com.mytuition.utility.AppUtils;
-import com.mytuition.utility.DatabaseUtils;
+import com.mytuition.viewHolder.ParentViewHolder;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
@@ -37,6 +36,9 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
     NavController navController;
     SubSpecialityAdapter adapter;
     String specialityName = null;
+
+    ParentViewHolder viewModel;
+    TeacherRequestModel requestModel;
 
 
     @Override
@@ -60,19 +62,20 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
         adapter = new SubSpecialityAdapter(this);
         bySubjectBinding.subSpecialityRec.setAdapter(adapter);
 
+        requestModel = new TeacherRequestModel();
 
         AppUtils.showRequestDialog(requireActivity());
-        DatabaseUtils.getTeacherBySpecialityName(specialityName, new DatabaseCallbackInterface() {
-            @Override
-            public void onSuccess(Object obj) {
-                AppUtils.hideDialog();
-                adapter.submitList((List<TeacherModel>) obj);
-            }
 
+        viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
+
+        requestModel.setSpecialityId(specialityName);
+        viewModel.getTeacher(requestModel).observe(getViewLifecycleOwner(), new Observer<List<TeacherModel>>() {
             @Override
-            public void onFailed(String msg) {
+            public void onChanged(List<TeacherModel> teacherModels) {
                 AppUtils.hideDialog();
-                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+                adapter.submitList(teacherModels);
+
+
             }
         });
 
@@ -82,7 +85,6 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
 
     @Override
     public void onItemClick(String item) {
-
         Bundle bundle = new Bundle();
         bundle.putString("docModel", item);
         navController.navigate(R.id.action_teachersListBySubjectFragment_to_selectTimeSlotsFragment, bundle);

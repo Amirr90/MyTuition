@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -32,7 +31,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -261,7 +259,7 @@ public class AppUtils {
         Map<String, Object> map = new HashMap<>();
         map.put("image", teacherModel.getImage());
         map.put("name", teacherModel.getName());
-        map.put("fatherName", teacherModel.getFatherName());
+      /*  map.put("fatherName", teacherModel.getFatherName());
         map.put("email", teacherModel.getEmail());
         map.put("experience", teacherModel.getExperience());
         map.put("rating", teacherModel.getRating());
@@ -276,7 +274,7 @@ public class AppUtils {
         map.put("city", teacherModel.getCity());
         map.put("state", teacherModel.getState());
         map.put("aadharFrontImage", teacherModel.getAadharFrontImage());
-        map.put("aadharBackImage", teacherModel.getAadharBackImage());
+        map.put("aadharBackImage", teacherModel.getAadharBackImage());*/
         Log.d(TAG, "getTeacherProfileMap: " + map);
         return map;
     }
@@ -331,7 +329,7 @@ public class AppUtils {
                     uploadImageInterface.onFailed("failed to upload Image " + e.getLocalizedMessage());
                 }
             });
-            
+
         }
 
 
@@ -557,7 +555,7 @@ public class AppUtils {
     }
 
 
-    public static JSONObject objectToJSONObject(Object object){
+    public static JSONObject objectToJSONObject(Object object) {
         Object json = null;
         JSONObject jsonObject = null;
         try {
@@ -571,7 +569,7 @@ public class AppUtils {
         return jsonObject;
     }
 
-    public static JSONArray objectToJSONArray(Object object){
+    public static JSONArray objectToJSONArray(Object object) {
         Object json = null;
         JSONArray jsonArray = null;
         try {

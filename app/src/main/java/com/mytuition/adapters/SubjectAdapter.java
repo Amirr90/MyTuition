@@ -60,7 +60,7 @@ public class SubjectAdapter extends ListAdapter<SpecialityModel, SubjectAdapter.
 
     }
 
-    public class SpecialityVH extends RecyclerView.ViewHolder {
+    public static class SpecialityVH extends RecyclerView.ViewHolder {
         SpecialitiyViewBinding specialitiyViewBinding;
 
         public SpecialityVH(SpecialitiyViewBinding specialitiyViewBinding) {

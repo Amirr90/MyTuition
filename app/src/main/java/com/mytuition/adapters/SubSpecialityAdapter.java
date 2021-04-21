@@ -43,14 +43,12 @@ public class SubSpecialityAdapter extends ListAdapter<TeacherModel, SubSpecialit
         final TeacherModel teacherModel = getItem(position);
         holder.subSpecialityViewBinding.setTeacher(teacherModel);
 
-        holder.subSpecialityViewBinding.tvFreeDemoTag.setVisibility(teacherModel.isDemoClassFree() ? View.VISIBLE : View.GONE);
         holder.subSpecialityViewBinding.btnBookAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Gson gson = new Gson();
                 String jsonString = gson.toJson(teacherModel);
                 Log.d(TAG, "onClickTeacherModel: " + teacherModel.toString());
-                Log.d(TAG, "onClickTeacher: " + jsonString.toString());
                 try {
                     JSONObject request = new JSONObject(jsonString);
                     subSpecialityInterface.onItemClick(request.toString());
@@ -64,10 +62,16 @@ public class SubSpecialityAdapter extends ListAdapter<TeacherModel, SubSpecialit
         holder.subSpecialityViewBinding.mailLAyout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("docModel", teacherModel.toString());
-                ParentScreen.getInstance().navigate(R.id.action_teachersListBySubjectFragment_to_teacherProfileFragment, bundle);
-                //addNewTeacher(teacherModel);
+                Gson gson = new Gson();
+                String jsonString = gson.toJson(teacherModel);
+                try {
+                    JSONObject request = new JSONObject(jsonString);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("docModel", request.toString());
+                    ParentScreen.getInstance().navigate(R.id.action_teachersListBySubjectFragment_to_teacherProfileFragment, bundle);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

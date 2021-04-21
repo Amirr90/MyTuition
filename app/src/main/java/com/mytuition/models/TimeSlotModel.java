@@ -4,7 +4,35 @@ import java.util.List;
 
 public class TimeSlotModel {
     String slotType;
+    String type;
     List<TimeDetails> timeDetails;
+    List<TimeDetails> slots;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "slotType='" + slotType + '\'' +
+                ", type='" + type + '\'' +
+                ", timeDetails=" + timeDetails +
+                ", slots=" + slots +
+                '}';
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public List<TimeDetails> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(List<TimeDetails> slots) {
+        this.slots = slots;
+    }
 
     public TimeSlotModel(String slotType, List<TimeDetails> timeDetails) {
         this.slotType = slotType;
@@ -30,6 +58,14 @@ public class TimeSlotModel {
     public static class TimeDetails {
         String slotTime;
         Boolean booked;
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "slotTime='" + slotTime + '\'' +
+                    ", booked=" + booked +
+                    '}';
+        }
 
         public TimeDetails(String slotTime, Boolean booked) {
             this.slotTime = slotTime;

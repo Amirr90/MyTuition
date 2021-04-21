@@ -97,7 +97,7 @@
                     android:layout_below="@id/textView98"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/poppins"
-                    android:text="@{doc.experience}"
+                    android:text="@{doc.teachingProfile.experience}"
                     android:textAlignment="center"
                     android:textColor="#3F4E6E"
                     android:textSize="12sp" />
@@ -115,7 +115,6 @@
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/imageView33"
                         android:fontFamily="@font/poppins"
-                        android:text="@{doc.rating+`(`+doc.review+` reviews)`}"
                         android:textAlignment="center"
                         android:textColor="#3F4E6E"
                         android:textSize="12sp" />
