@@ -345,6 +345,14 @@ public class TeacherModel extends BaseObservable {
         String type;
         List<String> slots;
 
+        public TimeSlotModel(String type, List<String> slots) {
+            this.type = type;
+            this.slots = slots;
+        }
+
+        public TimeSlotModel() {
+        }
+
         public String getType() {
             return type;
         }

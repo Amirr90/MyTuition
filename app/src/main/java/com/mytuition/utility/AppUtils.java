@@ -43,7 +43,6 @@ import com.mytuition.interfaces.UploadImageInterface;
 import com.mytuition.models.CalendarModel;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
-import com.mytuition.models.TimeSlotModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,12 +113,15 @@ public class AppUtils {
     }
 
 
-    public static List<TimeSlotModel.TimeDetails> getSlots(boolean b, int i, int i1) {
-        List<TimeSlotModel.TimeDetails> s1 = new ArrayList<>();
+    public static List<String> getSlots(boolean b, int i, int i1) {
+        /*List<TimeSlotModel.TimeDetails> s1 = new ArrayList<>();
         ArrayList<String> results = getTimeSet(b, i, i1, 60);
         for (String s : results)
-            s1.add(new TimeSlotModel.TimeDetails(s, false));
-        return s1;
+            s1.add(new TimeSlotModel.TimeDetails(s, false));*/
+        Log.d(TAG, "getSlots: " + getTimeSet(b, i, i1, 60));
+        return getTimeSet(b, i, i1, 60);
+
+
     }
 
     public static ArrayList<String> getTimeSet(boolean isCurrentDay, int from, int to, int duration) {

@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 
 import es.dmoral.toasty.Toasty;
 
-import static com.mytuition.RequestTuitionDetailFragment.TIME_SLOT;
 import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.Utils.getParentModel;
 
@@ -104,11 +103,11 @@ public class RequestTuitionFragment extends Fragment {
 
     private boolean initReqModel() {
         requestTuitionModel = new RequestTuitionModel();
-        requestTuitionModel.setName(teacherModel.getName());
+        requestTuitionModel.setName(null == parentModel ? "" : parentModel.getName());
         requestTuitionModel.setReqDate(date);
         requestTuitionModel.setReqTime(timeSlot);
         requestTuitionModel.setUid(getUid());
-        requestTuitionModel.setTeacherId(teacherModel.getId());
+        requestTuitionModel.setTeacherId(null == teacherModel ? "" : teacherModel.getId());
         requestTuitionModel.setTuitionFor(null == classId ? AppConstant.ALL : classId);
         return null != requestTuitionModel;
     }

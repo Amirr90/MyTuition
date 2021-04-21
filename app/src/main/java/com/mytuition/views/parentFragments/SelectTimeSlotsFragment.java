@@ -32,6 +32,7 @@ import java.util.List;
 import static com.mytuition.RequestTuitionDetailFragment.TIME_SLOT;
 import static com.mytuition.utility.AppUtils.getCurrentDateInWeekMonthDayFormat;
 import static com.mytuition.utility.AppUtils.getNextWeekDays;
+import static com.mytuition.utility.AppUtils.getSlots;
 
 public class SelectTimeSlotsFragment extends Fragment implements AdapterInterface {
 
@@ -110,24 +111,23 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
     }
 
     private void setSlots() {
-        /*boolean b = false;
         timeSlotsModelList = new ArrayList<>();
         if (null != classId) {
-            timeSlotsModelList.add(new TimeSlotModel("Morning", getSlots(b, 7, 12)));
-            timeSlotsModelList.add(new TimeSlotModel("Noon", getSlots(b, 12, 17)));
-            timeSlotsModelList.add(new TimeSlotModel("Evening", getSlots(b, 17, 21)));
-            timeSlotsModelList.add(new TimeSlotModel("Night", getSlots(b, 21, 24)));
-        } else {
-            timeSlotsModelList.add(new TimeSlotModel("Morning", getSlots(b, 7, 10)));
-            timeSlotsModelList.add(new TimeSlotModel("Noon", getSlots(b, 14, 17)));
-            timeSlotsModelList.add(new TimeSlotModel("Evening", getSlots(b, 18, 21)));
-            timeSlotsModelList.add(new TimeSlotModel("Night", getSlots(b, 21, 24)));
-        }*/
+            boolean b = false;
 
-        timeSlotsModelList = new ArrayList<>();
-        timeSlotsModelList.addAll(teacherModel.getTimeSlots());
+            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Morning", getSlots(b, 6, 12)));
+            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Noon", getSlots(b, 12, 17)));
+            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Evening", getSlots(b, 17, 21)));
+            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Night", getSlots(b, 21, 24)));
+            Log.d(TAG, "setSlots: " + getSlots(b, 21, 24));
+
+        } else {
+            timeSlotsModelList.addAll(teacherModel.getTimeSlots());
+        }
         slotsAdapter = new TimeSlotsAdapter(timeSlotsModelList, this);
         slotsBinding.timingRec.setAdapter(slotsAdapter);
+
+
     }
 
 
