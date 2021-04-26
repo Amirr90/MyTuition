@@ -690,6 +690,13 @@ public class AppUtils {
         else return null;
     }
 
+    public static String getMobileNumber() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (null != user)
+            return user.getPhoneNumber();
+        else return null;
+    }
+
     public static String getCurrencyFormat(double num) {
         String COUNTRY = "IN";
         String LANGUAGE = "en";

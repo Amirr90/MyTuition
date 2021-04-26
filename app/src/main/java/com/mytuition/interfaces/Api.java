@@ -1,11 +1,14 @@
 package com.mytuition.interfaces;
 
 import com.mytuition.models.RequestModel;
+import com.mytuition.models.RequestModel2;
 import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.responseModel.ApiResponse;
+import com.mytuition.responseModel.DashboardResponseModel;
 import com.mytuition.responseModel.SpecialityRes;
 import com.mytuition.responseModel.TeacherRequestModel;
 import com.mytuition.responseModel.TeacherRes;
+import com.mytuition.responseModel.TuitionDetailResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -37,4 +40,11 @@ public interface Api {
 
     @POST("requestTuition")
     Call<TeacherRes> reqTuition(@Body RequestTuitionModel model);
+
+    @POST("getTuitionDetail")
+    Call<TuitionDetailResponse> getTuitionDetail(@Body RequestModel2 model);
+
+
+    @POST("getDashboardData")
+    Call<DashboardResponseModel> getDashboardData(@Body RequestModel2 requestModel2);
 }

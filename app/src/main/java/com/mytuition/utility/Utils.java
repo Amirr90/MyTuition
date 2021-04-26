@@ -3,46 +3,28 @@ package com.mytuition.utility;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
-import com.mytuition.adapters.SpecialityAdapter;
-import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.ParentModel;
-import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
 
-import java.sql.Time;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.provider.MediaStore.Files.FileColumns.PARENT;
-import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 import static com.mytuition.utility.AppConstant.USERS;
 import static com.mytuition.utility.AppUtils.MY_PREFS_NAME;
-import static com.mytuition.utility.AppUtils.getDateInDMYFormatFromTimestamp;
 import static com.mytuition.utility.AppUtils.getFirestoreReference;
-import static com.mytuition.utility.AppUtils.getString;
 import static com.mytuition.utility.AppUtils.getUid;
-import static com.mytuition.utility.AppUtils.sdfFromTimeStamp;
 import static com.mytuition.views.activity.ChooseLoginTypeScreen.getUserMap;
 
 
@@ -62,7 +44,8 @@ public class Utils {
             return;
         }
 
-        getFirestoreReference().collection(USERS).document(getUid()).update(getUserMap(loginType))
+        getFirestoreReference().collection(USERS).document(getUid())
+                .update(getUserMap(loginType))
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -83,7 +66,7 @@ public class Utils {
     public static TeacherModel getTeacherModel(String id) {
         TeacherModel teacherModel = new TeacherModel();
         teacherModel.setName("Teacher Name");
-     /*   teacherModel.setExperience("5");*/
+        /*   teacherModel.setExperience("5");*/
         teacherModel.setSpeciality("Computer");
       /*  teacherModel.setFee("500");
         teacherModel.setRating("5");

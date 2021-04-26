@@ -109,6 +109,7 @@ public class RequestTuitionFragment extends Fragment {
         requestTuitionModel.setUid(getUid());
         requestTuitionModel.setTeacherId(null == teacherModel ? "" : teacherModel.getId());
         requestTuitionModel.setTuitionFor(null == classId ? AppConstant.ALL : classId);
+        requestTuitionModel.setReqType(null == classId ? AppConstant.REQUEST_TYPE_BY_TEACHER : AppConstant.REQUEST_TYPE_BY_CLASS);
         return null != requestTuitionModel;
     }
 
@@ -144,6 +145,5 @@ public class RequestTuitionFragment extends Fragment {
                 .setCancelable(false)
                 .show();
     }
-
 
 }

@@ -18,29 +18,27 @@ import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.gson.Gson;
 import com.mytuition.databinding.FragmentRequestTuitionDetailBinding;
+import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.models.TeacherModel;
-import com.mytuition.models.TuitionModel;
 import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.activity.ParentScreen;
-import com.mytuition.views.parentFragments.RequestTuitionFragment;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.mytuition.utility.AppUtils.getFirestoreReference;
 import static com.mytuition.utility.AppUtils.getTimeFormat;
 import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.AppUtils.hideDialog;
-import static com.mytuition.utility.AppUtils.showRequestDialog;
-import static com.mytuition.utility.Utils.getFirebaseReference;
 
 
 public class RequestTuitionDetailFragment extends Fragment {
@@ -48,15 +46,21 @@ public class RequestTuitionDetailFragment extends Fragment {
 
     FragmentRequestTuitionDetailBinding requestTuitionBinding;
     NavController navController;
-    TuitionModel tuitionModel;
 
     int selectedPosition = -1;
 
+    TeacherModel teacherModel;
+
+    RequestTuitionModel requestTuitionModel;
+
     public static final String REQUEST_TUITION = "TuitionRequest";
     public static final String REQUEST_STATUS_PENDING = "Pending";
+    public static final String REQUEST_STATUS_PENDING_S = "pending";
     public static final String TIME_SLOT = "slot";
     public static final String REQUEST_STATUS_ACCEPTED = "Accepted";
     public static final String REQUEST_STATUS_REJECTED = "Rejected";
+    public static final String REQUEST_STATUS_ACCEPTED_S = "accepted";
+    public static final String REQUEST_STATUS_REJECTED_S = "rejected";
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -73,13 +77,28 @@ public class RequestTuitionDetailFragment extends Fragment {
         navController = Navigation.findNavController(view);
 
 
-        AppUtils.showRequestDialog(requireActivity());
-        getTuitionDetails();
+
 
         requestTuitionBinding.tvViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getTeacherProfile();
+                if (teacherModel != null) {
+
+                    Gson gson = new Gson();
+                    String jsonString = gson.toJson(teacherModel);
+                    try {
+                        JSONObject request = new JSONObject(jsonString);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("docModel", request.toString());
+                        navController.navigate(R.id.action_DetailsFragment2_to_teacherProfileFragment, bundle);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                } else {
+                    Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         requestTuitionBinding.btnChangeTeacher.setOnClickListener(new View.OnClickListener() {
@@ -89,85 +108,76 @@ public class RequestTuitionDetailFragment extends Fragment {
             }
         });
 
+
+        requestTuitionBinding.btnCancelTuitionReq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString(AppConstant.TUITION_ID, requestTuitionModel.getId());
+                bundle.putString(AppConstant.TEACHER_ID, requestTuitionModel.getTeacherId());
+                navController.navigate(R.id.action_DetailsFragment2_to_cancelTuitionReqDialog, bundle);
+            }
+        });
     }
 
     private void getTeacherProfile() {
-        showRequestDialog(requireActivity());
-        Log.d(TAG, "getTeacherProfile: " + tuitionModel.getTeacherId());
-        getFirebaseReference("Teachers").child(tuitionModel.getTeacherId()).addValueEventListener(new ValueEventListener() {
+        getFirestoreReference().collection(AppConstant.TEACHER).document(requestTuitionModel.getTeacherId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
                 hideDialog();
-                TeacherModel teacherModel = dataSnapshot.getValue(TeacherModel.class);
-                if (teacherModel != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("docModel", teacherModel.toString());
-                    navController.navigate(R.id.action_DetailsFragment2_to_teacherProfileFragment, bundle);
-                } else {
-                    Log.d(TAG, "onDataChange: " + dataSnapshot.toString());
-                    Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
+                if (documentSnapshot.exists()) {
+                    teacherModel = documentSnapshot.toObject(TeacherModel.class);
+                    requestTuitionBinding.setTeacher(teacherModel);
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG, "DatabaseError: " + databaseError.toString());
-                Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
     private void getTuitionDetails() {
-        if (getUid() != null)
-            AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION).document(getUid())
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        if (getArguments() != null) {
+            String jsonString = getArguments().getString(AppConstant.TUITION_MODEL);
+            Gson gson = new Gson();
+            requestTuitionModel = gson.fromJson(jsonString, RequestTuitionModel.class);
 
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            hideDialog();
-                            tuitionModel = documentSnapshot.toObject(TuitionModel.class);
-                            if (null != tuitionModel) {
-                                requestTuitionBinding.setTeacher(tuitionModel.getTeacherModel());
-                                requestTuitionBinding.setTuition(tuitionModel);
-                                updateRequestStatus(tuitionModel);
-                                Log.d(TAG, "onSuccess: " + tuitionModel.toString());
-                            }
+            Log.d(TAG, "getTuitionDetails: " + requestTuitionModel.toString());
+            requestTuitionBinding.setTuition(requestTuitionModel);
+            updateRequestStatus(requestTuitionModel);
 
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    hideDialog();
-                    Toast.makeText(requireActivity(), "try again", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-                }
-            });
+            if (null != requestTuitionModel.getTeacherId() && !requestTuitionModel.getTeacherId().isEmpty())
+                getTeacherProfile();
+        }
+
+
     }
 
-    private void updateRequestStatus(TuitionModel tuitionModel) {
-        switch (tuitionModel.getRequestStatus()) {
+    private void updateRequestStatus(RequestTuitionModel tuitionModel) {
+        switch (tuitionModel.getReqStatus()) {
             case REQUEST_STATUS_PENDING:
+            case REQUEST_STATUS_PENDING_S:
                 requestTuitionBinding.btLoading.setAnimation(R.raw.waiting);
                 break;
             case REQUEST_STATUS_ACCEPTED:
+            case REQUEST_STATUS_ACCEPTED_S:
                 requestTuitionBinding.btLoading.setAnimation(R.raw.accepted);
                 break;
             case REQUEST_STATUS_REJECTED:
+            case REQUEST_STATUS_REJECTED_S:
                 requestTuitionBinding.btLoading.setAnimation(R.raw.rejected);
                 break;
         }
         requestTuitionBinding.btLoading.playAnimation();
 
         requestTuitionBinding.tvTime.setText(getTimeFormat(tuitionModel.getTimestamp(), "EEE, d MMM yyyy h:mm a"));
-        if (!tuitionModel.requestStatus.equals(REQUEST_STATUS_PENDING) && null != tuitionModel.getRequestActionTimestamp())
+        /*if (!tuitionModel.getReqStatus().equals(REQUEST_STATUS_PENDING) && null != tuitionModel.getRequestActionTimestamp())
             requestTuitionBinding.tvTimeAccepted.setText(getTimeFormat(tuitionModel.getRequestActionTimestamp(), "EEE, d MMM yyyy h:mm a"));
+*/
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        getTuitionDetails();
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).show();
     }
 
@@ -175,7 +185,7 @@ public class RequestTuitionDetailFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
-        final String[] choices = {"Less experience", "Less educated", "Timing issue", "Fee Issue"};
+        final String[] choices = {"Less experience", "Timing issue", "Fee Issue"};
         builder.setTitle("Please select the reason of change Teacher ")
                 .setSingleChoiceItems(choices, 0, new DialogInterface.OnClickListener() {
                     @Override
@@ -205,17 +215,20 @@ public class RequestTuitionDetailFragment extends Fragment {
 
 
         if (getUid() != null)
-            AppUtils.getFirestoreReference().collection(REQUEST_TUITION).document(getUid()).update(getUpdateMap(choice)).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    AppUtils.hideDialog();
-                    Toast.makeText(requireActivity(), "request Submitted successfully !!", Toast.LENGTH_SHORT).show();
-                    ParentScreen.getInstance().onSupportNavigateUp();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
+            AppUtils.getFirestoreReference().collection(REQUEST_TUITION)
+                    .document(requestTuitionModel.getId()).update(getUpdateMap(choice))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            hideDialog();
+                            Toast.makeText(requireActivity(), "request Submitted successfully !!", Toast.LENGTH_SHORT).show();
+                            ParentScreen.getInstance().onSupportNavigateUp();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    AppUtils.hideDialog();
+                    hideDialog();
+                    Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
                     Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -223,10 +236,10 @@ public class RequestTuitionDetailFragment extends Fragment {
 
     private Map<String, Object> getUpdateMap(String choice) {
         Map<String, Object> objectsMap = new HashMap<>();
-        objectsMap.put("requestStatus", REQUEST_STATUS_PENDING);
-        objectsMap.put("teacherModel", null);
+        objectsMap.put("reqStatus", REQUEST_STATUS_PENDING);
         objectsMap.put("reason", choice);
-        objectsMap.put("rejectedTeacherId", tuitionModel.getTeacherId());
+        objectsMap.put("teacherId", "");
+        objectsMap.put("rejectedTeacherId", requestTuitionModel.getTeacherId());
         objectsMap.put("requestActionTimestamp", System.currentTimeMillis());
         return objectsMap;
     }
@@ -234,4 +247,6 @@ public class RequestTuitionDetailFragment extends Fragment {
     private void showToast(String s) {
         Toast.makeText(requireActivity(), s, Toast.LENGTH_SHORT).show();
     }
+
+
 }

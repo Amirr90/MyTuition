@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.recyclerview.widget.DiffUtil;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class TeacherModel extends BaseObservable {
@@ -182,27 +181,20 @@ public class TeacherModel extends BaseObservable {
     }
 
     public static class TeachingProfile {
-        public String[] teachingSubject;
+        public List<String> teachingSubject;
         public long perVisitFee;
         public long monthlyFee;
         public String expertIn;
         public String experience;
         public Boolean demoClass;
 
-        @Override
-        public String toString() {
-            return "{" +
-                    "teachingSubject=" + Arrays.toString(teachingSubject) +
-                    ", perVisitFee=" + perVisitFee +
-                    ", monthlyFee=" + monthlyFee +
-                    ", expertIn='" + expertIn + '\'' +
-                    ", experience='" + experience + '\'' +
-                    ", demoClass=" + demoClass +
-                    '}';
+
+        public List<String> getTeachingSubject() {
+            return teachingSubject;
         }
 
-        public String[] getTeachingSubject() {
-            return teachingSubject;
+        public Boolean getDemoClass() {
+            return demoClass;
         }
 
         public long getPerVisitFee() {
@@ -219,6 +211,18 @@ public class TeacherModel extends BaseObservable {
 
         public String getExperience() {
             return experience;
+        }
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "teachingSubject=" + teachingSubject +
+                    ", perVisitFee=" + perVisitFee +
+                    ", monthlyFee=" + monthlyFee +
+                    ", expertIn='" + expertIn + '\'' +
+                    ", experience='" + experience + '\'' +
+                    ", demoClass=" + demoClass +
+                    '}';
         }
     }
 

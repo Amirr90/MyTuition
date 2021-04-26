@@ -43,7 +43,6 @@
                     app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:loadCustomParentImage="@{parent.image}"
                     android:id="@+id/profile_image"
                     android:layout_width="43dp"
                     android:layout_height="36dp"
@@ -51,6 +50,7 @@
                     android:layout_toEndOf="@+id/imageView7"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
+                    android:loadCustomParentImage="@{parent.image}"
                     android:src="@drawable/profile"
                     app:civ_border_color="@color/colorPrimary"
                     app:civ_border_width="0.5dp"
@@ -87,25 +87,22 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:textSize="12sp" />
+
+
                 </RelativeLayout>
 
 
-                <androidx.cardview.widget.CardView
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/bannerViewPager"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
                     android:layout_below="@+id/profile_image"
                     android:layout_marginTop="8dp"
-                    app:cardCornerRadius="@dimen/_10sdp"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
+                    app:layout_constraintTop_toBottomOf="@+id/relativeLayout3" />
 
-                    <ImageView
-                        android:id="@+id/dashboardHomeImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="fitXY" />
-                </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

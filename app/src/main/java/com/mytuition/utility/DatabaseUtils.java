@@ -11,14 +11,17 @@ import com.mytuition.interfaces.Api;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.RequestModel;
+import com.mytuition.models.RequestModel2;
 import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.models.TuitionModel;
 import com.mytuition.responseModel.ApiResponse;
+import com.mytuition.responseModel.DashboardResponseModel;
 import com.mytuition.responseModel.SpecialityRes;
 import com.mytuition.responseModel.TeacherRequestModel;
 import com.mytuition.responseModel.TeacherRes;
+import com.mytuition.responseModel.TuitionDetailResponse;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +34,7 @@ import retrofit2.Response;
 
 import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 import static com.mytuition.adapters.DashboardPatientAdapter1.TEACHERS;
+import static com.mytuition.utility.AppUtils.getUid;
 
 public class DatabaseUtils {
     public static final String TAG = "DatabaseUtils";
@@ -271,6 +275,108 @@ public class DatabaseUtils {
 
                 @Override
                 public void onFailure(@NotNull Call<TeacherRes> call, @NotNull Throwable t) {
+                    apiCallbackInterface.onFailed(t.getLocalizedMessage());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            apiCallbackInterface.onFailed(e.getLocalizedMessage());
+        }
+    }
+
+    public static void getTuitionDetail(RequestModel2 model, final ApiInterface apiCallbackInterface) {
+        try {
+            final Api api = URLUtils.getAPIServiceForParent();
+            Call<TuitionDetailResponse> call = api.getTuitionDetail(model);
+            call.enqueue(new Callback<TuitionDetailResponse>() {
+                @Override
+                public void onResponse(@NotNull Call<TuitionDetailResponse> call, @NotNull Response<TuitionDetailResponse> response) {
+
+                    if (response.code() == 200) {
+                        TuitionDetailResponse apiResponse = response.body();
+                        if (null != apiResponse) {
+                            if (apiResponse.getResponseCode() == 1) {
+                                apiCallbackInterface.onSuccess(apiResponse.getResponseValue());
+                            } else {
+                                apiCallbackInterface.onFailed(apiResponse.getResponseMessage());
+                            }
+                        } else apiCallbackInterface.onFailed(response.message());
+                    } else apiCallbackInterface.onFailed(response.message());
+
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<TuitionDetailResponse> call, @NotNull Throwable t) {
+                    apiCallbackInterface.onFailed(t.getLocalizedMessage());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            apiCallbackInterface.onFailed(e.getLocalizedMessage());
+        }
+    }
+
+    public static void getTuitionList(final ApiInterface apiCallbackInterface) {
+        try {
+            RequestModel2 parentModel = new RequestModel2();
+            parentModel.setUserId(getUid());
+            final Api api = URLUtils.getAPIServiceForParent();
+            Call<TuitionDetailResponse> call = api.getTuitionDetail(parentModel);
+            call.enqueue(new Callback<TuitionDetailResponse>() {
+                @Override
+                public void onResponse(@NotNull Call<TuitionDetailResponse> call, @NotNull Response<TuitionDetailResponse> response) {
+
+                    if (response.code() == 200) {
+                        TuitionDetailResponse apiResponse = response.body();
+                        if (null != apiResponse) {
+                            if (apiResponse.getResponseCode() == 1) {
+                                apiCallbackInterface.onSuccess(apiResponse.getResponseValue());
+                            } else {
+                                apiCallbackInterface.onFailed(apiResponse.getResponseMessage());
+                            }
+                        } else apiCallbackInterface.onFailed(response.message());
+                    } else apiCallbackInterface.onFailed(response.message());
+
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<TuitionDetailResponse> call, @NotNull Throwable t) {
+                    apiCallbackInterface.onFailed(t.getLocalizedMessage());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            apiCallbackInterface.onFailed(e.getLocalizedMessage());
+        }
+    }
+
+    public static void getDashboardData(RequestModel2 requestModel2, final ApiInterface apiCallbackInterface) {
+
+        try {
+            final Api api = URLUtils.getAPIServiceForParent();
+            Call<DashboardResponseModel> call = api.getDashboardData(requestModel2);
+            call.enqueue(new Callback<DashboardResponseModel>() {
+                @Override
+                public void onResponse(@NotNull Call<DashboardResponseModel> call, @NotNull Response<DashboardResponseModel> response) {
+
+                    if (response.code() == 200) {
+                        DashboardResponseModel apiResponse = response.body();
+                        if (null != apiResponse) {
+                            if (apiResponse.getResponseCode() == 1) {
+                                apiCallbackInterface.onSuccess(apiResponse.getResponseValue());
+                            } else {
+                                apiCallbackInterface.onFailed(apiResponse.getResponseMessage());
+                            }
+                        } else apiCallbackInterface.onFailed(response.message());
+                    } else apiCallbackInterface.onFailed(response.message());
+
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<DashboardResponseModel> call, @NotNull Throwable t) {
                     apiCallbackInterface.onFailed(t.getLocalizedMessage());
                 }
             });

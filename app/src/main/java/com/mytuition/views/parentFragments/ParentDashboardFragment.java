@@ -1,35 +1,33 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mytuition.R;
 import com.mytuition.adapters.CoachingAdapter;
 import com.mytuition.adapters.DashboardPatientAdapter1;
+import com.mytuition.adapters.HomeBannerAdapter;
 import com.mytuition.adapters.MainSliderAdapter;
 import com.mytuition.databinding.FragmentParentDashboardBinding;
-import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.Banner;
 import com.mytuition.models.CoachingModel;
+import com.mytuition.models.DashboardModel;
 import com.mytuition.models.DashboardModel1;
-import com.mytuition.models.TeacherModel;
+import com.mytuition.models.RequestModel2;
 import com.mytuition.utility.AppUtils;
-import com.mytuition.utility.DatabaseUtils;
 import com.mytuition.utility.PicassoImageLoadingService;
 import com.mytuition.utility.Utils;
 import com.mytuition.viewHolder.ParentViewHolder;
@@ -39,7 +37,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
@@ -61,13 +58,15 @@ public class ParentDashboardFragment extends Fragment {
     NavController navController;
     ParentViewHolder viewModel;
     ImageLoadingService imageLoadingService;
+    RequestModel2 requestModel2;
 
     public static ParentDashboardFragment instance;
+
+    List<DashboardModel> models;
 
     public static ParentDashboardFragment getInstance() {
         return instance;
     }
-
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,6 +80,7 @@ public class ParentDashboardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(view);
+        requestModel2 = new RequestModel2();
 
         parentDashboardBinding.setParent(getParentModel(requireActivity()));
         adapter1 = new DashboardPatientAdapter1();
@@ -99,24 +99,32 @@ public class ParentDashboardFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
 
 
-        //Binding First Adapter
-        adapter1.submitList(getFirstAdapterData());
+        requestModel2.setLocation("Rajajipuram");
+        requestModel2.setArea("Lucknow");
+        viewModel.getDashboardData(requestModel2, requireActivity()).observe(getViewLifecycleOwner(), new Observer<List<DashboardModel>>() {
+            @Override
+            public void onChanged(List<DashboardModel> dashboardModels) {
+                AppUtils.hideDialog();
+                models = dashboardModels;
+                if (!dashboardModels.isEmpty()) {
+
+                    //Binding First Adapter
+                    adapter1.submitList(getFirstAdapterData());
+
+                    //Binding Top Teacher Data Adapter
+                    adapter2.submitList(dashboardModels.get(0).getTeacherList());
 
 
-        //Binding Second Adapter
-        getTopTeacherData();
+                    //Binding Top Coaching Adapter
+                    adapter3.submitList(getTopCoachingData());
 
 
-        //Binding Third Adapter
-        adapter3.submitList(getTopCoachingData());
-
-
-        //Binding Slider Adapter
-        setSlider();
-
-
-        loadBigBannerImage();
-
+                    //Binding Slider Adapter
+                    setSlider();
+                    loadBigBannerImage(dashboardModels.get(0).getBannerData());
+                }
+            }
+        });
 
         parentDashboardBinding.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,26 +143,23 @@ public class ParentDashboardFragment extends Fragment {
 
     }
 
-    private void loadBigBannerImage() {
-        Utils.getFirebaseReference().child(DASHBOARD).child(BANNER).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Banner imageUrl = dataSnapshot.getValue(Banner.class);
-                    if (null != imageUrl)
-                        Glide.with(requireActivity()).load(imageUrl.getBannerImage())
-                                .placeholder(R.drawable.ic_launcher_foreground)
-                                .into(parentDashboardBinding.dashboardHomeImage);
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+    private void loadBigBannerImage(DashboardModel.BannerData bannerData) {
+        List<String> bannerImages = new ArrayList<>();
+        bannerImages.add(bannerData.getBanner().getBannerImage());
+        if (null != bannerData.getBanner().getBannerImage2())
+            bannerImages.add(bannerData.getBanner().getBannerImage2());
+        if (null != bannerData.getBanner().getBannerImage3())
+            bannerImages.add(bannerData.getBanner().getBannerImage3());
+        if (null != bannerData.getBanner().getBannerImage4())
+            bannerImages.add(bannerData.getBanner().getBannerImage4());
+        if (null != bannerData.getBanner().getBannerImage5())
+            bannerImages.add(bannerData.getBanner().getBannerImage5());
+        parentDashboardBinding.bannerViewPager.setAdapter(new HomeBannerAdapter(bannerImages));
 
-            }
-        });
 
     }
+
 
     private List<CoachingModel> getTopCoachingData() {
         List<CoachingModel> coachingModels = new ArrayList<>();
@@ -170,10 +175,13 @@ public class ParentDashboardFragment extends Fragment {
         return coachingModels;
     }
 
+
     public void updateLocation(String city, String area) {
         try {
             parentDashboardBinding.tvLocation.setText(area);
             parentDashboardBinding.tvCity.setText(city);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -188,22 +196,6 @@ public class ParentDashboardFragment extends Fragment {
         return dashboardModel1s;
     }
 
-    private void getTopTeacherData() {
-        DatabaseUtils.getTopTeacherData(new DatabaseCallbackInterface() {
-            @Override
-            public void onSuccess(Object obj) {
-                List<TeacherModel> teacherModels = (List<TeacherModel>) obj;
-                adapter2.submitList(teacherModels);
-            }
-
-            @Override
-            public void onFailed(String msg) {
-                Log.d(TAG, "onFailed: " + msg);
-            }
-        });
-
-    }
-
     private List<Banner> getSliderData() {
         List<Banner> bannerDetails = new ArrayList<>();
         Banner banner = new Banner();
@@ -216,8 +208,6 @@ public class ParentDashboardFragment extends Fragment {
     }
 
     private void setSlider() {
-
-
         Utils.getFirebaseReference().child(DASHBOARD).child(BANNER_SLIDER).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

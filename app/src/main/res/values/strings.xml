@@ -143,4 +143,5 @@
     <string name="share_app">Share App</string>
     <string name="about_us">About Us</string>
     <string name="tuition_reqiest">Tuition Request</string>
+    <string name="cancel_tuition">Cancel Tuition</string>
 </resources>

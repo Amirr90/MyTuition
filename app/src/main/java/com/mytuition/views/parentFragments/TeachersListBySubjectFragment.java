@@ -31,7 +31,6 @@ import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 
 public class TeachersListBySubjectFragment extends Fragment implements SubSpecialityAdapter.SubSpecialityInterface {
 
-    private static final String TAG = "TeachersListBySubjectFr";
     FragmentTeachersListBySubjectBinding bySubjectBinding;
     NavController navController;
     SubSpecialityAdapter adapter;

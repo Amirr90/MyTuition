@@ -190,5 +190,30 @@
         <action
             android:id="@+id/action_DetailsFragment2_to_teacherProfileFragment"
             app:destination="@id/teacherProfileFragment" />
+        <action
+            android:id="@+id/action_DetailsFragment2_to_cancelTuitionReqDialog"
+            app:destination="@id/cancelTuitionReqDialog"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
+    <fragment
+        android:id="@+id/tuitionListFragment"
+        android:name="com.mytuition.TuitionListFragment"
+        android:label="Tuition List"
+        tools:layout="@layout/fragment_tuition_list">
+        <action
+            android:id="@+id/action_tuitionListFragment_to_DetailsFragment2"
+            app:destination="@id/DetailsFragment2"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <dialog
+        android:id="@+id/cancelTuitionReqDialog"
+        android:name="com.mytuition.CancelTuitionReqDialog"
+        android:label="fragment_cancel_tuition_req_dialog"
+        tools:layout="@layout/fragment_cancel_tuition_req_dialog" />
 </navigation>

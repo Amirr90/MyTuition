@@ -37,12 +37,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.mytuition.R;
 import com.mytuition.adapters.NavAdapter;
 import com.mytuition.databinding.ActivityParentScreenBinding;
 import com.mytuition.interfaces.NavigationInterface;
 import com.mytuition.models.NavModel;
-import com.mytuition.models.TuitionModel;
+import com.mytuition.models.ParentModel;
+import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.GetAddressIntentService;
 import com.mytuition.views.SplashScreen;
@@ -53,6 +56,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.mytuition.utility.AppUtils.getFirestoreReference;
+import static com.mytuition.utility.AppUtils.getMobileNumber;
 import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.AppUtils.hideDialog;
 import static com.mytuition.utility.Utils.LOGIN_TYPE;
@@ -116,6 +120,10 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
 
 
         updateUI(getIntent().getStringExtra(LOGIN_TYPE));
+
+        if (getUid() != null) {
+            updateUserInfo();
+        }
         setNavAdapter();
 
 
@@ -130,16 +138,29 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                mainBinding.constraintLayout.setVisibility(destination.getId() == R.id.DetailsFragment2 ? View.GONE : View.VISIBLE);
+                // mainBinding.constraintLayout.setVisibility(destination.getId() == R.id.DetailsFragment2 ? View.GONE : View.VISIBLE);
             }
         });
 
     }
 
+    private void updateUserInfo() {
+        getFirestoreReference().collection("Users").document(getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error == null) {
+                    ParentModel user = value.toObject(ParentModel.class);
+                    user.setMobile(getMobileNumber());
+                    mainBinding.setUser(user);
+                }
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        updateRequestView();
+        // updateRequestView();
     }
 
     public void openDrawer() {
@@ -158,8 +179,8 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                     LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             LocationRequest locationRequest = new LocationRequest();
-            locationRequest.setInterval(10000);
-            locationRequest.setFastestInterval(1000);
+            locationRequest.setInterval(0);
+            locationRequest.setFastestInterval(0);
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
         }
@@ -175,20 +196,20 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()) {
-                                TuitionModel tuitionModel = documentSnapshot.toObject(TuitionModel.class);
+                                RequestTuitionModel tuitionModel = documentSnapshot.toObject(RequestTuitionModel.class);
                                 if (null != tuitionModel) {
-                                    if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_CONFIRMED)) {
+                                    if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_CONFIRMED)) {
                                         mainBinding.constraintLayout.setVisibility(View.GONE);
                                     }
                                 } else {
-                                    if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_PENDING)) {
+                                    if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_PENDING)) {
                                         mainBinding.textView9.setText("Waiting for Teacher to accept your Demo Class");
-                                    } else if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_ACCEPTED)) {
-                                        mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Accepted your tuition request");
+                                    } else if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_ACCEPTED)) {
+                                        //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Accepted your tuition request");
                                         mainBinding.btLoading.setAnimation(R.raw.accepted);
                                         mainBinding.btLoading.playAnimation();
-                                    } else if (tuitionModel.getRequestStatus().equals(REQUEST_STATUS_REJECTED)) {
-                                        mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Rejected your tuition request");
+                                    } else if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_REJECTED)) {
+                                        //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Rejected your tuition request");
                                         mainBinding.btLoading.setAnimation(R.raw.rejected);
                                         mainBinding.btLoading.playAnimation();
                                     }
@@ -214,14 +235,14 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     }
 
     private void loadNavData() {
-        navModels.add(new NavModel(getString(R.string.tuition_reqiest), R.drawable.ic_launcher_foreground));
+        navModels.add(new NavModel(getString(R.string.tuition_reqiest), R.drawable.ic_baseline_control_camera_24));
 
       /*  navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
         navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));*/
 
-        navModels.add(new NavModel(getString(R.string.about_us), R.drawable.ic_launcher_foreground));
-        navModels.add(new NavModel(getString(R.string.share_app), R.drawable.ic_launcher_foreground));
-        navModels.add(new NavModel(getString(R.string.logout), R.drawable.ic_launcher_foreground));
+        navModels.add(new NavModel(getString(R.string.about_us), R.drawable.ic_baseline_textsms_24));
+        navModels.add(new NavModel(getString(R.string.share_app), R.drawable.ic_baseline_share_24));
+        navModels.add(new NavModel(getString(R.string.logout), R.drawable.ic_baseline_logout_24));
         navAdapter.notifyDataSetChanged();
     }
 
@@ -273,6 +294,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             setCityName(address[0]);
             ParentDashboardFragment.getInstance().updateLocation(address[0], address[1]);
             Log.d(TAG, "showResults: " + address[0]);
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -326,7 +348,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         if (pos == 5)
             showLogoutDialog();
         else if (pos == 0) {
-            navController.navigate(R.id.DetailsFragment2);
+            navController.navigate(R.id.tuitionListFragment);
         }
     }
 

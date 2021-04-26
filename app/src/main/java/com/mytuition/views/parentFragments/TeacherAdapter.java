@@ -1,6 +1,7 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.mytuition.R;
 import com.mytuition.databinding.DashBoardViewHorizontal1Binding;
 import com.mytuition.models.TeacherModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Random;
 
 public class TeacherAdapter extends ListAdapter<TeacherModel, TeacherAdapter.DashBoardVH2> {
+    private static final String TAG = "TeacherAdapter";
     Integer[] cards = new Integer[]{R.drawable.box_one,
             R.drawable.box_two,
             R.drawable.box_three,
@@ -47,16 +53,26 @@ public class TeacherAdapter extends ListAdapter<TeacherModel, TeacherAdapter.Das
         holder.dashBoardViewBinding.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString("docModel", teacherModel.toString());
-                ParentDashboardFragment.getInstance().navController.navigate(R.id.action_parentDashboardFragment2_to_teacherProfileFragment, bundle);
+
+                Gson gson = new Gson();
+                String jsonString = gson.toJson(teacherModel);
+                Log.d(TAG, "onClickTeacherModel: " + teacherModel.toString());
+                try {
+                    JSONObject request = new JSONObject(jsonString);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("docModel", request.toString());
+                    ParentDashboardFragment.getInstance().navController.navigate(R.id.action_parentDashboardFragment2_to_teacherProfileFragment, bundle);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
 
             }
         });
 
     }
 
-    public class DashBoardVH2 extends RecyclerView.ViewHolder {
+    public static class DashBoardVH2 extends RecyclerView.ViewHolder {
         DashBoardViewHorizontal1Binding dashBoardViewBinding;
 
         public DashBoardVH2(DashBoardViewHorizontal1Binding dashBoardViewBinding) {

@@ -13,7 +13,7 @@
 
         <variable
             name="tuition"
-            type="com.mytuition.models.TuitionModel" />
+            type="com.mytuition.models.RequestTuitionModel" />
     </data>
 
     <FrameLayout
@@ -37,7 +37,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:paddingBottom="23dp"
-                android:visibility="@{tuition.requestStatus.equals(`Pending`)?View.GONE:View.VISIBLE}"
+                android:visibility="@{tuition.teacherId.isEmpty()?View.GONE:View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -80,8 +80,8 @@
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_centerHorizontal="true"
                         android:loadCustomTeacherImage="@{teacher.image}"
                         android:src="@drawable/tuitor_image"
@@ -186,7 +186,7 @@
                     android:layout_marginTop="26dp"
                     android:layout_toEndOf="@id/llImage2"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="@{tuition.requestTimeSLot}"
+                    android:text="@{tuition.time}"
                     android:textColor="#262E3F"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -199,7 +199,7 @@
                     android:layout_marginTop="1dp"
                     android:layout_toEndOf="@id/llImage2"
                     android:fontFamily="@font/poppins"
-                    android:text="@{tuition.requestStatus}"
+                    android:text="@{tuition.reqStatus}"
                     android:textColor="#3F4E6E"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -254,6 +254,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="@drawable/border_rectangle"
                 android:orientation="vertical"
                 android:paddingBottom="10dp"
                 app:layout_constraintEnd_toEndOf="@+id/rlViewFile"
@@ -323,7 +324,22 @@
                 android:text="@string/change_teacher"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
-                android:visibility="@{tuition.requestStatus.equals(`Pending`)?View.GONE:View.VISIBLE}"
+                android:visibility="@{tuition.reqStatus.equalsIgnoreCase(`Pending`)?View.GONE:View.VISIBLE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btnCancelTuitionReq"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:fontFamily="@font/poppins"
+                android:text="@string/cancel_tuition"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:visibility="@{tuition.reqStatus.equalsIgnoreCase(`Pending`)?View.VISIBLE:View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
