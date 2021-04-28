@@ -1,4 +1,4 @@
-package com.mytuition.views.parentFragments;
+package com.mytuition;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,23 +12,23 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.mytuition.R;
-import com.mytuition.databinding.FragmentRequestTuitionSuccessfullyBinding;
+import com.mytuition.databinding.FragmentAboutUsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 
-public class RequestTuitionSuccessfullyFragment extends Fragment {
+public class AboutUsFragment extends Fragment {
 
-    FragmentRequestTuitionSuccessfullyBinding binding;
+
+    FragmentAboutUsBinding binding;
     NavController navController;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentRequestTuitionSuccessfullyBinding.inflate(getLayoutInflater());
+        binding = FragmentAboutUsBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }
 
@@ -37,18 +37,11 @@ public class RequestTuitionSuccessfullyFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-
-        binding.btnBookingDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.action_requestTuitionSuccessfullyFragment_to_tuitionListFragment);
-            }
-        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).hide();
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).show();
     }
 }

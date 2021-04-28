@@ -43,13 +43,16 @@ import com.mytuition.R;
 import com.mytuition.adapters.NavAdapter;
 import com.mytuition.databinding.ActivityParentScreenBinding;
 import com.mytuition.interfaces.NavigationInterface;
+import com.mytuition.interfaces.onSuccessListener;
 import com.mytuition.models.NavModel;
 import com.mytuition.models.ParentModel;
 import com.mytuition.models.RequestTuitionModel;
+import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.GetAddressIntentService;
 import com.mytuition.views.SplashScreen;
 import com.mytuition.views.parentFragments.ParentDashboardFragment;
+import com.mytuition.views.parentFragments.ParentDashboardFragmentDirections;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +63,7 @@ import static com.mytuition.utility.AppUtils.getMobileNumber;
 import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.AppUtils.hideDialog;
 import static com.mytuition.utility.Utils.LOGIN_TYPE;
+import static com.mytuition.utility.Utils.setParentModel;
 import static com.mytuition.utility.Utils.updateUI;
 import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_ACCEPTED;
 import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_PENDING;
@@ -106,6 +110,8 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         NavigationUI.setupActionBarWithNavController(this, navController);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
+        getNotificationData();
+
         addressResultReceiver = new LocationAddressResultReceiver(new Handler());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         locationCallback = new LocationCallback() {
@@ -145,21 +151,26 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     }
 
     private void updateUserInfo() {
-        getFirestoreReference().collection("Users").document(getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error == null) {
-                    ParentModel user = value.toObject(ParentModel.class);
-                    user.setMobile(getMobileNumber());
-                    mainBinding.setUser(user);
+        if (null != getUid())
+            getFirestoreReference().collection(AppConstant.USERS).document(getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    if (error == null && null != value) {
+                        ParentModel user = value.toObject(ParentModel.class);
+                        if (null != user)
+                            user.setMobile(getMobileNumber());
+                        mainBinding.setUser(user);
+                        setParentModel(ParentScreen.this, user);
+
+                    }
                 }
-            }
-        });
+            });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        updateToken();
         // updateRequestView();
     }
 
@@ -285,6 +296,23 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     }
 
 
+    public void getNotificationData() {
+
+        String notificationId = getIntent().getStringExtra(AppConstant.NOTIFICATION_ID);
+        String notificationType = getIntent().getStringExtra(AppConstant.NOTIFICATION_TYPE);
+
+        Log.d(TAG, "getNotificationData: notificationId " + notificationId);
+        Log.d(TAG, "getNotificationData: notificationType " + notificationType);
+
+        if (null != notificationId && null != notificationType) {
+            if (notificationType.equalsIgnoreCase(AppConstant.NOTIFICATION_TUITION_DETAIL)) {
+                ParentDashboardFragmentDirections.ActionParentDashboardFragment2ToDetailsFragment2 action = ParentDashboardFragmentDirections.actionParentDashboardFragment2ToDetailsFragment2();
+                action.setTuitionId(notificationId);
+                navController.navigate(action);
+            }
+        }
+    }
+
     public void showResults(String currentAdd, String lat, String lng) {
 
         final String[] address = currentAdd.split(",");
@@ -345,19 +373,24 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     @Override
     public void onNavigationItemClicked(int pos) {
         mainBinding.drawerLayout.close();
-        if (pos == 5)
-            showLogoutDialog();
-        else if (pos == 0) {
+
+        if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.tuition_reqiest))) {
             navController.navigate(R.id.tuitionListFragment);
-        }
+        } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.about_us))) {
+            navController.navigate(R.id.aboutUsFragment);
+        } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.share_app))) {
+            AppUtils.shareApp(instance);
+        } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.logout)))
+            showLogoutDialog();
+        else Toast.makeText(instance, "coming soon !!", Toast.LENGTH_SHORT).show();
     }
 
 
     private void showLogoutDialog() {
         new AlertDialog.Builder(ParentScreen.this)
                 .setMessage("Do you really want to logout?")
-                .setIcon(R.drawable.ic_launcher_foreground)
-                .setPositiveButton("YES",
+                .setIcon(R.drawable.app_icon)
+                .setPositiveButton("Yes",
                         new DialogInterface.OnClickListener() {
                             @TargetApi(11)
                             public void onClick(DialogInterface dialog, int id) {
@@ -365,7 +398,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                                 logout();
                             }
                         })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @TargetApi(11)
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -387,5 +420,14 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                         finish();
                     }
                 });
+    }
+
+    private void updateToken() {
+        AppUtils.updateToken(new onSuccessListener() {
+            @Override
+            public void onSuccess(Object obj) {
+                Log.d(TAG, "updateToken: " + (String) obj);
+            }
+        });
     }
 }

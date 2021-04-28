@@ -49,8 +49,8 @@ public class CancelTuitionReqDialog extends BottomSheetDialogFragment {
                     Toasty.info(requireActivity(), "Please write reason for cancelling Tuition Request", Toast.LENGTH_SHORT, true).show();
 
                 } else {
-                    dismiss();
                     updateRequestStatus();
+
                 }
             }
         });
@@ -67,6 +67,7 @@ public class CancelTuitionReqDialog extends BottomSheetDialogFragment {
                 public void onSuccess(Void aVoid) {
                     AppUtils.hideDialog();
                     Toasty.success(App.context, "cancelled successfully !!", Toast.LENGTH_SHORT, true).show();
+                    dismiss();
 
                 }
             }).addOnFailureListener(new OnFailureListener() {

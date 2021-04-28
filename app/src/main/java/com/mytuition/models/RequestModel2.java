@@ -5,6 +5,15 @@ public class RequestModel2 {
     String userId;
     String location;
     String area;
+    String city;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public String getLocation() {
         return location;

@@ -52,7 +52,7 @@
                     android:fontFamily="@font/poppins_semibold"
                     android:padding="10dp"
                     android:tag="@{user.image==null || user.image.equals(``)?0:1}"
-                    android:text="@{user.image==`` ?`upload profile photo`:`change profile photo`}"
+                    android:text="@{user.image==`` ?`Upload Profile Photo`:`Change Profile Photo`}"
                     android:textColor="#0A586C"
                     android:textSize="14sp"
                     android:textStyle="bold" />

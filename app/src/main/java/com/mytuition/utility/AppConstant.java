@@ -14,4 +14,9 @@ public class AppConstant {
     public static final String TUITION_MODEL = "tuitionModel";
     public static final String TEACHER = "Teachers";
     public static final Object CANCELLED = "Cancelled";
+    public static final String TOKEN = "token";
+    public static final String USER = "Users";
+    public static final String NOTIFICATION_TYPE = "notificationType";
+    public static final String NOTIFICATION_ID = "notificationId";
+    public static final String NOTIFICATION_TUITION_DETAIL = "tuitionDetail";
 }

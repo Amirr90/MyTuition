@@ -144,4 +144,12 @@
     <string name="about_us">About Us</string>
     <string name="tuition_reqiest">Tuition Request</string>
     <string name="cancel_tuition">Cancel Tuition</string>
+    <string name="default_notification_channel_id">com.mytuition</string>
+    <string name="tuition_history">Tuition History</string>
+    <string name="submit">Submit</string>
+    <string name="write_cancel_reason">Write cancel Reason</string>
+    <string name="cancel_tuition_request">Cancel Tuition Request</string>
+    <string name="find_top_coaching_near_you">Find Top Coaching near you</string>
+    <string name="see_what_our_existing_users_have_to_say_about_us">See what our existing users have to say about us</string>
+    <string name="testimonials">Testimonials</string>
 </resources>

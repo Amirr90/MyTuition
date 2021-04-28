@@ -10,7 +10,11 @@ public class RequestTuitionModel {
     String reqType;
     String reqStatus;
     String id;
+    Long acceptedAt;
 
+    public Long getAcceptedAt() {
+        return acceptedAt;
+    }
 
     public String getId() {
         return id;

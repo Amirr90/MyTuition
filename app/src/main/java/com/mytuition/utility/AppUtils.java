@@ -32,17 +32,22 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+import com.mytuition.BuildConfig;
 import com.mytuition.R;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.interfaces.UploadImageInterface;
+import com.mytuition.interfaces.onSuccessListener;
 import com.mytuition.models.CalendarModel;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.views.activity.ParentScreen;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -171,16 +176,11 @@ public class AppUtils {
             if (!((Activity) activity).isFinishing()) {
                 if (progressDialog == null) {
                     progressDialog = new ProgressDialog(activity);
-                    progressDialog = ProgressDialog.show(activity, null, null, false, true);
-                    progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(activity.getResources().getColor(android.R.color.transparent)));
-                    progressDialog.setContentView(R.layout.progress_bar);
-                    progressDialog.show();
-                } else {
-                    progressDialog = ProgressDialog.show(activity, null, null, false, true);
-                    progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(activity.getResources().getColor(android.R.color.transparent)));
-                    progressDialog.setContentView(R.layout.progress_bar);
-                    progressDialog.show();
                 }
+                progressDialog = ProgressDialog.show(activity, null, null, false, true);
+                progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(activity.getResources().getColor(android.R.color.transparent)));
+                progressDialog.setContentView(R.layout.progress_bar);
+                progressDialog.show();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,6 +210,36 @@ public class AppUtils {
         AppUtils.hideDialog();
         return specialityModels;
 
+    }
+
+
+    public static void updateToken(final onSuccessListener onSuccessListener) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (null != user) {
+            final Map<String, Object> map = new HashMap<>();
+
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                @Override
+                public void onSuccess(InstanceIdResult instanceIdResult) {
+                    String newToken = instanceIdResult.getToken();
+                    map.put(AppConstant.TOKEN, newToken);
+                    getFirestoreReference().collection(AppConstant.USER)
+                            .document(Objects.requireNonNull(getUid()))
+                            .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            onSuccessListener.onSuccess("Updated !!");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
+                        }
+                    });
+                    Log.e("newToken2", newToken);
+                }
+            });
+        }
     }
 
     public static void hideDialog() {
@@ -335,6 +365,42 @@ public class AppUtils {
         }
 
 
+    }
+
+    public static void shareApp(ParentScreen instance) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out my app at: https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID);
+        sendIntent.setType("text/plain");
+        instance.startActivity(sendIntent);
+    }
+
+    public static int setExperience(String experience) {
+        int exp = Integer.parseInt(experience);
+        switch (exp) {
+            case 0:
+            case 1:
+                return R.drawable.ic_baseline_filter_1_24;
+            case 2:
+                return R.drawable.ic_baseline_filter_2_24;
+            case 3:
+                return R.drawable.ic_baseline_filter_3_24;
+            case 4:
+                return R.drawable.ic_baseline_filter_4_24;
+            case 5:
+                return R.drawable.ic_baseline_filter_5_24;
+            case 6:
+                return R.drawable.ic_baseline_filter_6_24;
+            case 7:
+                return R.drawable.ic_baseline_filter_7_24;
+            case 8:
+                return R.drawable.ic_baseline_filter_8_24;
+            case 9:
+                return R.drawable.ic_baseline_filter_9_24;
+            default:
+                return R.drawable.ic_baseline_filter_9_plus_24;
+        }
     }
 
 

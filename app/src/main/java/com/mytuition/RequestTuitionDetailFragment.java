@@ -21,10 +21,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 import com.mytuition.databinding.FragmentRequestTuitionDetailBinding;
+import com.mytuition.interfaces.ApiInterface;
+import com.mytuition.models.RequestModel2;
 import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.responseModel.TuitionDetailResponse;
 import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
+import com.mytuition.utility.DatabaseUtils;
 import com.mytuition.views.activity.ParentScreen;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -77,8 +82,6 @@ public class RequestTuitionDetailFragment extends Fragment {
         navController = Navigation.findNavController(view);
 
 
-
-
         requestTuitionBinding.tvViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +104,7 @@ public class RequestTuitionDetailFragment extends Fragment {
                 }
             }
         });
+
         requestTuitionBinding.btnChangeTeacher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,24 +132,46 @@ public class RequestTuitionDetailFragment extends Fragment {
                 if (documentSnapshot.exists()) {
                     teacherModel = documentSnapshot.toObject(TeacherModel.class);
                     requestTuitionBinding.setTeacher(teacherModel);
+                    if (null != teacherModel.getTeachingProfile().getExperience())
+                        requestTuitionBinding.imageView9.setImageResource(AppUtils.setExperience(teacherModel.getTeachingProfile().getExperience()));
                 }
             }
         });
 
     }
 
+
     private void getTuitionDetails() {
         if (getArguments() != null) {
-            String jsonString = getArguments().getString(AppConstant.TUITION_MODEL);
-            Gson gson = new Gson();
-            requestTuitionModel = gson.fromJson(jsonString, RequestTuitionModel.class);
+            final String tuitionId = RequestTuitionDetailFragmentArgs.fromBundle(getArguments()).getTuitionId();
+            RequestModel2 model = new RequestModel2();
+            model.setTuitionId(tuitionId);
+            DatabaseUtils.getTuitionDetail(model, new ApiInterface() {
+                @Override
+                public void onSuccess(Object obj) {
+                    AppUtils.hideDialog();
+                    List<TuitionDetailResponse.Tuition> tuitions = (List<TuitionDetailResponse.Tuition>) obj;
+                    if (null != tuitions && !tuitions.isEmpty()) {
+                        requestTuitionModel = tuitions.get(0).getTuitionModel().get(0);
+                        Log.d(TAG, "getTuitionDetails: " + requestTuitionModel.toString());
+                        requestTuitionBinding.setTuition(requestTuitionModel);
+                        updateRequestStatus(requestTuitionModel);
 
-            Log.d(TAG, "getTuitionDetails: " + requestTuitionModel.toString());
-            requestTuitionBinding.setTuition(requestTuitionModel);
-            updateRequestStatus(requestTuitionModel);
 
-            if (null != requestTuitionModel.getTeacherId() && !requestTuitionModel.getTeacherId().isEmpty())
-                getTeacherProfile();
+                        if (null != requestTuitionModel.getTeacherId() && !requestTuitionModel.getTeacherId().isEmpty())
+                            getTeacherProfile();
+                    }
+
+                }
+
+                @Override
+                public void onFailed(String msg) {
+                    AppUtils.hideDialog();
+                    Toast.makeText(requireActivity(), "could't find tuition Detail !!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
         }
 
 
@@ -212,7 +238,6 @@ public class RequestTuitionDetailFragment extends Fragment {
 
     private void swapTeacher(String choice) {
         AppUtils.showRequestDialog(requireActivity());
-
 
         if (getUid() != null)
             AppUtils.getFirestoreReference().collection(REQUEST_TUITION)

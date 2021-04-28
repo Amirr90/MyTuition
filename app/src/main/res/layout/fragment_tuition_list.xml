@@ -9,16 +9,20 @@
 
     <TextView
         android:id="@+id/textView20"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="26dp"
         android:layout_marginRight="15dp"
+        android:drawableEnd="@drawable/ic_baseline_history_toggle_off_24"
+        android:drawablePadding="@dimen/_10sdp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="Tuition History"
+        android:paddingEnd="@dimen/_10sdp"
+        android:text="@string/tuition_history"
         android:textColor="#262E3F"
         android:textSize="19sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:ignore="RtlSymmetry" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -30,7 +34,56 @@
         android:layout_marginRight="10dp"
         android:nestedScrollingEnabled="false"
         android:paddingBottom="40dp"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/tuition_list_view" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/noDataLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_10sdp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_format_list_numbered_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins"
+            android:text="No Data Found !!"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="@+id/imageView11"
+            app:layout_constraintStart_toStartOf="@+id/imageView11"
+            app:layout_constraintTop_toBottomOf="@+id/imageView11" />
+
+        <Button
+            android:id="@+id/btnRetry"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/round_for_search"
+            android:backgroundTint="@color/colorAccent"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/try_again"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/textView24"
+            app:layout_constraintStart_toStartOf="@+id/textView24"
+            app:layout_constraintTop_toBottomOf="@+id/textView24" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

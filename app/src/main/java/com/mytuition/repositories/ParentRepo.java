@@ -17,6 +17,7 @@ import com.mytuition.utility.App;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.DatabaseUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ParentRepo {
@@ -74,25 +75,30 @@ public class ParentRepo {
         });
     }
 
-    public LiveData<List<TuitionDetailResponse.Tuition>> getTuitionList() {
+    public LiveData<List<TuitionDetailResponse.Tuition>> getTuitionList(FragmentActivity fragmentActivity) {
 
         if (mutableTuitionListLiveData == null) {
             mutableTuitionListLiveData = new MutableLiveData<>();
         }
-        loadTuitionListData();
+        loadTuitionListData(fragmentActivity);
         return mutableTuitionListLiveData;
     }
 
-    private void loadTuitionListData() {
+    private void loadTuitionListData(FragmentActivity fragmentActivity) {
+        AppUtils.showRequestDialog(fragmentActivity);
         DatabaseUtils.getTuitionList(new ApiInterface() {
             @Override
             public void onSuccess(Object obj) {
+                AppUtils.hideDialog();
                 mutableTuitionListLiveData.setValue((List<TuitionDetailResponse.Tuition>) obj);
             }
 
             @Override
             public void onFailed(String msg) {
+                AppUtils.hideDialog();
                 Toast.makeText(App.context, msg, Toast.LENGTH_SHORT).show();
+                List<TuitionDetailResponse.Tuition> tuition = new ArrayList<>();
+                mutableTuitionListLiveData.setValue(tuition);
             }
         });
     }

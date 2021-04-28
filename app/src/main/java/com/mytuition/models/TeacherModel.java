@@ -19,6 +19,15 @@ public class TeacherModel extends BaseObservable {
     private List<TimeSlotModel> timeSlots;
     private String about;
     private Profile profile;
+    private long timestamp;
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public void setTimeSlots(List<TimeSlotModel> timeSlots) {
         this.timeSlots = timeSlots;

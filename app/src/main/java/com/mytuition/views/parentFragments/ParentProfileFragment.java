@@ -7,25 +7,23 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,11 +38,9 @@ import com.mytuition.utility.AppUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.mytuition.utility.AppConstant.USERS;
 import static com.mytuition.utility.AppUtils.getFirestoreReference;
@@ -88,7 +84,8 @@ public class ParentProfileFragment extends Fragment {
 
         progressDialog = new ProgressDialog(requireActivity());
 
-        parentModel = getParentModel(requireActivity());
+        setParent();
+
 
         profileBinding.setUser(parentModel);
 
@@ -126,6 +123,11 @@ public class ParentProfileFragment extends Fragment {
         });
     }
 
+    private void setParent() {
+        parentModel = getParentModel(requireActivity());
+        profileBinding.setUser(parentModel);
+    }
+
     private void selectImage(int tag) {
         ImagePicker.Companion.with(this)
                 .crop(4f, 4f)
@@ -151,7 +153,7 @@ public class ParentProfileFragment extends Fragment {
 
     }
 
-    private void uploadImageToFirebase(Uri uri)  {
+    private void uploadImageToFirebase(Uri uri) {
 
 
         progressDialog.show();
@@ -224,6 +226,7 @@ public class ParentProfileFragment extends Fragment {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
                             setParentModel(requireActivity(), parentModel);
+
                         }
                     });
         else Toast.makeText(requireActivity(), "User not found !!", Toast.LENGTH_SHORT).show();
@@ -263,5 +266,11 @@ public class ParentProfileFragment extends Fragment {
             parentModel.setEmail(profileBinding.editTextTextPersonEmail.getText().toString());
             return true;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).show();
     }
 }

@@ -1,6 +1,7 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,15 @@ import com.mytuition.adapters.CoachingAdapter;
 import com.mytuition.adapters.DashboardPatientAdapter1;
 import com.mytuition.adapters.HomeBannerAdapter;
 import com.mytuition.adapters.MainSliderAdapter;
+import com.mytuition.adapters.TestimonialsAdapter;
 import com.mytuition.databinding.FragmentParentDashboardBinding;
 import com.mytuition.models.Banner;
 import com.mytuition.models.CoachingModel;
 import com.mytuition.models.DashboardModel;
 import com.mytuition.models.DashboardModel1;
+import com.mytuition.models.ParentModel;
 import com.mytuition.models.RequestModel2;
+import com.mytuition.models.TestimonialsModel;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.PicassoImageLoadingService;
 import com.mytuition.utility.Utils;
@@ -55,10 +59,12 @@ public class ParentDashboardFragment extends Fragment {
     DashboardPatientAdapter1 adapter1;
     TeacherAdapter adapter2;
     CoachingAdapter adapter3;
+    TestimonialsAdapter testimonialsAdapter;
     NavController navController;
     ParentViewHolder viewModel;
     ImageLoadingService imageLoadingService;
     RequestModel2 requestModel2;
+    List<TestimonialsModel> testimonialsModels;
 
     public static ParentDashboardFragment instance;
 
@@ -86,10 +92,13 @@ public class ParentDashboardFragment extends Fragment {
         adapter1 = new DashboardPatientAdapter1();
         adapter2 = new TeacherAdapter();
         adapter3 = new CoachingAdapter();
+        testimonialsModels = new ArrayList<>();
+        testimonialsAdapter = new TestimonialsAdapter(testimonialsModels);
 
         parentDashboardBinding.rec1.setAdapter(adapter1);
         parentDashboardBinding.rec2.setAdapter(adapter2);
         parentDashboardBinding.rec3.setAdapter(adapter3);
+        parentDashboardBinding.recTestimonials.setAdapter(testimonialsAdapter);
 
 
         imageLoadingService = new PicassoImageLoadingService(ParentScreen.getInstance());
@@ -97,10 +106,7 @@ public class ParentDashboardFragment extends Fragment {
 
 
         viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
-
-
-        requestModel2.setLocation("Rajajipuram");
-        requestModel2.setArea("Lucknow");
+        requestModel2.setCity("Lucknow");
         viewModel.getDashboardData(requestModel2, requireActivity()).observe(getViewLifecycleOwner(), new Observer<List<DashboardModel>>() {
             @Override
             public void onChanged(List<DashboardModel> dashboardModels) {
@@ -118,14 +124,18 @@ public class ParentDashboardFragment extends Fragment {
                     //Binding Top Coaching Adapter
                     adapter3.submitList(getTopCoachingData());
 
+                    //Binding Testimonials  Adapter
+                    testimonialsAdapter.notifyDataSetChanged();
+
 
                     //Binding Slider Adapter
                     setSlider();
                     loadBigBannerImage(dashboardModels.get(0).getBannerData());
-                }
+                } else Log.d(TAG, "onChanged: no data");
             }
         });
 
+        updateProfile();
         parentDashboardBinding.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,6 +168,12 @@ public class ParentDashboardFragment extends Fragment {
         parentDashboardBinding.bannerViewPager.setAdapter(new HomeBannerAdapter(bannerImages));
 
 
+    }
+
+
+    public void updateProfile() {
+        ParentModel parentModel = getParentModel(requireActivity());
+        parentDashboardBinding.setParent(parentModel);
     }
 
 

@@ -52,6 +52,13 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_parentDashboardFragment2_to_DetailsFragment2"
+            app:destination="@id/DetailsFragment2"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
 
     </fragment>
     <fragment
@@ -157,7 +164,7 @@
     <fragment
         android:id="@+id/parentProfileFragment"
         android:name="com.mytuition.views.parentFragments.ParentProfileFragment"
-        android:label="fragment_parent_profile"
+        android:label="Profile"
         tools:layout="@layout/fragment_parent_profile" />
     <fragment
         android:id="@+id/requestTuitonFragment"
@@ -181,6 +188,14 @@
         <action
             android:id="@+id/action_requestTuitionSuccessfullyFragment_to_requestMyTuitionDetailFragment"
             app:destination="@id/DetailsFragment2" />
+        <action
+            android:id="@+id/action_requestTuitionSuccessfullyFragment_to_tuitionListFragment"
+            app:destination="@id/tuitionListFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/parentDashboardFragment2" />
     </fragment>
     <fragment
         android:id="@+id/DetailsFragment2"
@@ -189,7 +204,11 @@
         tools:layout="@layout/fragment_request_tuition_detail">
         <action
             android:id="@+id/action_DetailsFragment2_to_teacherProfileFragment"
-            app:destination="@id/teacherProfileFragment" />
+            app:destination="@id/teacherProfileFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_DetailsFragment2_to_cancelTuitionReqDialog"
             app:destination="@id/cancelTuitionReqDialog"
@@ -197,6 +216,14 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <argument
+            android:name="id"
+            app:argType="string"
+            android:defaultValue="0" />
+        <argument
+            android:name="tuitionId"
+            app:argType="string"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/tuitionListFragment"
@@ -216,4 +243,9 @@
         android:name="com.mytuition.CancelTuitionReqDialog"
         android:label="fragment_cancel_tuition_req_dialog"
         tools:layout="@layout/fragment_cancel_tuition_req_dialog" />
+    <fragment
+        android:id="@+id/aboutUsFragment"
+        android:name="com.mytuition.AboutUsFragment"
+        android:label="@string/about_us"
+        tools:layout="@layout/fragment_about_us" />
 </navigation>

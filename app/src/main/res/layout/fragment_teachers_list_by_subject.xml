@@ -15,7 +15,8 @@
         android:paddingLeft="10dp"
         android:paddingTop="@dimen/_20sdp"
         android:paddingRight="10dp"
-        android:paddingBottom="@dimen/_20sdp">
+        android:paddingBottom="@dimen/_20sdp"
+        android:visibility="gone">
 
 
         <EditText

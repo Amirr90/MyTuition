@@ -29,10 +29,16 @@ public class TeacherScreen extends AppCompatActivity {
 
     ActivityTeacherScreenBinding teacherScreenBinding;
     NavController navController;
+    public static TeacherScreen instance;
+
+    public static TeacherScreen getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         teacherScreenBinding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_screen);
     }
 

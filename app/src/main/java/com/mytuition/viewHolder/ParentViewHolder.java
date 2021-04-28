@@ -26,8 +26,8 @@ public class ParentViewHolder extends ViewModel {
         return repo.getTeacher(model);
     }
 
-    public LiveData<List<TuitionDetailResponse.Tuition>> getTuitionList() {
-        return repo.getTuitionList();
+    public LiveData<List<TuitionDetailResponse.Tuition>> getTuitionList(FragmentActivity fragmentActivity) {
+        return repo.getTuitionList(fragmentActivity);
     }
 
     public LiveData<List<DashboardModel>> getDashboardData(RequestModel2 requestModel2, FragmentActivity fragmentActivity) {

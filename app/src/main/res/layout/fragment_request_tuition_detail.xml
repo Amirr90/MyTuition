@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.mytuition.utility.AppUtils" />
+
         <import type="android.view.View" />
 
         <variable
@@ -105,9 +107,8 @@
                     android:layout_below="@id/view1"
                     android:layout_marginStart="28dp"
                     android:layout_marginTop="13dp"
-                    android:setCustomVisibility="@{teacher.academicInformation.highestEducation}"
-                    android:src="@drawable/ic_calendar"
-                    app:tint="@color/GreyColo" />
+                    android:setCustomVisibility="@{teacher.teachingProfile.experience}"
+                    app:tint="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/textView22"
@@ -118,19 +119,20 @@
                     android:layout_marginTop="13dp"
                     android:layout_toEndOf="@+id/imageView9"
                     android:fontFamily="@font/poppins"
-                    android:setCustomVisibility="@{teacher.academicInformation.highestEducation}"
-                    android:text="@{teacher.academicInformation.highestEducation}"
+                    android:setCustomVisibility="@{teacher.teachingProfile.experience}"
+                    android:text="@{`Years of Experiance`}"
                     android:textColor="#3F4E6E"
                     android:textSize="14sp" />
 
                 <ImageView
+
                     android:id="@+id/imageView10"
                     android:layout_width="19dp"
                     android:layout_height="18dp"
                     android:layout_below="@id/imageView9"
                     android:layout_marginStart="28dp"
                     android:layout_marginTop="22dp"
-                    android:src="@drawable/ic_calendar" />
+                    android:src="@drawable/graduation_hat" />
 
                 <TextView
                     android:id="@+id/textView23"
@@ -152,10 +154,11 @@
                     android:layout_below="@id/imageView9"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="33dp"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="17dp"
                     android:layout_marginEnd="10dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:fontFamily="@font/poppins"
+                    android:padding="@dimen/_5sdp"
                     android:text="@string/view_profile"
                     android:textColor="#3F4E6E"
                     android:textSize="14sp"
@@ -186,20 +189,34 @@
                     android:layout_marginTop="26dp"
                     android:layout_toEndOf="@id/llImage2"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="@{tuition.time}"
+                    android:text="@{`Tuition Timing\n`+tuition.time}"
                     android:textColor="#262E3F"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
+
                 <TextView
-                    android:id="@+id/tvSpec"
+                    android:id="@+id/tvTuitionFor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tcPhysicalExamination"
                     android:layout_marginTop="1dp"
                     android:layout_toEndOf="@id/llImage2"
                     android:fontFamily="@font/poppins"
-                    android:text="@{tuition.reqStatus}"
+                    android:text="@{tuition.tuitionFor.equalsIgnoreCase(`all`)?`Tuition For : Not Defined`:`Tuition For : `+tuition.tuitionFor}"
+                    android:textColor="#3F4E6E"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/tvSpec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvTuitionFor"
+                    android:layout_marginTop="1dp"
+                    android:layout_toEndOf="@id/llImage2"
+                    android:fontFamily="@font/poppins"
+                    android:text="@{`Request Status : `+tuition.reqStatus}"
                     android:textColor="#3F4E6E"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -242,6 +259,7 @@
                         android:id="@+id/btLoading"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_gravity="center_vertical"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:lottie_autoPlay="true"
@@ -280,7 +298,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="38dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="15dp"
                     android:fontFamily="@font/poppins"
                     android:textColor="#3F4E6E"
@@ -299,6 +316,7 @@
                     android:textColor="#262E3F"
                     android:textSize="15sp"
                     android:textStyle="bold"
+                    android:visibility="@{tuition.acceptedAt==null?View.GONE:View.VISIBLE}"
                     app:autoSizeTextType="uniform" />
 
                 <TextView
@@ -306,9 +324,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="38dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="15dp"
                     android:fontFamily="@font/poppins"
+                    android:text="@{tuition.acceptedAt!=null?AppUtils.getTimeFormat(tuition.acceptedAt,`EEE, d MMM yyyy h:mm a`):``}"
                     android:textColor="#3F4E6E"
                     android:textSize="12sp"
                     android:textStyle="normal"

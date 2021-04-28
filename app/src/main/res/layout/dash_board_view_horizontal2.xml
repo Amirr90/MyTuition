@@ -9,7 +9,7 @@
             type="com.mytuition.models.CoachingModel" />
     </data>
 
-    <androidx.cardview.widget.CardView
+  <!--  <androidx.cardview.widget.CardView
         android:layout_width="118dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_5sdp"
@@ -17,11 +17,16 @@
         android:layout_marginEnd="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         app:cardCornerRadius="@dimen/_10sdp">
-
+-->
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@drawable/border_rectangle"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <ImageView
@@ -32,6 +37,7 @@
                 android:scaleType="fitXY" />
 
             <LinearLayout
+                android:background="#80F4F4F4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -64,5 +70,5 @@
             </LinearLayout>
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+ <!--   </androidx.cardview.widget.CardView>-->
 </layout>

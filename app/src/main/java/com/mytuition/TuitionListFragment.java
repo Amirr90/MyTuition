@@ -15,18 +15,13 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.mytuition.databinding.FragmentTuitionListBinding;
 import com.mytuition.databinding.TuitionListViewBinding;
 import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.responseModel.TuitionDetailResponse;
-import com.mytuition.utility.AppConstant;
-import com.mytuition.utility.AppUtils;
 import com.mytuition.viewHolder.ParentViewHolder;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Objects;
@@ -56,19 +51,34 @@ public class TuitionListFragment extends Fragment {
 
 
         binding.getRoot().setAnimation(fadeIn(requireActivity()));
-        AppUtils.showRequestDialog(requireActivity());
         viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
-        viewModel.getTuitionList().observe(getViewLifecycleOwner(), new Observer<List<TuitionDetailResponse.Tuition>>() {
+        getData();
+
+        binding.btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(List<TuitionDetailResponse.Tuition> tuitions) {
-                AppUtils.hideDialog();
-                if (null != tuitions && !tuitions.isEmpty()) {
-                    List<RequestTuitionModel> tuitionListModels = tuitions.get(0).getTuitionModel();
-                    binding.prescriptionRec.setAdapter(new AdapterTuitionList(tuitionListModels));
-                }
+            public void onClick(View v) {
+                binding.noDataLayout.setVisibility(View.GONE);
+                getData();
             }
         });
 
+    }
+
+    private void getData() {
+        viewModel.getTuitionList(requireActivity()).observe(getViewLifecycleOwner(), new Observer<List<TuitionDetailResponse.Tuition>>() {
+            @Override
+            public void onChanged(List<TuitionDetailResponse.Tuition> tuitions) {
+                if (null != tuitions && !tuitions.isEmpty()) {
+                    binding.noDataLayout.setVisibility(View.GONE);
+                    binding.prescriptionRec.setVisibility(View.VISIBLE);
+                    List<RequestTuitionModel> tuitionListModels = tuitions.get(0).getTuitionModel();
+                    binding.prescriptionRec.setAdapter(new AdapterTuitionList(tuitionListModels));
+                } else {
+                    binding.noDataLayout.setVisibility(View.VISIBLE);
+                    binding.prescriptionRec.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private class AdapterTuitionList extends RecyclerView.Adapter<AdapterTuitionList.TuitionVH> {
@@ -93,16 +103,10 @@ public class TuitionListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    Gson gson = new Gson();
-                    String jsonString = gson.toJson(listModels.get(position));
-                    try {
-                        JSONObject request = new JSONObject(jsonString);
-                        Bundle bundle = new Bundle();
-                        bundle.putString(AppConstant.TUITION_MODEL, request.toString());
-                        navController.navigate(R.id.action_tuitionListFragment_to_DetailsFragment2, bundle);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
+                    TuitionListFragmentDirections.ActionTuitionListFragmentToDetailsFragment2 action = TuitionListFragmentDirections.actionTuitionListFragmentToDetailsFragment2();
+                    action.setTuitionId(listModels.get(position).getId());
+                    navController.navigate(action);
 
 
                 }

@@ -110,6 +110,7 @@
                 android:id="@+id/rec1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:nestedScrollingEnabled="false"
                 android:padding="@dimen/_10sdp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
@@ -172,7 +173,7 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:paddingStart="@dimen/_10sdp"
                 android:paddingEnd="@dimen/_100sdp"
-                android:text="Find Top Coaching near you"
+                android:text="@string/find_top_coaching_near_you"
                 android:textColor="#2B3344"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -193,6 +194,82 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView"
                 tools:listitem="@layout/dash_board_view_horizontal2" />
+
+
+            <TextView
+                android:id="@+id/tvTestimonials"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_100sdp"
+                android:text="@string/testimonials"
+                android:textColor="#2B3344"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rec3" />
+
+
+            <TextView
+                android:id="@+id/textView27"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:paddingStart="@dimen/_10sdp"
+                android:text="@string/see_what_our_existing_users_have_to_say_about_us"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/tvTestimonials"
+                app:layout_constraintTop_toBottomOf="@+id/tvTestimonials"
+                tools:ignore="RtlSymmetry" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recTestimonials"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                android:padding="@dimen/_10sdp"
+                android:visibility="visible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView27"
+                tools:listitem="@layout/dash_board_view_testimonials" />
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/GreyColo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recTestimonials" />
+            <TextView
+                android:textColor="@color/colorAccent"
+                android:textStyle="italic"
+                android:gravity="center"
+                android:id="@+id/textView30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginBottom="60dp"
+                android:fontFamily="@font/krona_one"
+                android:text="S Y U M A"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

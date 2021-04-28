@@ -103,7 +103,7 @@ public class RequestTuitionFragment extends Fragment {
 
     private boolean initReqModel() {
         requestTuitionModel = new RequestTuitionModel();
-        requestTuitionModel.setName(null == parentModel ? "" : parentModel.getName());
+        requestTuitionModel.setName(null == teacherModel ? "Not Defined" : teacherModel.getName());
         requestTuitionModel.setReqDate(date);
         requestTuitionModel.setReqTime(timeSlot);
         requestTuitionModel.setUid(getUid());
