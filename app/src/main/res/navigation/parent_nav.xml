@@ -59,6 +59,13 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_parentDashboardFragment2_to_writeTestimonialsDialog"
+            app:destination="@id/writeTestimonialsDialog"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
 
     </fragment>
     <fragment
@@ -218,12 +225,12 @@
             app:popExitAnim="@anim/fade_out" />
         <argument
             android:name="id"
-            app:argType="string"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="string" />
         <argument
             android:name="tuitionId"
-            app:argType="string"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/tuitionListFragment"
@@ -248,4 +255,39 @@
         android:name="com.mytuition.AboutUsFragment"
         android:label="@string/about_us"
         tools:layout="@layout/fragment_about_us" />
+    <dialog
+        android:id="@+id/writeTestimonialsDialog"
+        android:name="com.mytuition.WriteTestimonialsDialog"
+        android:label="fragment_write_testimonials_dialog"
+        tools:layout="@layout/fragment_write_testimonials_dialog" />
+    <fragment
+        android:id="@+id/tuitionRequestForAdminFragment"
+        android:name="com.mytuition.TuitionRequestForAdminFragment"
+        android:label="All Tuition Request"
+        tools:layout="@layout/fragment_tuition_request_for_admin" >
+        <action
+            android:id="@+id/action_tuitionRequestForAdminFragment_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_tuitionRequestForAdminFragment_to_singleTuitionDetailFragment"
+            app:destination="@id/singleTuitionDetailFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleTuitionDetailFragment"
+        android:name="com.mytuition.SingleTuitionDetailFragment"
+        android:label="Tuition Detail"
+        tools:layout="@layout/fragment_single_tuition_detail" >
+        <argument
+            android:name="tuitionId"
+            app:argType="string"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

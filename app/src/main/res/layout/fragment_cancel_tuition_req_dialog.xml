@@ -34,8 +34,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/write_cancel_reason" />
     </com.google.android.material.textfield.TextInputLayout>
-
-
     <Button
         android:id="@+id/btnCancelReqTuition"
         android:layout_width="match_parent"

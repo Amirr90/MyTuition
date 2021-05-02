@@ -19,6 +19,7 @@ public class TeacherModel extends BaseObservable {
     private List<TimeSlotModel> timeSlots;
     private String about;
     private Profile profile;
+
     private long timestamp;
 
     public long getTimestamp() {
@@ -193,10 +194,20 @@ public class TeacherModel extends BaseObservable {
         public List<String> teachingSubject;
         public long perVisitFee;
         public long monthlyFee;
+        public long tuitions;
         public String expertIn;
         public String experience;
+        public String tuitionHours;
+        ;
         public Boolean demoClass;
 
+        public long getTuitions() {
+            return tuitions;
+        }
+
+        public String getTuitionHours() {
+            return tuitionHours;
+        }
 
         public List<String> getTeachingSubject() {
             return teachingSubject;
@@ -244,6 +255,11 @@ public class TeacherModel extends BaseObservable {
         public String fatherName;
         public String aadharFrontImage;
         public String aadharBackImage;
+        public Boolean verified;
+
+        public Boolean getVerified() {
+            return verified;
+        }
 
         @Override
         public String toString() {

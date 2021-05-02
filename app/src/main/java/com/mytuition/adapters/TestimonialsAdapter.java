@@ -28,13 +28,13 @@ public class TestimonialsAdapter extends RecyclerView.Adapter<TestimonialsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull TestimonialsVH holder, int position) {
-       // holder.binding.setTestimonials(models.get(position));
+        holder.binding.setTestimonials(models.get(position));
     }
 
     @Override
     public int getItemCount() {
-        /*  return null == models ? 0 : models.size();*/
-        return 10;
+        return null == models ? 0 : models.size();
+
     }
 
     public static class TestimonialsVH extends RecyclerView.ViewHolder {

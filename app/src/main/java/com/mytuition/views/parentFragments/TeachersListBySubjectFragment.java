@@ -1,10 +1,10 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,10 +71,8 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
         viewModel.getTeacher(requestModel).observe(getViewLifecycleOwner(), new Observer<List<TeacherModel>>() {
             @Override
             public void onChanged(List<TeacherModel> teacherModels) {
-                AppUtils.hideDialog();
+                AppUtils.hideDialog();AppUtils.hideDialog();
                 adapter.submitList(teacherModels);
-
-
             }
         });
 

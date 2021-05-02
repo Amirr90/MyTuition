@@ -247,13 +247,18 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
 
     private void loadNavData() {
         navModels.add(new NavModel(getString(R.string.tuition_reqiest), R.drawable.ic_baseline_control_camera_24));
-
-      /*  navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));
-        navModels.add(new NavModel(getString(R.string.app_name), R.drawable.ic_launcher_foreground));*/
-
         navModels.add(new NavModel(getString(R.string.about_us), R.drawable.ic_baseline_textsms_24));
         navModels.add(new NavModel(getString(R.string.share_app), R.drawable.ic_baseline_share_24));
         navModels.add(new NavModel(getString(R.string.logout), R.drawable.ic_baseline_logout_24));
+        if (null != getUid()) {
+            switch (getUid()) {
+                case AppConstant.ADMIN_UID:
+                case AppConstant.ADMIN_UID2:
+                    navModels.add(new NavModel(getString(R.string.requests), R.drawable.ic_baseline_verified_user_24));
+            }
+        }
+
+
         navAdapter.notifyDataSetChanged();
     }
 
@@ -297,6 +302,9 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
 
 
     public void getNotificationData() {
+
+        if (!getIntent().hasExtra(AppConstant.NOTIFICATION_ID))
+            return;
 
         String notificationId = getIntent().getStringExtra(AppConstant.NOTIFICATION_ID);
         String notificationType = getIntent().getStringExtra(AppConstant.NOTIFICATION_TYPE);
@@ -378,6 +386,8 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             navController.navigate(R.id.tuitionListFragment);
         } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.about_us))) {
             navController.navigate(R.id.aboutUsFragment);
+        } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.requests))) {
+            navController.navigate(R.id.tuitionRequestForAdminFragment);
         } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.share_app))) {
             AppUtils.shareApp(instance);
         } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.logout)))

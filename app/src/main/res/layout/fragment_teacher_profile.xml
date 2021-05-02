@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.mytuition.utility.AppUtils" />
+
         <variable
             name="teacher"
             type="com.mytuition.models.TeacherModel" />
@@ -17,8 +19,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".view.fragments.DoctorProfileFragment">
+            android:layout_height="match_parent">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -59,10 +60,12 @@
 
                             <TextView
                                 android:id="@+id/textView92"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:drawableEnd="@drawable/ic_baseline_verified_user_24"
+                                android:drawablePadding="5dp"
                                 android:fontFamily="@font/poppins_semibold"
-                                android:text="@{teacher.name}"
+                                android:text="@{teacher.name,default=`Aamirr khan`}"
                                 android:textColor="#262E3F"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -109,7 +112,7 @@
                                 android:layout_marginStart="9dp"
                                 android:layout_toEndOf="@+id/ivLocationPin"
                                 android:fontFamily="@font/poppins_semibold"
-                                android:text="@{teacher.profile.address}"
+                                android:text="@{teacher.profile.address+`, `+teacher.profile.city}"
                                 android:textColor="#3F4E6E"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -169,6 +172,7 @@
                                 android:layout_marginStart="12dp"
                                 android:layout_toEndOf="@id/imageView34"
                                 android:fontFamily="@font/poppins_medium"
+                                android:text="@{``+teacher.teachingProfile.tuitions+`\nTuitions`}"
                                 android:textAlignment="center"
                                 android:textColor="@android:color/white"
                                 android:textSize="15sp" />
@@ -223,23 +227,74 @@
                         android:paddingTop="23dp"
                         android:paddingRight="15dp">
 
+
                         <TextView
-                            android:id="@+id/textView104"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="@string/about_doc"
+                            android:text="Highest Education"
                             android:textColor="#262E3F"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/textView105"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:fontFamily="@font/poppins"
-                            android:text="@{teacher.about}"
+                            android:text="@{teacher.academicInformation.highestEducation}"
+                            android:textColor="#3F4E6E"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/poppins"
+                            android:text="@{teacher.academicInformation.collegeName}"
+                            android:textColor="#3F4E6E"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="Teaching Profile"
+                            android:textColor="#262E3F"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:text="@{`Expert In : `+teacher.teachingProfile.expertIn}"
+                            android:textColor="#3F4E6E"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:text="@{`Per Visit Fee : `+AppUtils.getCurrencyFormat(teacher.teachingProfile.perVisitFee)}"
+                            android:textColor="#3F4E6E"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:text="@{`Monthly Fee : `+AppUtils.getCurrencyFormat(teacher.teachingProfile.monthlyFee)}"
+                            android:textColor="#3F4E6E"
+                            android:textSize="12sp" />
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:fontFamily="@font/poppins"
+                            android:text="@{teacher.teachingProfile.demoClass?`Demo Class : Availabe`:`Demo Class : Not Availabe`}"
                             android:textColor="#3F4E6E"
                             android:textSize="12sp" />
 
@@ -253,15 +308,33 @@
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
-
                         <TextView
                             android:id="@+id/textView107"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
                             android:layout_marginBottom="10dp"
                             android:fontFamily="@font/poppins"
-                            android:text="Mon - Fri, 10:00AM - 08:00 PM"
+                            android:text="@{teacher.teachingProfile.tuitionHours}"
+                            android:textColor="#3F4E6E"
+                            android:textSize="12sp" />
+
+
+                        <TextView
+                            android:id="@+id/textView104"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="@string/about_doc"
+                            android:textColor="#262E3F"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView105"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
                             android:textColor="#3F4E6E"
                             android:textSize="12sp" />
 

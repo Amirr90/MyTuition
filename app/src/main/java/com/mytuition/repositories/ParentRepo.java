@@ -61,16 +61,19 @@ public class ParentRepo {
         return mutableLiveTeacherData;
     }
 
-    private void loadTeacherData(TeacherRequestModel model) {
+    private void loadTeacherData(final TeacherRequestModel model) {
         DatabaseUtils.getTeacher(model, new ApiInterface() {
             @Override
             public void onSuccess(Object obj) {
-                mutableLiveTeacherData.setValue((List<TeacherModel>) obj);
+                List<TeacherModel> models = (List<TeacherModel>) obj;
+                mutableLiveTeacherData.setValue(models);
             }
 
             @Override
             public void onFailed(String msg) {
                 Toast.makeText(App.context, msg, Toast.LENGTH_SHORT).show();
+                List<TeacherModel> models = new ArrayList<>();
+                mutableLiveTeacherData.setValue(models);
             }
         });
     }

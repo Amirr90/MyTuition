@@ -28,7 +28,6 @@ import static com.mytuition.utility.AppUtils.setString;
 import static com.mytuition.utility.Utils.LOGIN_TYPE;
 import static com.mytuition.utility.Utils.LOGIN_TYPE_PARENT;
 import static com.mytuition.utility.Utils.LOGIN_TYPE_TEACHER;
-import static com.mytuition.utility.Utils.getFirebaseReference;
 import static com.mytuition.utility.Utils.setParentModel;
 
 public class ChooseLoginTypeScreen extends AppCompatActivity {
@@ -83,8 +82,8 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
                         .setAvailableProviders(providers)
                         .setLogo(R.drawable.ic_launcher_foreground)
                         .setTheme(R.style.AppTheme_NoActionBar)
-                        .build(),
-                10);
+                        .setIsSmartLockEnabled(false)
+                        .build(), 10);
     }
 
     @Override
@@ -98,10 +97,11 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
                 if (loginType.equalsIgnoreCase(LOGIN_TYPE_TEACHER)) {
                     startActivity(new Intent(ChooseLoginTypeScreen.this, RegistrationActivity.class)
                             .putExtra(LOGIN_TYPE, loginType));
+                    finish();
                 } else {
                     updateParentModel();
                 }
-                finish();
+
             } else {
                 Toast.makeText(ChooseLoginTypeScreen.this, "sign in failed", Toast.LENGTH_SHORT).show();
 
@@ -119,6 +119,8 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
                             setParentModel(ChooseLoginTypeScreen.this, parentModel);
+                            startActivity(new Intent(ChooseLoginTypeScreen.this, ParentScreen.class));
+                            finish();
                         }
                     });
     }

@@ -12,4 +12,8 @@
     <color name="GreyColo">#a2b3b8</color>
     <color name="white">#ffffff</color>
     <color name="BackgroundColor">#f2f6fe</color>
+    <color name="pink">#C2185B</color>
+    <color name="green">#66BB6A</color>
+    <color name="yellow2">#FFCA28</color>
+    <color name="red700">#D32F2F</color>
 </resources>

@@ -152,4 +152,8 @@
     <string name="find_top_coaching_near_you">Find Top Coaching near you</string>
     <string name="see_what_our_existing_users_have_to_say_about_us">See what our existing users have to say about us</string>
     <string name="testimonials">Testimonials</string>
+    <string name="write_review">Write Review</string>
+    <string name="write_review_here">write review here</string>
+    <string name="s_y_u_m_a">S Y U M A</string>
+    <string name="requests">Requests</string>
 </resources>

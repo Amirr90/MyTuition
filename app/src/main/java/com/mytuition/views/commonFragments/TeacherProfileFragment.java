@@ -1,5 +1,6 @@
 package com.mytuition.views.commonFragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,8 @@ public class TeacherProfileFragment extends Fragment {
         teacherModel = gson.fromJson(jsonString, TeacherModel.class);
         teacherProfileBinding.setTeacher(teacherModel);
 
+        setAboutMe(teacherModel);
+
 
         teacherProfileBinding.btnRequestTuition.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,5 +61,21 @@ public class TeacherProfileFragment extends Fragment {
                 navController.navigate(R.id.action_teacherProfileFragment_to_selectTimeSlotsFragment, bundle);
             }
         });
+    }
+
+    private void setAboutMe(TeacherModel teacherModel) {
+        String text;
+        if (teacherModel.getAbout().isEmpty()) {
+            text = "Hi there, I'm " + teacherModel.getName() + " and I teach all subjects and specialization in " + teacherModel.getSpeciality() + ". I have been teaching for over " + teacherModel.getTeachingProfile().getExperience() + " years and have education experience in " + teacherModel.getAcademicInformation().getHighestEducation() + ". When you walk in my classroom you will notice.";
+        } else text = teacherModel.getAbout();
+        teacherProfileBinding.textView105.setText(text);
+
+        Drawable img = teacherProfileBinding.textView92.getContext().getResources().getDrawable(R.drawable.ic_baseline_verified_user_24);
+
+        if (teacherModel.getProfile().verified)
+            teacherProfileBinding.textView92.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+        else
+            teacherProfileBinding.textView92.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+
     }
 }

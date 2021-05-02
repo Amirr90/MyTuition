@@ -121,6 +121,7 @@ public class ParentProfileFragment extends Fragment {
                 selectImage(tag);
             }
         });
+
     }
 
     private void setParent() {

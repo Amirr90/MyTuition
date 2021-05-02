@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ListAdapter;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mytuition.R;
 import com.mytuition.databinding.SpecialitiyViewBinding;
 import com.mytuition.models.SpecialityModel;
-import com.mytuition.models.SubjectModel;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.activity.ParentScreen;
 
@@ -49,6 +47,7 @@ public class SubjectAdapter extends ListAdapter<SpecialityModel, SubjectAdapter.
         holder.specialitiyViewBinding.llspeality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               // AddNewSpeciality(subjectModel);
                 AppUtils.hideSoftKeyboard(activity);
                 Bundle bundle = new Bundle();
                 bundle.putString(ID, String.valueOf(subjectModel.getId()));
@@ -58,6 +57,10 @@ public class SubjectAdapter extends ListAdapter<SpecialityModel, SubjectAdapter.
         });
 
 
+    }
+
+    private void AddNewSpeciality(SpecialityModel subjectModel) {
+        AppUtils.getFirestoreReference().collection("Speciality").add(subjectModel);
     }
 
     public static class SpecialityVH extends RecyclerView.ViewHolder {

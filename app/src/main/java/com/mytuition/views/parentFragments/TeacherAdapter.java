@@ -60,7 +60,7 @@ public class TeacherAdapter extends ListAdapter<TeacherModel, TeacherAdapter.Das
                 String jsonString = gson.toJson(teacherModel);
                 Log.d(TAG, "onClickTeacherModel: " + teacherModel.toString());
                 try {
-                    AddNewTeacher(teacherModel);
+                    //AddNewTeacher(teacherModel);
                     JSONObject request = new JSONObject(jsonString);
                     Bundle bundle = new Bundle();
                     bundle.putString("docModel", request.toString());

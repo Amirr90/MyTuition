@@ -12,6 +12,30 @@ public class RequestTuitionModel {
     String id;
     Long acceptedAt;
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setAcceptedAt(Long acceptedAt) {
+        this.acceptedAt = acceptedAt;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public Long getAcceptedAt() {
         return acceptedAt;
     }

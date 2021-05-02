@@ -19,4 +19,18 @@ public class AppConstant {
     public static final String NOTIFICATION_TYPE = "notificationType";
     public static final String NOTIFICATION_ID = "notificationId";
     public static final String NOTIFICATION_TUITION_DETAIL = "tuitionDetail";
+    public static final String TESTIMONIALS = "Testimonials";
+    public static final String ADMIN_UID = "toGPvqlmPxPN6IQaFlRlFN3F8W22";
+    public static final String ADMIN_UID2 = "mGUhE1KzBcO5QKag1sI2KnNSKls2";
+    public static final String TIMESTAMP = "timestamp";
+
+    public static final String REQUEST_STATUS_PENDING = "Pending";
+    public static final String REQUEST_STATUS_PENDING_S = "pending";
+    public static final String TIME_SLOT = "slot";
+    public static final String REQUEST_STATUS_ACCEPTED = "Accepted";
+    public static final String REQUEST_STATUS_REJECTED = "Rejected";
+    public static final String REQUEST_STATUS_ACCEPTED_S = "accepted";
+    public static final String REQUEST_STATUS_REJECTED_S = "rejected";
+    public static final String REQUEST_STATUS_CANCELLED = "Cancelled";
+    public static final String REQUEST_STATUS_CANCELLED_S = "cancelled";
 }

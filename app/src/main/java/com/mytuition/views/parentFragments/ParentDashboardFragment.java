@@ -45,6 +45,7 @@ import java.util.List;
 import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
 
+import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.Utils.getParentModel;
 
 public class ParentDashboardFragment extends Fragment {
@@ -107,6 +108,7 @@ public class ParentDashboardFragment extends Fragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
         requestModel2.setCity("Lucknow");
+        requestModel2.setUserId(getUid());
         viewModel.getDashboardData(requestModel2, requireActivity()).observe(getViewLifecycleOwner(), new Observer<List<DashboardModel>>() {
             @Override
             public void onChanged(List<DashboardModel> dashboardModels) {
@@ -125,6 +127,8 @@ public class ParentDashboardFragment extends Fragment {
                     adapter3.submitList(getTopCoachingData());
 
                     //Binding Testimonials  Adapter
+                    testimonialsModels.clear();
+                    testimonialsModels.addAll(dashboardModels.get(0).getTestimonialsList());
                     testimonialsAdapter.notifyDataSetChanged();
 
 
@@ -150,6 +154,12 @@ public class ParentDashboardFragment extends Fragment {
                 ParentScreen.getInstance().openDrawer();
             }
         });
+        parentDashboardBinding.tvWriteReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_parentDashboardFragment2_to_writeTestimonialsDialog);
+            }
+        });
 
     }
 
@@ -166,6 +176,8 @@ public class ParentDashboardFragment extends Fragment {
         if (null != bannerData.getBanner().getBannerImage5())
             bannerImages.add(bannerData.getBanner().getBannerImage5());
         parentDashboardBinding.bannerViewPager.setAdapter(new HomeBannerAdapter(bannerImages));
+
+        parentDashboardBinding.dotsIndicator.setViewPager2(parentDashboardBinding.bannerViewPager);
 
 
     }
