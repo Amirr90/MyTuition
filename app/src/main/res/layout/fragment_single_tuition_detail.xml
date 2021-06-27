@@ -206,12 +206,15 @@
                     android:textStyle="normal" />
 
                 <TextView
+                    android:drawablePadding="@dimen/_10sdp"
                     android:id="@+id/tvSpec"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvTuitionFor"
                     android:layout_marginTop="1dp"
+                    android:layout_marginRight="@dimen/_15sdp"
                     android:layout_toEndOf="@id/llImage2"
+                    android:drawableRight="@drawable/arrow_down"
                     android:fontFamily="@font/poppins"
                     android:text="@{`Request Status : `+tuition.reqStatus}"
                     android:textColor="#3F4E6E"
@@ -328,34 +331,40 @@
                     app:autoSizeTextType="uniform" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btnChangeTeacher"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:fontFamily="@font/poppins"
-                android:text="@string/change_teacher"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:visibility="@{tuition.reqStatus.equalsIgnoreCase(`Pending`)?View.GONE:View.VISIBLE}"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent">
 
-            <Button
-                android:id="@+id/btnCancelTuitionReq"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:fontFamily="@font/poppins"
-                android:text="@string/cancel_tuition"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:visibility="@{tuition.reqStatus.equalsIgnoreCase(`Pending`)?View.VISIBLE:View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                <Button
+                    android:id="@+id/btnActionTeacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorAccent"
+                    android:fontFamily="@font/poppins"
+                    android:text="@{tuition.teacherId.isEmpty?`Allot Teacher`:`Change Teacher`}"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/btnActionTuition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/red700"
+                    android:fontFamily="@font/poppins"
+                    android:text="Cancel"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

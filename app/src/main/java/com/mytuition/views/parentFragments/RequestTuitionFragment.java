@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.firebase.ui.auth.data.model.User;
 import com.google.gson.Gson;
 import com.mytuition.R;
 import com.mytuition.databinding.FragmentRequestTuitionBinding;
@@ -53,6 +54,7 @@ public class RequestTuitionFragment extends Fragment {
     String classId = null;
 
     RequestTuitionModel requestTuitionModel;
+    User user;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -68,8 +70,12 @@ public class RequestTuitionFragment extends Fragment {
 
         if (getArguments() == null)
             return;
-        parentModel = getParentModel(requireActivity());
 
+        if (null == getParentModel(requireActivity()) || (null == getParentModel(requireActivity()).getName()) || getParentModel(requireActivity()).getName().isEmpty())
+            navController.navigate(R.id.action_requestTuitonFragment_to_parentProfileFragment);
+
+
+        parentModel = getParentModel(requireActivity());
         if (null != getArguments()) {
 
             date = getArguments().getString(AppConstant.DATE);

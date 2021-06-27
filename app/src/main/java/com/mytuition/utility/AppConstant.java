@@ -2,7 +2,7 @@ package com.mytuition.utility;
 
 public class AppConstant {
     public static final String USERS = "Users";
-    public static final String TEACHER_ID = "teacher_id";
+    public static final String TEACHER_ID = "teacherId";
     public static final String DATE = "date";
     public static final String ALL = "all";
     public static final String TEACHER_MODEL = "teacherModel";
@@ -33,4 +33,9 @@ public class AppConstant {
     public static final String REQUEST_STATUS_REJECTED_S = "rejected";
     public static final String REQUEST_STATUS_CANCELLED = "Cancelled";
     public static final String REQUEST_STATUS_CANCELLED_S = "cancelled";
+    public static final String PHONE_NUMBER = "phoneNumber";
+    public static final String NAME = "name";
+    public static final String ACCEPT = "Accept";
+    public static final String REJECT = "Reject";
+    public static final String ACTION_TIMESTAMP = "actionTimeStamp";
 }

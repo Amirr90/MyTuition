@@ -1,5 +1,8 @@
 package com.mytuition;
 
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.mytuition.databinding.FragmentSingleTuitionDetailBinding;
@@ -28,7 +32,9 @@ import com.mytuition.utility.DatabaseUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.mytuition.RequestTuitionDetailFragment.REQUEST_STATUS_ACCEPTED_S;
@@ -56,7 +62,6 @@ public class SingleTuitionDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = FragmentSingleTuitionDetailBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }
@@ -67,6 +72,75 @@ public class SingleTuitionDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(view);
+
+
+        binding.btnActionTeacher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allotTeacher();
+            }
+        });
+        binding.tvSpec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeStatusDialog();
+            }
+        });
+    }
+
+    private void changeStatusDialog() {
+        new AlertDialog.Builder(requireActivity())
+                .setTitle("Three Buttons")
+                .setMessage("Where do you want to go?")
+                .setIcon(R.drawable.app_icon)
+                .setPositiveButton(AppConstant.ACCEPT,
+                        new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                updateStatus(AppConstant.REQUEST_STATUS_ACCEPTED);
+                            }
+                        })
+                .setNegativeButton(AppConstant.REJECT,
+                        new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+                                updateStatus(AppConstant.REQUEST_STATUS_REJECTED);
+                                dialog.cancel();
+                            }
+                        }).show();
+    }
+
+    private void updateStatus(String requestStatus) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("reqStatus", requestStatus);
+        map.put(AppConstant.ACTION_TIMESTAMP, System.currentTimeMillis());
+        AppUtils.showRequestDialog(requireActivity());
+        AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
+                .document(requestTuitionModel.getId())
+                .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                AppUtils.hideDialog();
+                Toast.makeText(requireActivity(), "Updated Successfully !!", Toast.LENGTH_SHORT).show();
+                getTuitionDetails();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                AppUtils.hideDialog();
+                Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void allotTeacher() {
+        if (null == requestTuitionModel)
+            return;
+        SingleTuitionDetailFragmentDirections.ActionSingleTuitionDetailFragmentToAllotTeacherFragment action = SingleTuitionDetailFragmentDirections.actionSingleTuitionDetailFragmentToAllotTeacherFragment();
+        action.setId(requestTuitionModel.getId());
+        navController.navigate(action);
     }
 
     private void getTeacherProfile() {

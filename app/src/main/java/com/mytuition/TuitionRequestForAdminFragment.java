@@ -41,7 +41,6 @@ public class TuitionRequestForAdminFragment extends Fragment {
 
     FragmentTuitionRequestForAdminBinding binding;
     NavController navController;
-
     FirestorePagingAdapter adapter;
 
     @Override
@@ -60,25 +59,12 @@ public class TuitionRequestForAdminFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         setTuitionData();
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).show();
     }
 
     private void setTuitionData() {
 
-        /*AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
-                .orderBy(AppConstant.TIMESTAMP, Query.Direction.DESCENDING).get().addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-            }
-        }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                Log.d(TAG, "onSuccess: " + queryDocumentSnapshots.size());
-            }
-        });*/
 
         AppUtils.showRequestDialog(requireActivity());
         Query query = AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
@@ -98,6 +84,7 @@ public class TuitionRequestForAdminFragment extends Fragment {
                     public RequestTuitionModel parseSnapshot(@NonNull DocumentSnapshot snapshot) {
                         RequestTuitionModel model = snapshot.toObject(RequestTuitionModel.class);
                         Objects.requireNonNull(model).setId(snapshot.getId());
+                        Log.d(TAG, "parseSnapshot: ");
                         return model;
                     }
                 }).build();
@@ -190,5 +177,12 @@ public class TuitionRequestForAdminFragment extends Fragment {
 
         binding.recTuitionList.setHasFixedSize(true);
         binding.recTuitionList.setAdapter(adapter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (null != adapter)
+            adapter.stopListening();
     }
 }

@@ -1,10 +1,12 @@
 package com.mytuition.views.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -51,8 +53,8 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
         loginTypeScreenBinding.btnLoginAsTeacher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ChooseLoginTypeScreen.this, "Registration for Teachers is currently closed !!", Toast.LENGTH_SHORT).show();
 
+                showMsg();
                 // loginUi(LOGIN_TYPE_TEACHER);
             }
         });
@@ -64,6 +66,18 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
                 loginUi(LOGIN_TYPE_PARENT);
             }
         });
+    }
+
+    public void showMsg() {
+
+        new AlertDialog.Builder(ChooseLoginTypeScreen.this)
+                .setTitle("Registration closed")
+                .setMessage("Registration for Teachers is temporarily closed.\nDrop your mail on \n'aamirr.1232@gmail.com'\n for any enquiry.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).show();
     }
 
     private void loginUi(String loginType) {

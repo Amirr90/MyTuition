@@ -186,6 +186,13 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"
             app:popUpTo="@id/parentDashboardFragment2" />
+        <action
+            android:id="@+id/action_requestTuitonFragment_to_parentProfileFragment"
+            app:destination="@id/parentProfileFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/requestTuitionSuccessfullyFragment"
@@ -264,7 +271,7 @@
         android:id="@+id/tuitionRequestForAdminFragment"
         android:name="com.mytuition.TuitionRequestForAdminFragment"
         android:label="All Tuition Request"
-        tools:layout="@layout/fragment_tuition_request_for_admin" >
+        tools:layout="@layout/fragment_tuition_request_for_admin">
         <action
             android:id="@+id/action_tuitionRequestForAdminFragment_to_aboutUsFragment"
             app:destination="@id/aboutUsFragment"
@@ -284,10 +291,47 @@
         android:id="@+id/singleTuitionDetailFragment"
         android:name="com.mytuition.SingleTuitionDetailFragment"
         android:label="Tuition Detail"
-        tools:layout="@layout/fragment_single_tuition_detail" >
+        tools:layout="@layout/fragment_single_tuition_detail">
         <argument
             android:name="tuitionId"
-            app:argType="string"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_singleTuitionDetailFragment_to_allotTeacherFragment"
+            app:destination="@id/allotTeacherFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_singleTuitionDetailFragment_to_allotTeacherToTuitionFragment"
+            app:destination="@id/allotTeacherToTuitionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allotTeacherFragment"
+        android:name="com.mytuition.AllotTeacherFragment"
+        android:label="Allot Teacher"
+        tools:layout="@layout/fragment_allot_teacher">
+        <argument
+            android:name="id"
+            android:defaultValue="0"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_allotTeacherFragment_to_teacherProfileFragment"
+            app:destination="@id/teacherProfileFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/allotTeacherToTuitionFragment"
+        android:name="com.mytuition.AllotTeacherToTuitionFragment"
+        android:label="fragment_allot_teacher_to_tuition"
+        tools:layout="@layout/fragment_allot_teacher_to_tuition">
+        <argument
+            android:name="id"
+            android:defaultValue="0"
+            app:argType="string" />
     </fragment>
 </navigation>

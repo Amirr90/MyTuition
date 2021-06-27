@@ -3,11 +3,13 @@ package com.mytuition.views.parentFragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -148,16 +150,34 @@ public class ParentDashboardFragment extends Fragment {
         });
 
 
-        parentDashboardBinding.imageView7.setOnClickListener(new View.OnClickListener() {
+        parentDashboardBinding.imageView7.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ParentScreen.getInstance().openDrawer();
+                    }
+                });
+        parentDashboardBinding.tvWriteReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_parentDashboardFragment2_to_writeTestimonialsDialog);
+            }
+        });
+
+        parentDashboardBinding.bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParentScreen.getInstance().openDrawer();
             }
         });
-        parentDashboardBinding.tvWriteReview.setOnClickListener(new View.OnClickListener() {
+
+        parentDashboardBinding.bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.action_parentDashboardFragment2_to_writeTestimonialsDialog);
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.profile_image) {
+                    navController.navigate(R.id.action_parentDashboardFragment2_to_parentProfileFragment);
+                }
+                return true;
             }
         });
 

@@ -9,6 +9,9 @@ import java.util.List;
 public class TeacherModel extends BaseObservable {
 
 
+    public TeacherModel() {
+    }
+
     private AcademicInformation academicInformation;
     private TeachingProfile teachingProfile;
     private String speciality;
@@ -18,9 +21,19 @@ public class TeacherModel extends BaseObservable {
     private String id;
     private List<TimeSlotModel> timeSlots;
     private String about;
+    private String phoneNumber;
     private Profile profile;
 
     private long timestamp;
+
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public long getTimestamp() {
         return timestamp;

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -145,6 +147,27 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
                 // mainBinding.constraintLayout.setVisibility(destination.getId() == R.id.DetailsFragment2 ? View.GONE : View.VISIBLE);
+            }
+        });
+
+
+        mainBinding.navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setChecked(true);
+                mainBinding.drawerLayout.close();
+                if (item.getItemId() == R.id.itemTuitionList) {
+                    navController.navigate(R.id.tuitionListFragment);
+                } else if (item.getItemId() == R.id.itemAboutUs) {
+                    navController.navigate(R.id.aboutUsFragment);
+                } else if (item.getItemId() == R.id.itemTuitionList) {
+                    navController.navigate(R.id.tuitionRequestForAdminFragment);
+                } else if (item.getItemId() == R.id.itemAllTuition) {
+                    AppUtils.shareApp(instance);
+                } else if (item.getItemId() == R.id.itemLogout)
+                    showLogoutDialog();
+                else Toast.makeText(instance, "coming soon !!", Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 
