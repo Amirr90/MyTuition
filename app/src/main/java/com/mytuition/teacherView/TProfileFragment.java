@@ -1,6 +1,5 @@
 package com.mytuition.teacherView;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -69,30 +68,17 @@ public class TProfileFragment extends Fragment {
         binding.setTeacherProfile(teacherModel);
 
 
-        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: " + binding.getTeacherProfile().toString());
-                if (allFieldIsFilled()) {
-                    uploadImage();
-                }
+        binding.btnRegister.setOnClickListener(v -> {
+            Log.d(TAG, "onClick: " + binding.getTeacherProfile().toString());
+            if (allFieldIsFilled()) {
+                uploadImage();
             }
         });
 
         setSpinnerData();
 
-        binding.ivAadharFront.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage(REQUEST_CODE_FRONT_IMAGE);
-            }
-        });
-        binding.ivAadharBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage(REQUEST_CODE_BACK_IMAGE);
-            }
-        });
+        binding.ivAadharFront.setOnClickListener(v -> selectImage(REQUEST_CODE_FRONT_IMAGE));
+        binding.ivAadharBack.setOnClickListener(v -> selectImage(REQUEST_CODE_BACK_IMAGE));
     }
 
     private void selectImage(int tag) {
@@ -211,12 +197,12 @@ public class TProfileFragment extends Fragment {
 
         //Speciality Spinner
         List<String> specialities = getAllSpeciality();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, specialities);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, specialities);
         binding.specialitySpinner.setAdapter(adapter);
 
         //Highest Education Spinner
         final String[] items = new String[]{"High School", "Intermediate", "Graduate", "Post Graduate", "P.hd"};
-        ArrayAdapter<String> highestEducationAdapter = new ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, items);
+        ArrayAdapter<String> highestEducationAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, items);
         binding.highestEducationSpinner.setAdapter(highestEducationAdapter);
         binding.highestEducationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -232,32 +218,27 @@ public class TProfileFragment extends Fragment {
 
         //Monthly Fee Spinner
         String[] fee = new String[]{"₹1000-₹2000", "₹2000-₹2500", "₹2500-₹3000", "₹3000-₹3500", "₹3500-₹4000", "₹4000-₹4500", "₹5000-₹5500", "₹6000-₹6500", "₹6500-₹7000", "₹10,000"};
-        ArrayAdapter<String> feeAdapter = new ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, fee);
+        ArrayAdapter<String> feeAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, fee);
         binding.monthlyFeeSpinner.setAdapter(feeAdapter);
 
         //Per Visit Spinner
         String[] preVisit = new String[]{"₹100-₹200", "₹200-₹250", "₹250-₹300", "₹300-₹350"};
-        ArrayAdapter<String> preVisitAdapter = new ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, preVisit);
+        ArrayAdapter<String> preVisitAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, preVisit);
         binding.perVisitSpinner.setAdapter(preVisitAdapter);
 
         //Experience Spinner
         String[] experience = new String[]{"0(Fresher)", "1", "2", "3", "4", "5", "6", "7", "8+ years"};
-        ArrayAdapter<String> experienceAdapter = new ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, experience);
+        ArrayAdapter<String> experienceAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, experience);
         binding.expSpinner.setAdapter(experienceAdapter);
 
 
-        binding.btnAllSubject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAllSubjectDialog();
-            }
-        });
+        binding.btnAllSubject.setOnClickListener(v -> showAllSubjectDialog());
 
 
     }
 
     private void showAllSubjectDialog() {
-        mSelectedItems = new ArrayList<Integer>();
+        mSelectedItems = new ArrayList<>();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
@@ -265,37 +246,27 @@ public class TProfileFragment extends Fragment {
         for (int a = 0; a < getAllSpeciality().size(); a++)
             choices[a] = getAllSpeciality().get(a);
         builder.setTitle("Choose One or More")
-                .setMultiChoiceItems(choices, null, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        if (isChecked) {
-                            mSelectedItems.add(which);
-                        } else if (mSelectedItems.contains(which)) {
-                            mSelectedItems.remove(Integer.valueOf(which));
-                        }
-
-                        // you can also add other codes here,
-                        // for example a tool tip that gives user an idea of what he is selecting
-                        // showToast("Just an example description.");
+                .setMultiChoiceItems(choices, null, (dialog, which, isChecked) -> {
+                    if (isChecked) {
+                        mSelectedItems.add(which);
+                    } else if (mSelectedItems.contains(which)) {
+                        mSelectedItems.remove(Integer.valueOf(which));
                     }
 
-                }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                String selectedIndex = "";
-                for (Integer i : mSelectedItems) {
-                    selectedIndex += choices[i] + ", ";
-                }
+                    // you can also add other codes here,
+                    // for example a tool tip that gives user an idea of what he is selecting
+                    // showToast("Just an example description.");
+                }).setPositiveButton("OK", (dialog, id) -> {
+                    String selectedIndex = "";
+                    for (Integer i : mSelectedItems) {
+                        selectedIndex += choices[i] + ", ";
+                    }
 
-                String msg = ("Selected index: " + selectedIndex);
-                binding.tvSelectedSubjects.setText(selectedIndex);
-                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+                    String msg = ("Selected index: " + selectedIndex);
+                    binding.tvSelectedSubjects.setText(selectedIndex);
+                    Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
 
-            }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-            }
+                }).setNegativeButton("Cancel", (dialog, id) -> {
         }).show();
     }
 

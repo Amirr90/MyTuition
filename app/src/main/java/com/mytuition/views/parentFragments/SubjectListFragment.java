@@ -10,18 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.mytuition.adapters.SubjectAdapter;
 import com.mytuition.databinding.FragmentSubjectListBinding;
-import com.mytuition.models.SpecialityModel;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.viewHolder.ParentViewHolder;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Objects;
 
 public class SubjectListFragment extends Fragment {
@@ -51,13 +48,10 @@ public class SubjectListFragment extends Fragment {
         AppUtils.showRequestDialog(requireActivity());
 
         viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
-        viewModel.getSpecialityList().observe(getViewLifecycleOwner(), new Observer<List<SpecialityModel>>() {
-            @Override
-            public void onChanged(List<SpecialityModel> specialityModels) {
-                AppUtils.hideDialog();
-                subjectAdapter.submitList(specialityModels);
-                Log.d(TAG, "onChanged: " + specialityModels.size());
-            }
+        viewModel.getSpecialityList().observe(getViewLifecycleOwner(), specialityModels -> {
+            AppUtils.hideDialog();
+            subjectAdapter.submitList(specialityModels);
+            Log.d(TAG, "onChanged: " + specialityModels.size());
         });
 
     }

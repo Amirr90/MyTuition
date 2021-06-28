@@ -42,16 +42,13 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
         final CalendarModel calendarModel = calendarModelList.get(position);
         holder.calenderViewBinding.setCalender(calendarModel);
-        holder.calenderViewBinding.rlCalenderRoot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calenderInterface.onItemClicked(calendarModel, position);
-                holder.calenderViewBinding.getRoot().setBackground(ParentScreen.getInstance().getResources().getDrawable(R.drawable.rectangle_outline_new_ui_color_yellow));
-                selectedPosition = position;
-                setTextColor(holder, ParentScreen.getInstance().getResources().getColor(R.color.white),
-                        ParentScreen.getInstance().getResources().getColor(R.color.white));
-                notifyDataSetChanged();
-            }
+        holder.calenderViewBinding.rlCalenderRoot.setOnClickListener(v -> {
+            calenderInterface.onItemClicked(calendarModel, position);
+            holder.calenderViewBinding.getRoot().setBackground(ParentScreen.getInstance().getResources().getDrawable(R.drawable.rectangle_outline_new_ui_color_yellow));
+            selectedPosition = position;
+            setTextColor(holder, ParentScreen.getInstance().getResources().getColor(R.color.white),
+                    ParentScreen.getInstance().getResources().getColor(R.color.white));
+            notifyDataSetChanged();
         });
 
         if (selectedPosition == position) {
@@ -79,7 +76,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         return calendarModelList.size();
     }
 
-    public class CalenderVH extends RecyclerView.ViewHolder {
+    public static class CalenderVH extends RecyclerView.ViewHolder {
         CalenderViewBinding calenderViewBinding;
 
         public CalenderVH(CalenderViewBinding calenderViewBinding) {

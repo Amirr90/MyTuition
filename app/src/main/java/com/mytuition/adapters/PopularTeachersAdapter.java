@@ -43,7 +43,7 @@ public class PopularTeachersAdapter extends ListAdapter<TeacherModel, PopularTea
 
     }
 
-    public class PopularVH extends RecyclerView.ViewHolder {
+    public static class PopularVH extends RecyclerView.ViewHolder {
         PopularDocViewBinding popularDocViewBinding;
 
         public PopularVH(PopularDocViewBinding popularDocViewBinding) {

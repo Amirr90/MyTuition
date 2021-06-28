@@ -18,7 +18,6 @@ import com.mytuition.adapters.CalendarAdapter;
 import com.mytuition.adapters.TimeSlotsAdapter;
 import com.mytuition.databinding.FragmentSelectTimeSlotsBinding;
 import com.mytuition.interfaces.AdapterInterface;
-import com.mytuition.models.CalendarModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.AppConstant;
 
@@ -85,21 +84,14 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
         slotsBinding.tvCurrentDate.setText(getCurrentDateInWeekMonthDayFormat());
 
 
-        calendarAdapter = new CalendarAdapter(getNextWeekDays(), new CalendarAdapter.CalenderInterface() {
-            @Override
-            public void onItemClicked(CalendarModel calendarModel, int pos) {
-                getTimeSlots(pos);
-                date = calendarModel.getDateSend();
-            }
+        calendarAdapter = new CalendarAdapter(getNextWeekDays(), (calendarModel, pos) -> {
+            getTimeSlots(pos);
+            date = calendarModel.getDateSend();
         });
 
         slotsBinding.calRec.setAdapter(calendarAdapter);
 
-        slotsBinding.btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
+        slotsBinding.btnConfirm.setOnClickListener(view1 -> {
         });
 
 

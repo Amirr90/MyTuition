@@ -45,14 +45,11 @@ public class WriteTestimonialsDialog extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.btnSubmitTestimonialsReview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!Objects.requireNonNull(binding.etReason.getText()).toString().isEmpty()) {
-                    writeReview();
-                } else
-                    Toasty.warning(App.context, "write review", Toast.LENGTH_SHORT, true).show();
-            }
+        binding.btnSubmitTestimonialsReview.setOnClickListener(v -> {
+            if (!Objects.requireNonNull(binding.etReason.getText()).toString().isEmpty()) {
+                writeReview();
+            } else
+                Toasty.warning(App.context, "write review", Toast.LENGTH_SHORT, true).show();
         });
     }
 
@@ -67,20 +64,14 @@ public class WriteTestimonialsDialog extends BottomSheetDialogFragment {
 
 
         if (getUid() != null) {
-            AppUtils.getFirestoreReference().collection(AppConstant.TESTIMONIALS).document(getUid()).set(testimonialsModel).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    AppUtils.hideDialog();
-                    dismiss();
-                    Toasty.success(App.context, "Added successfully!!", Toast.LENGTH_SHORT, true).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    AppUtils.hideDialog();
-                    Toasty.error(App.context, "something went wrong, try again", Toast.LENGTH_SHORT, true).show();
-                    Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-                }
+            AppUtils.getFirestoreReference().collection(AppConstant.TESTIMONIALS).document(getUid()).set(testimonialsModel).addOnSuccessListener(aVoid -> {
+                AppUtils.hideDialog();
+                dismiss();
+                Toasty.success(App.context, "Added successfully!!", Toast.LENGTH_SHORT, true).show();
+            }).addOnFailureListener(e -> {
+                AppUtils.hideDialog();
+                Toasty.error(App.context, "something went wrong, try again", Toast.LENGTH_SHORT, true).show();
+                Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
             });
         }
     }

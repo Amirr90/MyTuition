@@ -35,25 +35,22 @@ public class SplashScreen extends AppCompatActivity {
         super.onStart();
 
         loginType = AppUtils.getString(LOGIN_TYPE, this);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent;
-                if (getCurrentUser() != null) {
-                    getNotificationData();
-                    if (loginType.equalsIgnoreCase(LOGIN_TYPE_PARENT)) {
-                        intent = new Intent(SplashScreen.this, ParentScreen.class)
-                                .putExtra(AppConstant.NOTIFICATION_TYPE, notificationType)
-                                .putExtra(AppConstant.NOTIFICATION_ID, notificationId);
-                    } else if (loginType.equalsIgnoreCase(LOGIN_TYPE_TEACHER)) {
-                        intent = new Intent(SplashScreen.this, TeacherScreen.class);
-                    } else intent = new Intent(SplashScreen.this, ChooseLoginTypeScreen.class);
-                } else {
-                    intent = new Intent(SplashScreen.this, ChooseLoginTypeScreen.class);
-                }
-                SplashScreen.this.startActivity(intent);
-                SplashScreen.this.finish();
+        new Handler().postDelayed(() -> {
+            Intent intent;
+            if (getCurrentUser() != null) {
+                getNotificationData();
+                if (loginType.equalsIgnoreCase(LOGIN_TYPE_PARENT)) {
+                    intent = new Intent(SplashScreen.this, ParentScreen.class)
+                            .putExtra(AppConstant.NOTIFICATION_TYPE, notificationType)
+                            .putExtra(AppConstant.NOTIFICATION_ID, notificationId);
+                } else if (loginType.equalsIgnoreCase(LOGIN_TYPE_TEACHER)) {
+                    intent = new Intent(SplashScreen.this, TeacherScreen.class);
+                } else intent = new Intent(SplashScreen.this, ChooseLoginTypeScreen.class);
+            } else {
+                intent = new Intent(SplashScreen.this, ChooseLoginTypeScreen.class);
             }
+            SplashScreen.this.startActivity(intent);
+            SplashScreen.this.finish();
         }, 1000);
     }
 

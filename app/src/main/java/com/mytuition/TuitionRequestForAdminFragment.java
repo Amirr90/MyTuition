@@ -78,15 +78,11 @@ public class TuitionRequestForAdminFragment extends Fragment {
 
         FirestorePagingOptions<RequestTuitionModel> options1 = new FirestorePagingOptions.Builder<RequestTuitionModel>()
                 .setLifecycleOwner(this)
-                .setQuery(query, config, new SnapshotParser<RequestTuitionModel>() {
-                    @NonNull
-                    @Override
-                    public RequestTuitionModel parseSnapshot(@NonNull DocumentSnapshot snapshot) {
-                        RequestTuitionModel model = snapshot.toObject(RequestTuitionModel.class);
-                        Objects.requireNonNull(model).setId(snapshot.getId());
-                        Log.d(TAG, "parseSnapshot: ");
-                        return model;
-                    }
+                .setQuery(query, config, snapshot -> {
+                    RequestTuitionModel model = snapshot.toObject(RequestTuitionModel.class);
+                    Objects.requireNonNull(model).setId(snapshot.getId());
+                    Log.d(TAG, "parseSnapshot: ");
+                    return model;
                 }).build();
 
         adapter = new FirestorePagingAdapter<RequestTuitionModel, CategoryViewHolder>(options1) {
@@ -124,13 +120,10 @@ public class TuitionRequestForAdminFragment extends Fragment {
                         holder.binding.llImage.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.red700)));
                         break;
                 }
-                holder.binding.root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        TuitionRequestForAdminFragmentDirections.ActionTuitionRequestForAdminFragmentToSingleTuitionDetailFragment action = TuitionRequestForAdminFragmentDirections.actionTuitionRequestForAdminFragmentToSingleTuitionDetailFragment();
-                        action.setTuitionId(model.getId());
-                        navController.navigate(action);
-                    }
+                holder.binding.root.setOnClickListener(v -> {
+                    TuitionRequestForAdminFragmentDirections.ActionTuitionRequestForAdminFragmentToSingleTuitionDetailFragment action = TuitionRequestForAdminFragmentDirections.actionTuitionRequestForAdminFragmentToSingleTuitionDetailFragment();
+                    action.setTuitionId(model.getId());
+                    navController.navigate(action);
                 });
             }
 

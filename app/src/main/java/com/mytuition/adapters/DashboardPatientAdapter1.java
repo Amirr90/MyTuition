@@ -1,7 +1,6 @@
 package com.mytuition.adapters;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +15,7 @@ import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
@@ -30,10 +27,6 @@ import com.mytuition.databinding.DashBoardViewBinding;
 import com.mytuition.models.DashboardModel1;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.views.activity.ParentScreen;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.mytuition.utility.Utils.getTeacherModel;
 
@@ -69,13 +62,7 @@ public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, Dashb
         DashboardModel1 dashboardModel1 = getItem(position);
         holder.dashBoardViewBinding.setDashboard1(dashboardModel1);
         holder.dashBoardViewBinding.imageView21.setImageResource(images[position]);
-        holder.dashBoardViewBinding.cv1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRewardAdd(position);
-
-            }
-        });
+        holder.dashBoardViewBinding.cv1.setOnClickListener(v -> setRewardAdd(position));
 
         holder.dashBoardViewBinding.textView55.setText(dashboardModel1.getDescription());
 
@@ -134,16 +121,13 @@ public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, Dashb
 
         if (mRewardedAd != null) {
             Activity activityContext = ParentScreen.getInstance();
-            mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
-                @Override
-                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                    // Handle the reward.
-                    Log.d("TAG", "The user earned the reward.");
-                    int rewardAmount = rewardItem.getAmount();
-                    String rewardType = rewardItem.getType();
-                    Log.d(TAG, "onUserEarnedReward: " + rewardAmount);
-                    Log.d(TAG, "onUserEarnedRewardType: " + rewardType);
-                }
+            mRewardedAd.show(activityContext, rewardItem -> {
+                // Handle the reward.
+                Log.d("TAG", "The user earned the reward.");
+                int rewardAmount = rewardItem.getAmount();
+                String rewardType = rewardItem.getType();
+                Log.d(TAG, "onUserEarnedReward: " + rewardAmount);
+                Log.d(TAG, "onUserEarnedRewardType: " + rewardType);
             });
         } else {
             initNav(position);
@@ -163,12 +147,7 @@ public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, Dashb
     private void createSpecialityData() {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child(TEACHERS);
         String specialityId = String.valueOf(System.currentTimeMillis());
-        myRef.child(specialityId).setValue(getTeacherModel(specialityId)).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-            }
-        });
+        myRef.child(specialityId).setValue(getTeacherModel(specialityId)).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
 
         Log.d(TAG, "createSpecialityData: " + specialityId);
     }
@@ -182,7 +161,7 @@ public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, Dashb
         return specialityModel;
     }
 
-    public class DashboardModelVH extends RecyclerView.ViewHolder {
+    public static class DashboardModelVH extends RecyclerView.ViewHolder {
         DashBoardViewBinding dashBoardViewBinding;
 
         public DashboardModelVH(DashBoardViewBinding dashBoardViewBinding) {

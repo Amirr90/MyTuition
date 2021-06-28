@@ -31,7 +31,7 @@ public class CoachingAdapter extends ListAdapter<CoachingModel, CoachingAdapter.
 
     }
 
-    public class DashboardVH extends RecyclerView.ViewHolder {
+    public static class DashboardVH extends RecyclerView.ViewHolder {
         DashBoardViewHorizontal2Binding dashBoardViewBinding;
 
 

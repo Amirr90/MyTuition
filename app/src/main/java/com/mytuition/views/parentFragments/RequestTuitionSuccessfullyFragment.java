@@ -38,12 +38,7 @@ public class RequestTuitionSuccessfullyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
-        binding.btnBookingDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.action_requestTuitionSuccessfullyFragment_to_tuitionListFragment);
-            }
-        });
+        binding.btnBookingDetails.setOnClickListener(v -> navController.navigate(R.id.action_requestTuitionSuccessfullyFragment_to_tuitionListFragment));
     }
 
     @Override

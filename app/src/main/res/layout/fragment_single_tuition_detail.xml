@@ -83,7 +83,6 @@
                     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
-                        android:layout_centerHorizontal="true"
                         android:loadCustomTeacherImage="@{teacher.image}"
                         android:src="@drawable/tuitor_image"
                         app:civ_border_color="@color/colorPrimary" />
@@ -212,14 +211,14 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvTuitionFor"
                     android:layout_marginTop="1dp"
-                    android:layout_marginRight="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
                     android:layout_toEndOf="@id/llImage2"
-                    android:drawableRight="@drawable/arrow_down"
                     android:fontFamily="@font/poppins"
                     android:text="@{`Request Status : `+tuition.reqStatus}"
                     android:textColor="#3F4E6E"
                     android:textSize="14sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    app:drawableEndCompat="@drawable/arrow_down" />
 
                 <TextView
                     android:id="@+id/tvViewImage"
@@ -361,7 +360,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/red700"
                     android:fontFamily="@font/poppins"
-                    android:text="Cancel"
+                    android:text="@string/cancel"
                     android:textColor="@android:color/white" />
             </LinearLayout>
 

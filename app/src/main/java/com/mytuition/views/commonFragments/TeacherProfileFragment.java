@@ -53,13 +53,10 @@ public class TeacherProfileFragment extends Fragment {
         setAboutMe(teacherModel);
 
 
-        teacherProfileBinding.btnRequestTuition.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("docModel", getJSONFromModel(teacherModel));
-                navController.navigate(R.id.action_teacherProfileFragment_to_selectTimeSlotsFragment, bundle);
-            }
+        teacherProfileBinding.btnRequestTuition.setOnClickListener(view1 -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("docModel", getJSONFromModel(teacherModel));
+            navController.navigate(R.id.action_teacherProfileFragment_to_selectTimeSlotsFragment, bundle);
         });
     }
 

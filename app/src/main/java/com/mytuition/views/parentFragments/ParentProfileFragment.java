@@ -21,14 +21,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mytuition.databinding.FragmentParentProfileBinding;
@@ -89,37 +85,25 @@ public class ParentProfileFragment extends Fragment {
 
         profileBinding.setUser(parentModel);
 
-        profileBinding.btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isAllFieldCheck() && null != getUid()) {
-                    AppUtils.showRequestDialog(requireActivity());
-                    getFirestoreReference().collection(USERS).document(getUid())
-                            .update(getUserMap(parentModel))
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    AppUtils.hideDialog();
-                                    Toast.makeText(requireActivity(), "Profile Updated !!", Toast.LENGTH_SHORT).show();
-                                    setParentModel(requireActivity(), parentModel);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
+        profileBinding.btnUpdateProfile.setOnClickListener(view1 -> {
+            if (isAllFieldCheck() && null != getUid()) {
+                AppUtils.showRequestDialog(requireActivity());
+                getFirestoreReference().collection(USERS).document(getUid())
+                        .update(getUserMap(parentModel))
+                        .addOnSuccessListener(aVoid -> {
                             AppUtils.hideDialog();
-                            Toast.makeText(requireActivity(), "try again", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+                            Toast.makeText(requireActivity(), "Profile Updated !!", Toast.LENGTH_SHORT).show();
+                            setParentModel(requireActivity(), parentModel);
+                        }).addOnFailureListener(e -> {
+                    AppUtils.hideDialog();
+                    Toast.makeText(requireActivity(), "try again", Toast.LENGTH_SHORT).show();
+                });
             }
         });
 
-        profileBinding.tvChangeProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int tag = (int) profileBinding.tvChangeProfile.getTag();
-                selectImage(tag);
-            }
+        profileBinding.tvChangeProfile.setOnClickListener(v -> {
+            int tag = (int) profileBinding.tvChangeProfile.getTag();
+            selectImage(tag);
         });
 
     }
@@ -173,47 +157,26 @@ public class ParentProfileFragment extends Fragment {
         byte[] compressData = baos.toByteArray();
         UploadTask uploadTask = spaceRef.putBytes(compressData);
 
-        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                progressDialog.setProgress((int) progress);
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                storageRef.child(STORAGE_PATH).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Map<String, Object> imageMap = new HashMap<>();
-                        imageMap.put("image", uri.toString());
+        uploadTask.addOnProgressListener(taskSnapshot -> {
+            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+            progressDialog.setProgress((int) progress);
+        }).addOnSuccessListener(taskSnapshot -> storageRef.child(STORAGE_PATH).getDownloadUrl().addOnSuccessListener(uri1 -> {
+            Map<String, Object> imageMap = new HashMap<>();
+            imageMap.put("image", uri1.toString());
 
-                        uploadImageUriRef.update(imageMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                progressDialog.dismiss();
-                                Toast.makeText(requireActivity(), " Image Uploaded", Toast.LENGTH_SHORT).show();
-                                setProfile();
-                            }
-                        });
-
-                    }
-                });
-
-            }
-        }).addOnCanceledListener(new OnCanceledListener() {
-            @Override
-            public void onCanceled() {
+            uploadImageUriRef.update(imageMap).addOnSuccessListener(aVoid -> {
                 progressDialog.dismiss();
-                Toast.makeText(requireActivity(), "Upload cancelled, try again", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
+                Toast.makeText(requireActivity(), " Image Uploaded", Toast.LENGTH_SHORT).show();
+                setProfile();
+            });
 
-                Toast.makeText(requireActivity(), "failed to upload Image " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-            }
+        })).addOnCanceledListener(() -> {
+            progressDialog.dismiss();
+            Toast.makeText(requireActivity(), "Upload cancelled, try again", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            progressDialog.dismiss();
+
+            Toast.makeText(requireActivity(), "failed to upload Image " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         });
 
 
@@ -222,13 +185,10 @@ public class ParentProfileFragment extends Fragment {
     private void setProfile() {
         if (null != getUid())
             AppUtils.getFirestoreReference().collection("Users").document(getUid()).get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
-                            setParentModel(requireActivity(), parentModel);
+                    .addOnSuccessListener(documentSnapshot -> {
+                        ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
+                        setParentModel(requireActivity(), parentModel);
 
-                        }
                     });
         else Toast.makeText(requireActivity(), "User not found !!", Toast.LENGTH_SHORT).show();
     }

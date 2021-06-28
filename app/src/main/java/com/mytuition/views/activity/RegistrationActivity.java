@@ -2,7 +2,6 @@ package com.mytuition.views.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -33,12 +32,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
         updateUI(getIntent().getStringExtra(LOGIN_TYPE));
 
-        registrationBinding.btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(RegistrationActivity.this, TeacherScreen.class));
-                finish();
-            }
+        registrationBinding.btnRegister.setOnClickListener(view -> {
+            startActivity(new Intent(RegistrationActivity.this, TeacherScreen.class));
+            finish();
         });
     }
 }

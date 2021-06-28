@@ -46,12 +46,7 @@ public class Utils {
 
         getFirestoreReference().collection(USERS).document(getUid())
                 .update(getUserMap(loginType))
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-                    }
-                });
+                .addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
 
     }
 

@@ -3,7 +3,6 @@ package com.mytuition.views.parentFragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -52,25 +51,22 @@ public class TeacherAdapter extends ListAdapter<TeacherModel, TeacherAdapter.Das
         Random rand = new Random();
 /*        int pos = rand.nextInt(5);
         holder.dashBoardViewBinding.imageView22.setBackgroundResource(cards[pos]);*/
-        holder.dashBoardViewBinding.mainLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.dashBoardViewBinding.mainLayout.setOnClickListener(v -> {
 
-                Gson gson = new Gson();
-                String jsonString = gson.toJson(teacherModel);
-                Log.d(TAG, "onClickTeacherModel: " + teacherModel.toString());
-                try {
-                    //AddNewTeacher(teacherModel);
-                    JSONObject request = new JSONObject(jsonString);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("docModel", request.toString());
-                    ParentDashboardFragment.getInstance().navController.navigate(R.id.action_parentDashboardFragment2_to_teacherProfileFragment, bundle);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(teacherModel);
+            Log.d(TAG, "onClickTeacherModel: " + teacherModel.toString());
+            try {
+                //AddNewTeacher(teacherModel);
+                JSONObject request = new JSONObject(jsonString);
+                Bundle bundle = new Bundle();
+                bundle.putString("docModel", request.toString());
+                ParentDashboardFragment.getInstance().navController.navigate(R.id.action_parentDashboardFragment2_to_teacherProfileFragment, bundle);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+
+
         });
 
     }

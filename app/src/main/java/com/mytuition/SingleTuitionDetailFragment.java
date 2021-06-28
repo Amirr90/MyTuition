@@ -74,18 +74,8 @@ public class SingleTuitionDetailFragment extends Fragment {
         navController = Navigation.findNavController(view);
 
 
-        binding.btnActionTeacher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                allotTeacher();
-            }
-        });
-        binding.tvSpec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeStatusDialog();
-            }
-        });
+        binding.btnActionTeacher.setOnClickListener(v -> allotTeacher());
+        binding.tvSpec.setOnClickListener(v -> changeStatusDialog());
     }
 
     private void changeStatusDialog() {
@@ -94,20 +84,14 @@ public class SingleTuitionDetailFragment extends Fragment {
                 .setMessage("Where do you want to go?")
                 .setIcon(R.drawable.app_icon)
                 .setPositiveButton(AppConstant.ACCEPT,
-                        new DialogInterface.OnClickListener() {
-                            @TargetApi(11)
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                updateStatus(AppConstant.REQUEST_STATUS_ACCEPTED);
-                            }
+                        (dialog, id) -> {
+                            dialog.cancel();
+                            updateStatus(AppConstant.REQUEST_STATUS_ACCEPTED);
                         })
                 .setNegativeButton(AppConstant.REJECT,
-                        new DialogInterface.OnClickListener() {
-                            @TargetApi(11)
-                            public void onClick(DialogInterface dialog, int id) {
-                                updateStatus(AppConstant.REQUEST_STATUS_REJECTED);
-                                dialog.cancel();
-                            }
+                        (dialog, id) -> {
+                            updateStatus(AppConstant.REQUEST_STATUS_REJECTED);
+                            dialog.cancel();
                         }).show();
     }
 
@@ -118,20 +102,14 @@ public class SingleTuitionDetailFragment extends Fragment {
         AppUtils.showRequestDialog(requireActivity());
         AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
                 .document(requestTuitionModel.getId())
-                .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                AppUtils.hideDialog();
-                Toast.makeText(requireActivity(), "Updated Successfully !!", Toast.LENGTH_SHORT).show();
-                getTuitionDetails();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                AppUtils.hideDialog();
-                Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                .update(map).addOnSuccessListener(aVoid -> {
+                    AppUtils.hideDialog();
+                    Toast.makeText(requireActivity(), "Updated Successfully !!", Toast.LENGTH_SHORT).show();
+                    getTuitionDetails();
+                }).addOnFailureListener(e -> {
+                    AppUtils.hideDialog();
+                    Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
+                });
     }
 
 
@@ -144,16 +122,13 @@ public class SingleTuitionDetailFragment extends Fragment {
     }
 
     private void getTeacherProfile() {
-        getFirestoreReference().collection(AppConstant.TEACHER).document(requestTuitionModel.getTeacherId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                hideDialog();
-                if (documentSnapshot.exists()) {
-                    teacherModel = documentSnapshot.toObject(TeacherModel.class);
-                    binding.setTeacher(teacherModel);
-                    if (null != teacherModel.getTeachingProfile().getExperience())
-                        binding.imageView9.setImageResource(AppUtils.setExperience(teacherModel.getTeachingProfile().getExperience()));
-                }
+        getFirestoreReference().collection(AppConstant.TEACHER).document(requestTuitionModel.getTeacherId()).get().addOnSuccessListener(documentSnapshot -> {
+            hideDialog();
+            if (documentSnapshot.exists()) {
+                teacherModel = documentSnapshot.toObject(TeacherModel.class);
+                binding.setTeacher(teacherModel);
+                if (null != teacherModel.getTeachingProfile().getExperience())
+                    binding.imageView9.setImageResource(AppUtils.setExperience(teacherModel.getTeachingProfile().getExperience()));
             }
         });
 

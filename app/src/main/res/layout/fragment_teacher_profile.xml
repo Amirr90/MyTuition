@@ -62,13 +62,13 @@
                                 android:id="@+id/textView92"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:drawableEnd="@drawable/ic_baseline_verified_user_24"
                                 android:drawablePadding="5dp"
                                 android:fontFamily="@font/poppins_semibold"
                                 android:text="@{teacher.name,default=`Aamirr khan`}"
                                 android:textColor="#262E3F"
                                 android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                app:drawableEndCompat="@drawable/ic_baseline_verified_user_24" />
 
                             <TextView
                                 android:id="@+id/textView93"
@@ -143,7 +143,8 @@
                         android:paddingTop="22dp"
                         android:paddingEnd="22dp"
                         android:paddingBottom="22dp"
-                        android:weightSum="2">
+                        android:weightSum="2"
+                        android:baselineAligned="false">
 
                         <RelativeLayout
                             android:layout_width="0dp"
@@ -232,7 +233,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Highest Education"
+                            android:text="@string/highest_education"
                             android:textColor="#262E3F"
                             android:textSize="16sp"
                             android:textStyle="bold" />

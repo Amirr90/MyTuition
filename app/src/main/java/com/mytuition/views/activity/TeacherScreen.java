@@ -1,12 +1,9 @@
 package com.mytuition.views.activity;
 
-import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -15,8 +12,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.mytuition.R;
 import com.mytuition.databinding.ActivityTeacherScreenBinding;
 import com.mytuition.utility.AppUtils;
@@ -66,19 +61,11 @@ public class TeacherScreen extends AppCompatActivity {
                 .setMessage("Do you really want to logout?")
                 .setIcon(R.drawable.ic_launcher_foreground)
                 .setPositiveButton("YES",
-                        new DialogInterface.OnClickListener() {
-                            @TargetApi(11)
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                logout();
-                            }
+                        (dialog, id) -> {
+                            dialog.cancel();
+                            logout();
                         })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @TargetApi(11)
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }).show();
+                .setNegativeButton("NO", (dialog, id) -> dialog.cancel()).show();
 
     }
 
@@ -86,14 +73,12 @@ public class TeacherScreen extends AppCompatActivity {
         AppUtils.showRequestDialog(TeacherScreen.this);
         AuthUI.getInstance()
                 .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        hideDialog();
-                        Intent intent = new Intent(TeacherScreen.this, SplashScreen.class);
-                        startActivity(intent);
-                        Toast.makeText(TeacherScreen.this, "logged out successfully", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
+                .addOnCompleteListener(task -> {
+                    hideDialog();
+                    Intent intent = new Intent(TeacherScreen.this, SplashScreen.class);
+                    startActivity(intent);
+                    Toast.makeText(TeacherScreen.this, "logged out successfully", Toast.LENGTH_SHORT).show();
+                    finish();
                 });
     }
 }

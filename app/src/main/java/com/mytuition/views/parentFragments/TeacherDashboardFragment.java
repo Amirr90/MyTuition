@@ -1,6 +1,10 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,13 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.mytuition.R;
-import com.mytuition.databinding.FragmentTProfileBinding;
 import com.mytuition.databinding.FragmentTeacherDashboardBinding;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.models.TeacherModel;
@@ -69,6 +67,4 @@ public class TeacherDashboardFragment extends Fragment {
             }
         });
     }
-
-
 }

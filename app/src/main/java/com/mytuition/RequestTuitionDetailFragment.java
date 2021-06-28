@@ -82,59 +82,45 @@ public class RequestTuitionDetailFragment extends Fragment {
         navController = Navigation.findNavController(view);
 
 
-        requestTuitionBinding.tvViewProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (teacherModel != null) {
+        requestTuitionBinding.tvViewProfile.setOnClickListener(v -> {
+            if (teacherModel != null) {
 
-                    Gson gson = new Gson();
-                    String jsonString = gson.toJson(teacherModel);
-                    try {
-                        JSONObject request = new JSONObject(jsonString);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("docModel", request.toString());
-                        navController.navigate(R.id.action_DetailsFragment2_to_teacherProfileFragment, bundle);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                } else {
-                    Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
+                Gson gson = new Gson();
+                String jsonString = gson.toJson(teacherModel);
+                try {
+                    JSONObject request = new JSONObject(jsonString);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("docModel", request.toString());
+                    navController.navigate(R.id.action_DetailsFragment2_to_teacherProfileFragment, bundle);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
+
+            } else {
+                Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
             }
         });
 
-        requestTuitionBinding.btnChangeTeacher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogToChangeTeacher();
-            }
-        });
+        requestTuitionBinding.btnChangeTeacher.setOnClickListener(v -> showDialogToChangeTeacher());
 
 
-        requestTuitionBinding.btnCancelTuitionReq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString(AppConstant.TUITION_ID, requestTuitionModel.getId());
-                bundle.putString(AppConstant.TEACHER_ID, requestTuitionModel.getTeacherId());
-                navController.navigate(R.id.action_DetailsFragment2_to_cancelTuitionReqDialog, bundle);
-            }
+        requestTuitionBinding.btnCancelTuitionReq.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstant.TUITION_ID, requestTuitionModel.getId());
+            bundle.putString(AppConstant.TEACHER_ID, requestTuitionModel.getTeacherId());
+            navController.navigate(R.id.action_DetailsFragment2_to_cancelTuitionReqDialog, bundle);
         });
     }
 
     private void getTeacherProfile() {
-        getFirestoreReference().collection(AppConstant.TEACHER).document(requestTuitionModel.getTeacherId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                hideDialog();
-                if (documentSnapshot.exists()) {
-                    teacherModel = documentSnapshot.toObject(TeacherModel.class);
-                    requestTuitionBinding.setTeacher(teacherModel);
-                    if (null != teacherModel.getTeachingProfile().getExperience())
-                        requestTuitionBinding.imageView9.setImageResource(AppUtils.setExperience(teacherModel.getTeachingProfile().getExperience()));
-                }
+        getFirestoreReference().collection(AppConstant.TEACHER).document(requestTuitionModel.getTeacherId()).get().addOnSuccessListener(documentSnapshot -> {
+            hideDialog();
+            if (documentSnapshot.exists()) {
+                teacherModel = documentSnapshot.toObject(TeacherModel.class);
+                requestTuitionBinding.setTeacher(teacherModel);
+                if (null != teacherModel.getTeachingProfile().getExperience())
+                    requestTuitionBinding.imageView9.setImageResource(AppUtils.setExperience(teacherModel.getTeachingProfile().getExperience()));
             }
         });
 
@@ -213,26 +199,15 @@ public class RequestTuitionDetailFragment extends Fragment {
 
         final String[] choices = {"Less experience", "Timing issue", "Fee Issue"};
         builder.setTitle("Please select the reason of change Teacher ")
-                .setSingleChoiceItems(choices, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        selectedPosition = arg1;
+                .setSingleChoiceItems(choices, 0, (arg0, arg1) -> selectedPosition = arg1).setPositiveButton("OK", (dialog, id) -> {
+                    if (selectedPosition < 0) {
+                        Toast.makeText(requireActivity(), "Select an issue", Toast.LENGTH_SHORT).show();
+                    } else {
+                        swapTeacher(choices[selectedPosition]);
                     }
-                }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                if (selectedPosition < 0) {
-                    Toast.makeText(requireActivity(), "Select an issue", Toast.LENGTH_SHORT).show();
-                } else {
-                    swapTeacher(choices[selectedPosition]);
-                }
 
-            }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-            }
-        }).show();
+                }).setNegativeButton("Cancel", (dialog, id) -> {
+                }).show();
 
     }
 
@@ -242,21 +217,15 @@ public class RequestTuitionDetailFragment extends Fragment {
         if (getUid() != null)
             AppUtils.getFirestoreReference().collection(REQUEST_TUITION)
                     .document(requestTuitionModel.getId()).update(getUpdateMap(choice))
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            hideDialog();
-                            Toast.makeText(requireActivity(), "request Submitted successfully !!", Toast.LENGTH_SHORT).show();
-                            ParentScreen.getInstance().onSupportNavigateUp();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    hideDialog();
-                    Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-                    Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
-                }
-            });
+                    .addOnSuccessListener(aVoid -> {
+                        hideDialog();
+                        Toast.makeText(requireActivity(), "request Submitted successfully !!", Toast.LENGTH_SHORT).show();
+                        ParentScreen.getInstance().onSupportNavigateUp();
+                    }).addOnFailureListener(e -> {
+                        hideDialog();
+                        Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
+                        Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
+                    });
     }
 
     private Map<String, Object> getUpdateMap(String choice) {

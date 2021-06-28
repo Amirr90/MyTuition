@@ -41,7 +41,7 @@ public class SpecialityAdapter extends ListAdapter<SpecialityModel, SpecialityAd
 
     }
 
-    public class SymptomVH extends RecyclerView.ViewHolder {
+    public static class SymptomVH extends RecyclerView.ViewHolder {
         SymptomsViewBinding symptomsViewBinding;
 
         public SymptomVH(SymptomsViewBinding symptomsViewBinding) {

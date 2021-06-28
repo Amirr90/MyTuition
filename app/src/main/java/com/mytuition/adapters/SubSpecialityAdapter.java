@@ -43,35 +43,29 @@ public class SubSpecialityAdapter extends ListAdapter<TeacherModel, SubSpecialit
         final TeacherModel teacherModel = getItem(position);
         holder.subSpecialityViewBinding.setTeacher(teacherModel);
 
-        holder.subSpecialityViewBinding.btnBookAppointment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Gson gson = new Gson();
-                String jsonString = gson.toJson(teacherModel);
-                Log.d(TAG, "onClickTeacherModel: " + teacherModel.toString());
-                try {
-                    JSONObject request = new JSONObject(jsonString);
-                    subSpecialityInterface.onItemClick(request.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+        holder.subSpecialityViewBinding.btnBookAppointment.setOnClickListener(v -> {
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(teacherModel);
+            Log.d(TAG, "onClickTeacherModel: " + teacherModel.toString());
+            try {
+                JSONObject request = new JSONObject(jsonString);
+                subSpecialityInterface.onItemClick(request.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+
         });
 
-        holder.subSpecialityViewBinding.mailLAyout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Gson gson = new Gson();
-                String jsonString = gson.toJson(teacherModel);
-                try {
-                    JSONObject request = new JSONObject(jsonString);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("docModel", request.toString());
-                    ParentScreen.getInstance().navigate(R.id.action_teachersListBySubjectFragment_to_teacherProfileFragment, bundle);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        holder.subSpecialityViewBinding.mailLAyout.setOnClickListener(view -> {
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(teacherModel);
+            try {
+                JSONObject request = new JSONObject(jsonString);
+                Bundle bundle = new Bundle();
+                bundle.putString("docModel", request.toString());
+                ParentScreen.getInstance().navigate(R.id.action_teachersListBySubjectFragment_to_teacherProfileFragment, bundle);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
 
@@ -81,7 +75,7 @@ public class SubSpecialityAdapter extends ListAdapter<TeacherModel, SubSpecialit
         Utils.getFirebaseReference("Teachers").child(String.valueOf(System.currentTimeMillis())).setValue(teacherModel);
     }
 
-    public class SubSpecialityVH extends RecyclerView.ViewHolder {
+    public static class SubSpecialityVH extends RecyclerView.ViewHolder {
         SubSpecialityViewBinding subSpecialityViewBinding;
 
         public SubSpecialityVH(SubSpecialityViewBinding subSpecialityViewBinding) {

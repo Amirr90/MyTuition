@@ -218,26 +218,13 @@ public class AppUtils {
         if (null != user) {
             final Map<String, Object> map = new HashMap<>();
 
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-                @Override
-                public void onSuccess(InstanceIdResult instanceIdResult) {
-                    String newToken = instanceIdResult.getToken();
-                    map.put(AppConstant.TOKEN, newToken);
-                    getFirestoreReference().collection(AppConstant.USER)
-                            .document(Objects.requireNonNull(getUid()))
-                            .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            onSuccessListener.onSuccess("Updated !!");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-                        }
-                    });
-                    Log.e("newToken2", newToken);
-                }
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
+                String newToken = instanceIdResult.getToken();
+                map.put(AppConstant.TOKEN, newToken);
+                getFirestoreReference().collection(AppConstant.USER)
+                        .document(Objects.requireNonNull(getUid()))
+                        .update(map).addOnSuccessListener(aVoid -> onSuccessListener.onSuccess("Updated !!")).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
+                Log.e("newToken2", newToken);
             });
         }
     }
@@ -268,23 +255,10 @@ public class AppUtils {
     public static void updateTeacherProfile(TeacherModel teacherModel, final ApiInterface apiInterface) {
         Log.d(TAG, "getUid: " + getUid());
         getFirestoreReference().collection("Users").document(getUid()).update(getTeacherProfileMap(teacherModel))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        apiInterface.onSuccess("Profile Updated Successfully !!");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                apiInterface.onFailed("failed to upload Image, try again !!");
-                Log.d(TAG, "onFailureUpdateProfile: " + e.getLocalizedMessage());
-            }
-        }).addOnCanceledListener(new OnCanceledListener() {
-            @Override
-            public void onCanceled() {
-                apiInterface.onFailed("cancel to update profile, try again !!");
-            }
-        });
+                .addOnSuccessListener(aVoid -> apiInterface.onSuccess("Profile Updated Successfully !!")).addOnFailureListener(e -> {
+                    apiInterface.onFailed("failed to upload Image, try again !!");
+                    Log.d(TAG, "onFailureUpdateProfile: " + e.getLocalizedMessage());
+                }).addOnCanceledListener(() -> apiInterface.onFailed("cancel to update profile, try again !!"));
     }
 
     private static Map<String, Object> getTeacherProfileMap(TeacherModel teacherModel) {
@@ -329,38 +303,16 @@ public class AppUtils {
             byte[] compressData = baos.toByteArray();
             UploadTask uploadTask = spaceRef.putBytes(compressData);
 
-            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                    //  double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    storageRef.child(STORAGE_PATH).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            uploadedImageUrl.add(uri.toString());
-                            if (uploadImageCounter == (bitmaps.size())) {
-                                Log.d(TAG, "onSuccessEqual: " + uploadImageCounter);
-                                uploadImageInterface.onSuccess(uploadedImageUrl);
-                            } else Log.d(TAG, "onSuccess: notEqual " + uploadImageCounter);
+            uploadTask.addOnProgressListener(taskSnapshot -> {
+                //  double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+            }).addOnSuccessListener(taskSnapshot -> storageRef.child(STORAGE_PATH).getDownloadUrl().addOnSuccessListener(uri -> {
+                uploadedImageUrl.add(uri.toString());
+                if (uploadImageCounter == (bitmaps.size())) {
+                    Log.d(TAG, "onSuccessEqual: " + uploadImageCounter);
+                    uploadImageInterface.onSuccess(uploadedImageUrl);
+                } else Log.d(TAG, "onSuccess: notEqual " + uploadImageCounter);
 
-                        }
-                    });
-
-                }
-            }).addOnCanceledListener(new OnCanceledListener() {
-                @Override
-                public void onCanceled() {
-                    uploadImageInterface.onFailed("Upload cancelled, try again");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    uploadImageInterface.onFailed("failed to upload Image " + e.getLocalizedMessage());
-                }
-            });
+            })).addOnCanceledListener(() -> uploadImageInterface.onFailed("Upload cancelled, try again")).addOnFailureListener(e -> uploadImageInterface.onFailed("failed to upload Image " + e.getLocalizedMessage()));
 
         }
 
@@ -407,11 +359,7 @@ public class AppUtils {
     private void showPdf(String filePath) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(filePath), "application/pdf");
-        try {
 
-        } catch (ActivityNotFoundException e) {
-            Log.d(TAG, "showPdf: " + e.getLocalizedMessage());
-        }
     }
 
     public static String parseDate(String inDate, String outPattern) {

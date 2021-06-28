@@ -211,7 +211,6 @@ public class TeacherModel extends BaseObservable {
         public String expertIn;
         public String experience;
         public String tuitionHours;
-        ;
         public Boolean demoClass;
 
         public long getTuitions() {

@@ -42,16 +42,13 @@ public class CancelTuitionReqDialog extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.btnCancelReqTuition.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (binding.etReason.getText().toString().isEmpty()) {
-                    Toasty.info(requireActivity(), "Please write reason for cancelling Tuition Request", Toast.LENGTH_SHORT, true).show();
+        binding.btnCancelReqTuition.setOnClickListener(v -> {
+            if (binding.etReason.getText().toString().isEmpty()) {
+                Toasty.info(requireActivity(), "Please write reason for cancelling Tuition Request", Toast.LENGTH_SHORT, true).show();
 
-                } else {
-                    updateRequestStatus();
+            } else {
+                updateRequestStatus();
 
-                }
             }
         });
 
@@ -62,22 +59,16 @@ public class CancelTuitionReqDialog extends BottomSheetDialogFragment {
             AppUtils.showRequestDialog(requireActivity());
             AppUtils.getFirestoreReference()
                     .collection(AppConstant.REQUEST_TUITION)
-                    .document(getArguments().getString(AppConstant.TUITION_ID)).update(getUpdateMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    AppUtils.hideDialog();
-                    Toasty.success(App.context, "cancelled successfully !!", Toast.LENGTH_SHORT, true).show();
-                    dismiss();
+                    .document(getArguments().getString(AppConstant.TUITION_ID)).update(getUpdateMap()).addOnSuccessListener(aVoid -> {
+                        AppUtils.hideDialog();
+                        Toasty.success(App.context, "cancelled successfully !!", Toast.LENGTH_SHORT, true).show();
+                        dismiss();
 
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    AppUtils.hideDialog();
-                    Toasty.error(App.context, "try again !!", Toast.LENGTH_SHORT, true).show();
+                    }).addOnFailureListener(e -> {
+                        AppUtils.hideDialog();
+                        Toasty.error(App.context, "try again !!", Toast.LENGTH_SHORT, true).show();
 
-                }
-            });
+                    });
         }
     }
 

@@ -157,4 +157,6 @@
     <string name="s_y_u_m_a">S Y U M A</string>
     <string name="requests">Requests</string>
     <string name="profile">profile</string>
+    <string name="cancel">Cancel</string>
+    <string name="highest_education">Highest Education</string>
 </resources>

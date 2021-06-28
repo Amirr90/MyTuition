@@ -4,27 +4,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.firebase.database.annotations.NotNull;
 import com.mytuition.R;
 import com.mytuition.adapters.SubSpecialityAdapter;
 import com.mytuition.databinding.FragmentTeachersListBySubjectBinding;
-import com.mytuition.models.TeacherModel;
 import com.mytuition.responseModel.TeacherRequestModel;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.viewHolder.ParentViewHolder;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 
@@ -68,12 +62,9 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
         viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
 
         requestModel.setSpecialityId(specialityName);
-        viewModel.getTeacher(requestModel).observe(getViewLifecycleOwner(), new Observer<List<TeacherModel>>() {
-            @Override
-            public void onChanged(List<TeacherModel> teacherModels) {
-                AppUtils.hideDialog();AppUtils.hideDialog();
-                adapter.submitList(teacherModels);
-            }
+        viewModel.getTeacher(requestModel).observe(getViewLifecycleOwner(), teacherModels -> {
+            AppUtils.hideDialog();AppUtils.hideDialog();
+            adapter.submitList(teacherModels);
         });
 
 

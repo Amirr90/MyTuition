@@ -54,29 +54,23 @@ public class TuitionListFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
         getData();
 
-        binding.btnRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.noDataLayout.setVisibility(View.GONE);
-                getData();
-            }
+        binding.btnRetry.setOnClickListener(v -> {
+            binding.noDataLayout.setVisibility(View.GONE);
+            getData();
         });
 
     }
 
     private void getData() {
-        viewModel.getTuitionList(requireActivity()).observe(getViewLifecycleOwner(), new Observer<List<TuitionDetailResponse.Tuition>>() {
-            @Override
-            public void onChanged(List<TuitionDetailResponse.Tuition> tuitions) {
-                if (null != tuitions && !tuitions.isEmpty()) {
-                    binding.noDataLayout.setVisibility(View.GONE);
-                    binding.prescriptionRec.setVisibility(View.VISIBLE);
-                    List<RequestTuitionModel> tuitionListModels = tuitions.get(0).getTuitionModel();
-                    binding.prescriptionRec.setAdapter(new AdapterTuitionList(tuitionListModels));
-                } else {
-                    binding.noDataLayout.setVisibility(View.VISIBLE);
-                    binding.prescriptionRec.setVisibility(View.GONE);
-                }
+        viewModel.getTuitionList(requireActivity()).observe(getViewLifecycleOwner(), tuitions -> {
+            if (null != tuitions && !tuitions.isEmpty()) {
+                binding.noDataLayout.setVisibility(View.GONE);
+                binding.prescriptionRec.setVisibility(View.VISIBLE);
+                List<RequestTuitionModel> tuitionListModels = tuitions.get(0).getTuitionModel();
+                binding.prescriptionRec.setAdapter(new AdapterTuitionList(tuitionListModels));
+            } else {
+                binding.noDataLayout.setVisibility(View.VISIBLE);
+                binding.prescriptionRec.setVisibility(View.GONE);
             }
         });
     }
@@ -99,17 +93,14 @@ public class TuitionListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull AdapterTuitionList.TuitionVH holder, final int position) {
             holder.binding.setTuition(listModels.get(position));
-            holder.binding.root.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            holder.binding.root.setOnClickListener(v -> {
 
 
-                    TuitionListFragmentDirections.ActionTuitionListFragmentToDetailsFragment2 action = TuitionListFragmentDirections.actionTuitionListFragmentToDetailsFragment2();
-                    action.setTuitionId(listModels.get(position).getId());
-                    navController.navigate(action);
+                TuitionListFragmentDirections.ActionTuitionListFragmentToDetailsFragment2 action = TuitionListFragmentDirections.actionTuitionListFragmentToDetailsFragment2();
+                action.setTuitionId(listModels.get(position).getId());
+                navController.navigate(action);
 
 
-                }
             });
         }
 

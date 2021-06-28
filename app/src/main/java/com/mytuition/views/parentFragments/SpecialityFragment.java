@@ -18,7 +18,6 @@ import com.mytuition.R;
 import com.mytuition.adapters.SpecialityAdapter;
 import com.mytuition.databinding.FragmentSpecialityBinding;
 import com.mytuition.interfaces.AdapterInterface;
-import com.mytuition.interfaces.DatabaseCallbackInterface;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.utility.AppUtils;
 
@@ -30,8 +29,6 @@ import java.util.Objects;
 
 import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 import static com.mytuition.utility.AppUtils.getClassData;
-import static com.mytuition.utility.AppUtils.getJSONFromModel;
-import static com.mytuition.utility.DatabaseUtils.getSubjectData;
 import static com.mytuition.utility.Utils.getFirebaseReference;
 
 
@@ -69,28 +66,25 @@ public class SpecialityFragment extends Fragment implements AdapterInterface {
         specialityAdapter.submitList(getClassData());
 
 
-        specialityBinding.btnProceedOnSymptomPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (specialitiesIds.isEmpty()) {
-                    Toast.makeText(requireActivity(), R.string.select_speciality, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                StringBuilder ids = new StringBuilder();
-                for (String id : specialitiesIds)
-                    ids.append(id + ",");
-                try {
-                  /*  Bundle bundle = new Bundle();
-                    bundle.putString("id", ids.toString());
-                    navController.navigate(R.id.action_specialityFragment_to_teacherListFragment, bundle);*/
+        specialityBinding.btnProceedOnSymptomPage.setOnClickListener(view1 -> {
+            if (specialitiesIds.isEmpty()) {
+                Toast.makeText(requireActivity(), R.string.select_speciality, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            StringBuilder ids = new StringBuilder();
+            for (String id : specialitiesIds)
+                ids.append(id + ",");
+            try {
+              /*  Bundle bundle = new Bundle();
+                bundle.putString("id", ids.toString());
+                navController.navigate(R.id.action_specialityFragment_to_teacherListFragment, bundle);*/
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("class", specialitiesIds.toString());
-                    navController.navigate(R.id.action_specialityFragment_to_selectTimeSlotsFragment, bundle);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "onItemClicked: " + e.getLocalizedMessage());
-                }
+                Bundle bundle = new Bundle();
+                bundle.putString("class", specialitiesIds.toString());
+                navController.navigate(R.id.action_specialityFragment_to_selectTimeSlotsFragment, bundle);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "onItemClicked: " + e.getLocalizedMessage());
             }
         });
     }

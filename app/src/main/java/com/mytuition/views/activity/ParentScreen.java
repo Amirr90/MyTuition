@@ -1,8 +1,6 @@
 package com.mytuition.views.activity;
 
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
@@ -11,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,7 +20,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -33,11 +29,8 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -45,7 +38,6 @@ import com.mytuition.R;
 import com.mytuition.adapters.NavAdapter;
 import com.mytuition.databinding.ActivityParentScreenBinding;
 import com.mytuition.interfaces.NavigationInterface;
-import com.mytuition.interfaces.onSuccessListener;
 import com.mytuition.models.NavModel;
 import com.mytuition.models.ParentModel;
 import com.mytuition.models.RequestTuitionModel;
@@ -135,57 +127,42 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         setNavAdapter();
 
 
-        mainBinding.constraintLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mainBinding.constraintLayout.setOnClickListener(v -> navController.navigate(R.id.DetailsFragment2));
 
-                navController.navigate(R.id.DetailsFragment2);
-            }
-        });
-
-        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                // mainBinding.constraintLayout.setVisibility(destination.getId() == R.id.DetailsFragment2 ? View.GONE : View.VISIBLE);
-            }
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            // mainBinding.constraintLayout.setVisibility(destination.getId() == R.id.DetailsFragment2 ? View.GONE : View.VISIBLE);
         });
 
 
-        mainBinding.navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                item.setChecked(true);
-                mainBinding.drawerLayout.close();
-                if (item.getItemId() == R.id.itemTuitionList) {
-                    navController.navigate(R.id.tuitionListFragment);
-                } else if (item.getItemId() == R.id.itemAboutUs) {
-                    navController.navigate(R.id.aboutUsFragment);
-                } else if (item.getItemId() == R.id.itemTuitionList) {
-                    navController.navigate(R.id.tuitionRequestForAdminFragment);
-                } else if (item.getItemId() == R.id.itemAllTuition) {
-                    AppUtils.shareApp(instance);
-                } else if (item.getItemId() == R.id.itemLogout)
-                    showLogoutDialog();
-                else Toast.makeText(instance, "coming soon !!", Toast.LENGTH_SHORT).show();
-                return true;
-            }
+        mainBinding.navView.setNavigationItemSelectedListener(item -> {
+            item.setChecked(true);
+            mainBinding.drawerLayout.close();
+            if (item.getItemId() == R.id.itemTuitionList) {
+                navController.navigate(R.id.tuitionListFragment);
+            } else if (item.getItemId() == R.id.itemAboutUs) {
+                navController.navigate(R.id.aboutUsFragment);
+            } else if (item.getItemId() == R.id.itemTuitionList) {
+                navController.navigate(R.id.tuitionRequestForAdminFragment);
+            } else if (item.getItemId() == R.id.itemAllTuition) {
+                AppUtils.shareApp(instance);
+            } else if (item.getItemId() == R.id.itemLogout)
+                showLogoutDialog();
+            else Toast.makeText(instance, "coming soon !!", Toast.LENGTH_SHORT).show();
+            return true;
         });
 
     }
 
     private void updateUserInfo() {
         if (null != getUid())
-            getFirestoreReference().collection(AppConstant.USERS).document(getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                    if (error == null && null != value) {
-                        ParentModel user = value.toObject(ParentModel.class);
-                        if (null != user)
-                            user.setMobile(getMobileNumber());
-                        mainBinding.setUser(user);
-                        setParentModel(ParentScreen.this, user);
+            getFirestoreReference().collection(AppConstant.USERS).document(getUid()).addSnapshotListener((value, error) -> {
+                if (error == null && null != value) {
+                    ParentModel user = value.toObject(ParentModel.class);
+                    if (null != user)
+                        user.setMobile(getMobileNumber());
+                    mainBinding.setUser(user);
+                    setParentModel(ParentScreen.this, user);
 
-                    }
                 }
             });
     }
@@ -226,38 +203,30 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             getFirestoreReference().collection(REQUEST_TUITION)
                     .document(getUid())
                     .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                RequestTuitionModel tuitionModel = documentSnapshot.toObject(RequestTuitionModel.class);
-                                if (null != tuitionModel) {
-                                    if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_CONFIRMED)) {
-                                        mainBinding.constraintLayout.setVisibility(View.GONE);
-                                    }
-                                } else {
-                                    if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_PENDING)) {
-                                        mainBinding.textView9.setText("Waiting for Teacher to accept your Demo Class");
-                                    } else if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_ACCEPTED)) {
-                                        //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Accepted your tuition request");
-                                        mainBinding.btLoading.setAnimation(R.raw.accepted);
-                                        mainBinding.btLoading.playAnimation();
-                                    } else if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_REJECTED)) {
-                                        //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Rejected your tuition request");
-                                        mainBinding.btLoading.setAnimation(R.raw.rejected);
-                                        mainBinding.btLoading.playAnimation();
-                                    }
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            RequestTuitionModel tuitionModel = documentSnapshot.toObject(RequestTuitionModel.class);
+                            if (null != tuitionModel) {
+                                if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_CONFIRMED)) {
+                                    mainBinding.constraintLayout.setVisibility(View.GONE);
                                 }
-
-
+                            } else {
+                                if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_PENDING)) {
+                                    mainBinding.textView9.setText("Waiting for Teacher to accept your Demo Class");
+                                } else if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_ACCEPTED)) {
+                                    //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Accepted your tuition request");
+                                    mainBinding.btLoading.setAnimation(R.raw.accepted);
+                                    mainBinding.btLoading.playAnimation();
+                                } else if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_REJECTED)) {
+                                    //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Rejected your tuition request");
+                                    mainBinding.btLoading.setAnimation(R.raw.rejected);
+                                    mainBinding.btLoading.playAnimation();
+                                }
                             }
+
+
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    mainBinding.constraintLayout.setVisibility(View.GONE);
-                }
-            });
+                    }).addOnFailureListener(e -> mainBinding.constraintLayout.setVisibility(View.GONE));
 
     }
 
@@ -424,19 +393,11 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                 .setMessage("Do you really want to logout?")
                 .setIcon(R.drawable.app_icon)
                 .setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            @TargetApi(11)
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                logout();
-                            }
+                        (dialog, id) -> {
+                            dialog.cancel();
+                            logout();
                         })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @TargetApi(11)
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }).show();
+                .setNegativeButton("No", (dialog, id) -> dialog.cancel()).show();
 
     }
 
@@ -444,23 +405,16 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         AppUtils.showRequestDialog(ParentScreen.this);
         AuthUI.getInstance()
                 .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        hideDialog();
-                        Intent intent = new Intent(ParentScreen.this, SplashScreen.class);
-                        startActivity(intent);
-                        Toast.makeText(ParentScreen.this, "logged out successfully", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
+                .addOnCompleteListener(task -> {
+                    hideDialog();
+                    Intent intent = new Intent(ParentScreen.this, SplashScreen.class);
+                    startActivity(intent);
+                    Toast.makeText(ParentScreen.this, "logged out successfully", Toast.LENGTH_SHORT).show();
+                    finish();
                 });
     }
 
     private void updateToken() {
-        AppUtils.updateToken(new onSuccessListener() {
-            @Override
-            public void onSuccess(Object obj) {
-                Log.d(TAG, "updateToken: " + (String) obj);
-            }
-        });
+        AppUtils.updateToken(obj -> Log.d(TAG, "updateToken: " + (String) obj));
     }
 }

@@ -68,13 +68,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:drawableLeft="@drawable/ic_calendar"
                     android:drawablePadding="@dimen/_10sdp"
-                    android:drawableTint="@color/colorPrimary"
                     android:padding="@dimen/_5sdp"
                     android:textColor="#262E3F"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:drawableTint="@color/colorPrimary"
+                    app:drawableLeftCompat="@drawable/ic_calendar" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/calRec"

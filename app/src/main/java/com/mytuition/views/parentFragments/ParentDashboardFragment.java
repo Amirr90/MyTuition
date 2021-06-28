@@ -3,15 +3,12 @@ package com.mytuition.views.parentFragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -111,74 +108,48 @@ public class ParentDashboardFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
         requestModel2.setCity("Lucknow");
         requestModel2.setUserId(getUid());
-        viewModel.getDashboardData(requestModel2, requireActivity()).observe(getViewLifecycleOwner(), new Observer<List<DashboardModel>>() {
-            @Override
-            public void onChanged(List<DashboardModel> dashboardModels) {
-                AppUtils.hideDialog();
-                models = dashboardModels;
-                if (!dashboardModels.isEmpty()) {
+        viewModel.getDashboardData(requestModel2, requireActivity()).observe(getViewLifecycleOwner(), dashboardModels -> {
+            AppUtils.hideDialog();
+            models = dashboardModels;
+            if (!dashboardModels.isEmpty()) {
 
-                    //Binding First Adapter
-                    adapter1.submitList(getFirstAdapterData());
+                //Binding First Adapter
+                adapter1.submitList(getFirstAdapterData());
 
-                    //Binding Top Teacher Data Adapter
-                    adapter2.submitList(dashboardModels.get(0).getTeacherList());
+                //Binding Top Teacher Data Adapter
+                adapter2.submitList(dashboardModels.get(0).getTeacherList());
 
 
-                    //Binding Top Coaching Adapter
-                    adapter3.submitList(getTopCoachingData());
+                //Binding Top Coaching Adapter
+                adapter3.submitList(getTopCoachingData());
 
-                    //Binding Testimonials  Adapter
-                    testimonialsModels.clear();
-                    testimonialsModels.addAll(dashboardModels.get(0).getTestimonialsList());
-                    testimonialsAdapter.notifyDataSetChanged();
+                //Binding Testimonials  Adapter
+                testimonialsModels.clear();
+                testimonialsModels.addAll(dashboardModels.get(0).getTestimonialsList());
+                testimonialsAdapter.notifyDataSetChanged();
 
 
-                    //Binding Slider Adapter
-                    setSlider();
-                    loadBigBannerImage(dashboardModels.get(0).getBannerData());
-                } else Log.d(TAG, "onChanged: no data");
-            }
+                //Binding Slider Adapter
+                setSlider();
+                loadBigBannerImage(dashboardModels.get(0).getBannerData());
+            } else Log.d(TAG, "onChanged: no data");
         });
 
         updateProfile();
-        parentDashboardBinding.profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.action_parentDashboardFragment2_to_parentProfileFragment);
-            }
-        });
+        parentDashboardBinding.profileImage.setOnClickListener(view1 -> navController.navigate(R.id.action_parentDashboardFragment2_to_parentProfileFragment));
 
 
         parentDashboardBinding.imageView7.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ParentScreen.getInstance().openDrawer();
-                    }
-                });
-        parentDashboardBinding.tvWriteReview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.action_parentDashboardFragment2_to_writeTestimonialsDialog);
-            }
-        });
+                v -> ParentScreen.getInstance().openDrawer());
+        parentDashboardBinding.tvWriteReview.setOnClickListener(v -> navController.navigate(R.id.action_parentDashboardFragment2_to_writeTestimonialsDialog));
 
-        parentDashboardBinding.bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParentScreen.getInstance().openDrawer();
-            }
-        });
+        parentDashboardBinding.bottomAppBar.setNavigationOnClickListener(v -> ParentScreen.getInstance().openDrawer());
 
-        parentDashboardBinding.bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.profile_image) {
-                    navController.navigate(R.id.action_parentDashboardFragment2_to_parentProfileFragment);
-                }
-                return true;
+        parentDashboardBinding.bottomAppBar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.profile_image) {
+                navController.navigate(R.id.action_parentDashboardFragment2_to_parentProfileFragment);
             }
+            return true;
         });
 
     }

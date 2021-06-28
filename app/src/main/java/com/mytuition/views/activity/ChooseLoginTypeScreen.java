@@ -1,6 +1,5 @@
 package com.mytuition.views.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,8 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.mytuition.R;
 import com.mytuition.databinding.ActivityChooseLoginTypeScreen2Binding;
 import com.mytuition.models.ParentModel;
@@ -50,22 +47,14 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
         super.onStart();
 
         loginTypeScreenBinding.getRoot().setAnimation(fadeIn(this));
-        loginTypeScreenBinding.btnLoginAsTeacher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        loginTypeScreenBinding.btnLoginAsTeacher.setOnClickListener(view -> {
 
-                showMsg();
-                // loginUi(LOGIN_TYPE_TEACHER);
-            }
+            showMsg();
+            // loginUi(LOGIN_TYPE_TEACHER);
         });
 
 
-        loginTypeScreenBinding.btnLoginAsParent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loginUi(LOGIN_TYPE_PARENT);
-            }
-        });
+        loginTypeScreenBinding.btnLoginAsParent.setOnClickListener(view -> loginUi(LOGIN_TYPE_PARENT));
     }
 
     public void showMsg() {
@@ -73,11 +62,7 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
         new AlertDialog.Builder(ChooseLoginTypeScreen.this)
                 .setTitle("Registration closed")
                 .setMessage("Registration for Teachers is temporarily closed.\nDrop your mail on \n'aamirr.1232@gmail.com'\n for any enquiry.")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }).show();
+                .setPositiveButton("OK", (dialog, id) -> dialog.cancel()).show();
     }
 
     private void loginUi(String loginType) {
@@ -128,14 +113,11 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
             getFirestoreReference().collection(USERS)
                     .document(getUid())
                     .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
-                            setParentModel(ChooseLoginTypeScreen.this, parentModel);
-                            startActivity(new Intent(ChooseLoginTypeScreen.this, ParentScreen.class));
-                            finish();
-                        }
+                    .addOnSuccessListener(documentSnapshot -> {
+                        ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
+                        setParentModel(ChooseLoginTypeScreen.this, parentModel);
+                        startActivity(new Intent(ChooseLoginTypeScreen.this, ParentScreen.class));
+                        finish();
                     });
     }
 

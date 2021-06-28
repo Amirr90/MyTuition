@@ -16,13 +16,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.mytuition.databinding.FragmentAllotTeacherBinding;
 import com.mytuition.databinding.UserListViewBinding;
@@ -70,15 +65,12 @@ public class AllotTeacherFragment extends Fragment {
             return;
 
         tuitionId = AllotTeacherFragmentArgs.fromBundle(getArguments()).getId();
-        binding.ivSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CharSequence text = Objects.requireNonNull(binding.nameMobile.getText()).toString().trim();
-                if (text.length() > 0)
-                    searchTeachers(text);
-                else
-                    Toast.makeText(requireActivity(), "Enter Name or number to search !!", Toast.LENGTH_SHORT).show();
-            }
+        binding.ivSearch.setOnClickListener(v -> {
+            CharSequence text = Objects.requireNonNull(binding.nameMobile.getText()).toString().trim();
+            if (text.length() > 0)
+                searchTeachers(text);
+            else
+                Toast.makeText(requireActivity(), "Enter Name or number to search !!", Toast.LENGTH_SHORT).show();
         });
 
         teacherModelList = new ArrayList<>();
@@ -98,20 +90,17 @@ public class AllotTeacherFragment extends Fragment {
                 .endAt(text + "\uf8ff");
 
 
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                AppUtils.hideDialog();
+        query.get().addOnCompleteListener(task -> {
+            AppUtils.hideDialog();
 
-                teacherModelList.clear();
-                for (DocumentSnapshot snapshot : task.getResult()) {
-                    TeacherModel model = snapshot.toObject(TeacherModel.class);
-                    teacherModelList.add(model);
-                    Log.d(TAG, "Added: " + model.getName());
-                }
-                adapter.notifyDataSetChanged();
-
+            teacherModelList.clear();
+            for (DocumentSnapshot snapshot : task.getResult()) {
+                TeacherModel model = snapshot.toObject(TeacherModel.class);
+                teacherModelList.add(model);
+                Log.d(TAG, "Added: " + model.getName());
             }
+            adapter.notifyDataSetChanged();
+
         });
 
     }
@@ -144,28 +133,22 @@ public class AllotTeacherFragment extends Fragment {
         public void onBindViewHolder(@NonNull TeacherAdapter.MyViewHolder holder, final int position) {
             holder.userListViewBinding.setTeacher(list.get(position));
 
-            holder.userListViewBinding.btnAllotTeacher.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String teacherId = list.get(position).getId();
-                    String name = list.get(position).getName();
-                    AllotTeacher(teacherId, name);
-                }
+            holder.userListViewBinding.btnAllotTeacher.setOnClickListener(v -> {
+                String teacherId = list.get(position).getId();
+                String name = list.get(position).getName();
+                AllotTeacher(teacherId, name);
             });
 
-            holder.userListViewBinding.mainLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Gson gson = new Gson();
-                    String jsonString = gson.toJson(list.get(position));
-                    try {
-                        JSONObject request = new JSONObject(jsonString);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("docModel", request.toString());
-                        ParentScreen.getInstance().navigate(R.id.action_allotTeacherFragment_to_teacherProfileFragment, bundle);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            holder.userListViewBinding.mainLayout.setOnClickListener(v -> {
+                Gson gson = new Gson();
+                String jsonString = gson.toJson(list.get(position));
+                try {
+                    JSONObject request = new JSONObject(jsonString);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("docModel", request.toString());
+                    ParentScreen.getInstance().navigate(R.id.action_allotTeacherFragment_to_teacherProfileFragment, bundle);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             });
         }
@@ -193,19 +176,13 @@ public class AllotTeacherFragment extends Fragment {
         AppUtils.showRequestDialog(requireActivity());
         AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
                 .document(tuitionId)
-                .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                AppUtils.hideDialog();
-                Toast.makeText(requireActivity(), "Teacher Allotted Successfully !!", Toast.LENGTH_SHORT).show();
-                navController.navigateUp();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                AppUtils.hideDialog();
-                Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                .update(map).addOnSuccessListener(aVoid -> {
+                    AppUtils.hideDialog();
+                    Toast.makeText(requireActivity(), "Teacher Allotted Successfully !!", Toast.LENGTH_SHORT).show();
+                    navController.navigateUp();
+                }).addOnFailureListener(e -> {
+                    AppUtils.hideDialog();
+                    Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
+                });
     }
 }

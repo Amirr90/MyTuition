@@ -14,21 +14,13 @@ public class TeacherProfile {
     public static void getProfile(final ApiInterface apiInterface) {
         if (null != getUid())
             AppUtils.getFirestoreReference().collection("Users").document(getUid())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (null == documentSnapshot)
-                        apiInterface.onFailed("User not found !!");
-                    else {
-                        apiInterface.onSuccess(documentSnapshot.toObject(TeacherModel.class));
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    apiInterface.onFailed(e.getLocalizedMessage());
-                }
-            });
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                        if (null == documentSnapshot)
+                            apiInterface.onFailed("User not found !!");
+                        else {
+                            apiInterface.onSuccess(documentSnapshot.toObject(TeacherModel.class));
+                        }
+                    }).addOnFailureListener(e -> apiInterface.onFailed(e.getLocalizedMessage()));
         else apiInterface.onFailed("User logged out !!");
 
     }

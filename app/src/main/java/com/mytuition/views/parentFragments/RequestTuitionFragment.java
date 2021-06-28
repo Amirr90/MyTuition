@@ -1,7 +1,6 @@
 package com.mytuition.views.parentFragments;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,14 +94,11 @@ public class RequestTuitionFragment extends Fragment {
 
         requestTuitionBinding.setParent(parentModel);
         timeSlot = getArguments().getString(TIME_SLOT);
-        requestTuitionBinding.btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (initReqModel()) {
-                    createTuitionReq();
-                } else
-                    Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
-            }
+        requestTuitionBinding.btnConfirm.setOnClickListener(view1 -> {
+            if (initReqModel()) {
+                createTuitionReq();
+            } else
+                Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -142,12 +138,7 @@ public class RequestTuitionFragment extends Fragment {
     private void showFailedDialog(String msg) {
         new AlertDialog.Builder(requireActivity()).setTitle("Failed to request Tuition")
                 .setMessage(msg)
-                .setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton("Dismiss", (dialog, which) -> dialog.dismiss())
                 .setCancelable(false)
                 .show();
     }

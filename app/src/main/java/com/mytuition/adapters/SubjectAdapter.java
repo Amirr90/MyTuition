@@ -44,16 +44,13 @@ public class SubjectAdapter extends ListAdapter<SpecialityModel, SubjectAdapter.
         holder.specialitiyViewBinding.setSubject(subjectModel);
 
 
-        holder.specialitiyViewBinding.llspeality.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // AddNewSpeciality(subjectModel);
-                AppUtils.hideSoftKeyboard(activity);
-                Bundle bundle = new Bundle();
-                bundle.putString(ID, String.valueOf(subjectModel.getId()));
-                bundle.putString(SPECIALITY, subjectModel.getName());
-                ParentScreen.getInstance().navigate(R.id.action_subjectListFragment_to_teachersListBySubjectFragment, bundle);
-            }
+        holder.specialitiyViewBinding.llspeality.setOnClickListener(v -> {
+           // AddNewSpeciality(subjectModel);
+            AppUtils.hideSoftKeyboard(activity);
+            Bundle bundle = new Bundle();
+            bundle.putString(ID, String.valueOf(subjectModel.getId()));
+            bundle.putString(SPECIALITY, subjectModel.getName());
+            ParentScreen.getInstance().navigate(R.id.action_subjectListFragment_to_teachersListBySubjectFragment, bundle);
         });
 
 
