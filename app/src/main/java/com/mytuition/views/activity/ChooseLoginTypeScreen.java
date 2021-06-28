@@ -49,8 +49,9 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
         loginTypeScreenBinding.getRoot().setAnimation(fadeIn(this));
         loginTypeScreenBinding.btnLoginAsTeacher.setOnClickListener(view -> {
 
-            showMsg();
-            // loginUi(LOGIN_TYPE_TEACHER);
+            //showMsg();
+            loginUi(LOGIN_TYPE_TEACHER);
+
         });
 
 
@@ -94,7 +95,7 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
                 Toast.makeText(ChooseLoginTypeScreen.this, "sign in successfully", Toast.LENGTH_SHORT).show();
                 setString(LOGIN_TYPE, loginType, ChooseLoginTypeScreen.this);
                 if (loginType.equalsIgnoreCase(LOGIN_TYPE_TEACHER)) {
-                    startActivity(new Intent(ChooseLoginTypeScreen.this, RegistrationActivity.class)
+                    startActivity(new Intent(ChooseLoginTypeScreen.this, TeacherScreen.class)
                             .putExtra(LOGIN_TYPE, loginType));
                     finish();
                 } else {
@@ -107,6 +108,8 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
             }
         }
     }
+
+    /*    startActivity(new Intent(this, TeacherSignUpActivity.class));*/
 
     private void updateParentModel() {
         if (null != getUid())

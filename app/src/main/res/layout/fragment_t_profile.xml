@@ -5,8 +5,10 @@
 
     <data>
 
-        <import type="com.google.firebase.auth.FirebaseAuth"/>
-        <import type="com.mytuition.utility.AppUtils"/>
+        <import type="com.google.firebase.auth.FirebaseAuth" />
+
+        <import type="com.mytuition.utility.AppUtils" />
+
         <variable
             name="teacherProfile"
             type="com.mytuition.models.TeacherModel" />
@@ -497,7 +499,7 @@
                                 android:layout_width="182dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/
-"
+ "
                                 android:gravity="center"
                                 android:text="Aadhar Front"
                                 android:textColor="@color/colorPrimary"
@@ -796,6 +798,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
 
+
                     <TextView
                         android:id="@+id/btnRegister"
                         style="@style/TextLabelDefault"
@@ -812,7 +815,7 @@
                         android:text="Register"
                         android:textColor="@color/colorWhite"
                         android:textSize="13sp"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

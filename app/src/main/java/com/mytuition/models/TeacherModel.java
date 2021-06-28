@@ -23,9 +23,25 @@ public class TeacherModel extends BaseObservable {
     private String about;
     private String phoneNumber;
     private Profile profile;
-
     private long timestamp;
 
+    @Override
+    public String toString() {
+        return "TeacherModel{" +
+                "academicInformation=" + academicInformation +
+                ", teachingProfile=" + teachingProfile +
+                ", speciality='" + speciality + '\'' +
+                ", isActive=" + isActive +
+                ", name='" + name + '\'' +
+                ", image='" + image + '\'' +
+                ", id='" + id + '\'' +
+                ", timeSlots=" + timeSlots +
+                ", about='" + about + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", profile=" + profile +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -275,7 +291,7 @@ public class TeacherModel extends BaseObservable {
 
         @Override
         public String toString() {
-            return "{" +
+            return "Profile{" +
                     "name='" + name + '\'' +
                     ", address='" + address + '\'' +
                     ", state='" + state + '\'' +
@@ -284,6 +300,7 @@ public class TeacherModel extends BaseObservable {
                     ", fatherName='" + fatherName + '\'' +
                     ", aadharFrontImage='" + aadharFrontImage + '\'' +
                     ", aadharBackImage='" + aadharBackImage + '\'' +
+                    ", verified=" + verified +
                     '}';
         }
 
@@ -364,22 +381,6 @@ public class TeacherModel extends BaseObservable {
             return oldItem.speciality.equalsIgnoreCase(newItem.speciality);
         }
     };
-
-    @Override
-    public String toString() {
-        return "{" +
-                "academicInformation=" + academicInformation +
-                ", teachingProfile=" + teachingProfile +
-                ", speciality='" + speciality + '\'' +
-                ", isActive=" + isActive +
-                ", name='" + name + '\'' +
-                ", image='" + image + '\'' +
-                ", id='" + id + '\'' +
-                ", timeSlots=" + timeSlots +
-                ", about='" + about + '\'' +
-                ", profile=" + profile +
-                '}';
-    }
 
     public static class TimeSlotModel {
 

@@ -257,16 +257,16 @@ public class TProfileFragment extends Fragment {
                     // for example a tool tip that gives user an idea of what he is selecting
                     // showToast("Just an example description.");
                 }).setPositiveButton("OK", (dialog, id) -> {
-                    String selectedIndex = "";
-                    for (Integer i : mSelectedItems) {
-                        selectedIndex += choices[i] + ", ";
-                    }
+            String selectedIndex = "";
+            for (Integer i : mSelectedItems) {
+                selectedIndex += choices[i] + ", ";
+            }
 
-                    String msg = ("Selected index: " + selectedIndex);
-                    binding.tvSelectedSubjects.setText(selectedIndex);
-                    Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+            String msg = ("Selected index: " + selectedIndex);
+            binding.tvSelectedSubjects.setText(selectedIndex);
+            Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
 
-                }).setNegativeButton("Cancel", (dialog, id) -> {
+        }).setNegativeButton("Cancel", (dialog, id) -> {
         }).show();
     }
 

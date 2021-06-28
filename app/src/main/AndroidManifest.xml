@@ -7,12 +7,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
 
     <application
         android:name=".utility.App"
@@ -23,6 +21,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".views.activity.TeacherSignUpActivity"
+            android:label="@string/title_activity_teacher_signup"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".views.activity.RegistrationActivity"
             android:theme="@style/AppTheme.NoToolbar" />
@@ -42,7 +44,6 @@
         </activity>
 
         <service android:name=".utility.GetAddressIntentService" />
-
         <service
             android:name=".notification.FirebaseMessageService"
             android:directBootAware="true"
@@ -55,7 +56,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

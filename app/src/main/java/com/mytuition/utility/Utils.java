@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
@@ -190,85 +187,6 @@ public class Utils {
         }
     }
 
-   /* public static TimeDemo timeSlots() {
-
-        int TIME_DURATION_IN_MINUTES = 60;
-        List<String> timeSlots = new ArrayList<>();
-        //String timeValue = "2021-01-16T18:37:04.899+05:30";
-        String timeValue = sdfFromTimeStamp("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Calendar startCalendar = Calendar.getInstance();
-            startCalendar.setTime(sdf.parse(timeValue));
-
-            if (startCalendar.get(Calendar.MINUTE) < TIME_DURATION_IN_MINUTES) {
-                startCalendar.set(Calendar.MINUTE, TIME_DURATION_IN_MINUTES);
-            } else {
-                startCalendar.add(Calendar.MINUTE, TIME_DURATION_IN_MINUTES); // overstep hour and clear minutes
-                startCalendar.clear(Calendar.MINUTE);
-            }
-
-            Calendar endCalendar = Calendar.getInstance();
-            endCalendar.setTime(startCalendar.getTime());
-
-            // if you want dates for whole next day, uncomment next line
-            endCalendar.add(Calendar.DAY_OF_YEAR, 1);
-            endCalendar.add(Calendar.HOUR_OF_DAY, 24 - startCalendar.get(Calendar.HOUR_OF_DAY));
-
-            endCalendar.clear(Calendar.MINUTE);
-            endCalendar.clear(Calendar.SECOND);
-            endCalendar.clear(Calendar.MILLISECOND);
-
-            SimpleDateFormat slotTime = new SimpleDateFormat("hh:mma");
-            SimpleDateFormat slotDate = new SimpleDateFormat(", dd/MM/yy");
-            while (endCalendar.after(startCalendar)) {
-                String slotStartTime = slotTime.format(startCalendar.getTime());
-                String slotStartDate = slotDate.format(startCalendar.getTime());
-
-                startCalendar.add(Calendar.MINUTE, TIME_DURATION_IN_MINUTES);
-                String slotEndTime = slotTime.format(startCalendar.getTime());
-
-                Log.d("DATE", slotStartTime + " - " + slotEndTime + slotStartDate);
-                timeSlots.add(slotStartTime + " - " + slotEndTime + slotStartDate);
-            }
-
-            return new TimeDemo(timeSlots);
-
-        } catch (ParseException e) {
-            return null;
-        }
-
-    }*/
-
- /*   public static TimeDemo timeSlots() throws ParseException {
-
-        int TIME_DURATION_IN_MINUTES = 60;
-        List<String> timeSlots = new ArrayList<>();
-        String firstDate = "26/02/2019";
-        String firstTime = "09:00 AM";
-        String secondDate = "26/02/2019";
-        String secondTime = "12:00 PM";
-
-        String format = "dd/MM/yyyy hh:mm a";
-
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
-
-        Date dateObj1 = sdf.parse(firstDate + " " + firstTime);
-        Date dateObj2 = sdf.parse(secondDate + " " + secondTime);
-        System.out.println("Date Start: " + dateObj1);
-        System.out.println("Date End: " + dateObj2);
-
-        long dif = dateObj1.getTime();
-        while (dif < dateObj2.getTime()) {
-            Date slot = new Date(dif);
-            System.out.println("Hour Slot --->" + slot);
-            dif += 3600000;
-            timeSlots.add("Hour Slot --->" + slot);
-        }
-
-        return new TimeDemo(timeSlots);
-    }*/
 
     public static void initializeSlots() {
         LocalTime time = LocalTime.of(9, 0);
@@ -332,5 +250,13 @@ public class Utils {
         String json = gson.toJson(myObject);
         prefsEditor.putString(PARENT, json);
         prefsEditor.commit();
+    }
+
+    public static String[] getCityList() {
+        return new String[]{"Lucknow", "Kanpur", "Sitapur", "Kakori"};
+    }
+
+    public static String[] getStateList() {
+        return new String[]{"Uttar Pradesh"};
     }
 }

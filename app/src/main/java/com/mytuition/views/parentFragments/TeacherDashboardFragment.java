@@ -54,7 +54,8 @@ public class TeacherDashboardFragment extends Fragment {
                 if (null != teacherModel) {
                     if (!teacherModel.getName().isEmpty()) {
                         Toast.makeText(requireActivity(), "incomplete profile !!", Toast.LENGTH_SHORT).show();
-                        navController.navigate(R.id.action_teacherDashboardFragment_to_TProfileFragment);
+                        //navController.navigate(R.id.action_teacherDashboardFragment_to_TProfileFragment);
+                        navController.navigate(R.id.action_teacherDashboardFragment_to_demoFragment);
                     }
                 }
 

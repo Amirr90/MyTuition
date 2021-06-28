@@ -159,4 +159,6 @@
     <string name="profile">profile</string>
     <string name="cancel">Cancel</string>
     <string name="highest_education">Highest Education</string>
+    <string name="title_activity_teacher_signup">ScrollingActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

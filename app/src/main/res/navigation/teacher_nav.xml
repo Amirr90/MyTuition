@@ -17,10 +17,18 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_teacherDashboardFragment_to_demoFragment"
+            app:destination="@id/demoFragment" />
     </fragment>
     <fragment
         android:id="@+id/TProfileFragment"
         android:name="com.mytuition.teacherView.TProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_t_profile" />
+    <fragment
+        android:id="@+id/demoFragment"
+        android:name="com.mytuition.DemoFragment"
+        android:label="fragment_demo"
+        tools:layout="@layout/fragment_demo" />
 </navigation>

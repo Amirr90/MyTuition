@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.google.firebase.auth.FirebaseAuth" />
+
+        <import type="com.mytuition.utility.AppUtils" />
+
+        <variable
+            name="teacherProfile"
+            type="com.mytuition.models.TeacherModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".teacherView.TProfileFragment">
+
+
+        <ImageView
+            android:id="@+id/ivLogin"
+            android:layout_width="@dimen/_170sdp"
+            android:layout_height="@dimen/_140sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:src="@drawable/ic_login_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tvWelcome"
+            style="@style/TextLabelDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="welcome"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/_18sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLogin" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="Manage your tuition and search more !!"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="Create Your account !!"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+
+        <TextView
+            android:id="@+id/textView34"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="Basic Information"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_20sdp"
+            android:paddingVertical="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView34">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="Name as on Aadhar Card"
+                app:counterEnabled="true"
+                app:counterMaxLength="25"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/ic_baseline_account_circle_24"
+                app:startIconTint="@color/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="26"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="father's Name as on Aadhar Card"
+                app:counterEnabled="true"
+                app:counterMaxLength="25"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/ic_baseline_account_circle_24"
+                app:startIconTint="@color/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="26"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="Contact number"
+                app:counterEnabled="true"
+                app:counterMaxLength="10"
+                app:endIconMode="clear_text"
+                app:prefixText="+91"
+                app:startIconDrawable="@drawable/ic_baseline_account_circle_24"
+                app:startIconTint="@color/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="Email"
+                app:counterEnabled="true"
+                app:counterMaxLength="26"
+                app:startIconDrawable="@drawable/ic_baseline_account_circle_24"
+                app:startIconTint="@color/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="26"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="Address"
+                app:counterEnabled="true"
+                app:counterMaxLength="60"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/ic_baseline_account_circle_24"
+                app:startIconTint="@color/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="60"
+                    android:singleLine="false" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="Land mark"
+                app:counterEnabled="true"
+                app:counterMaxLength="30"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/ic_baseline_account_circle_24"
+                app:startIconTint="@color/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="30"
+                    android:singleLine="false" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:hint="City"
+                app:startIconDrawable="@drawable/gender"
+                app:startIconTint="@color/colorPrimary">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:hint="State"
+                app:startIconDrawable="@drawable/gender"
+                app:startIconTint="@color/colorPrimary">
+
+                <AutoCompleteTextView
+                    android:id="@+id/editTextTextPersonGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
