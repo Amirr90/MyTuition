@@ -123,12 +123,25 @@ public class TProfileFragment extends Fragment {
                 List<String> uploadedImageUri = (List<String>) msg;
                 if (!uploadedImageUri.isEmpty()) {
                     TeacherModel.Profile profile = new TeacherModel.Profile();
+
                     profile.setAadharFrontImage(uploadedImageUri.get(0));
-                    profile.setAadharBackImage(uploadedImageUri.get(1));
+                    if (uploadedImageUri.size() > 1)
+                        profile.setAadharBackImage(uploadedImageUri.get(1));
                     teacherModel.setProfile(profile);
 
                 }
 
+                //Adding teaching subjects
+                TeacherModel.TeachingProfile teachingProfile = teacherModel.getTeachingProfile();
+                List<String> list = new ArrayList<>();
+                for (Integer index : mSelectedItems) {
+                    list.add(getAllSpeciality().get(index));
+                }
+                teachingProfile.setTeachingSubject(list);
+
+                teacherModel.setTeachingProfile(teachingProfile);
+
+                Log.d(TAG, "onSuccess: " + teachingProfile.getTeachingSubject());
                 AppUtils.updateTeacherProfile(teacherModel, new ApiInterface() {
                     @Override
                     public void onSuccess(Object obj) {
@@ -253,23 +266,21 @@ public class TProfileFragment extends Fragment {
                         mSelectedItems.remove(Integer.valueOf(which));
                     }
 
-                    // you can also add other codes here,
-                    // for example a tool tip that gives user an idea of what he is selecting
-                    // showToast("Just an example description.");
                 }).setPositiveButton("OK", (dialog, id) -> {
             String selectedIndex = "";
             for (Integer i : mSelectedItems) {
                 selectedIndex += choices[i] + ", ";
             }
 
+
             String msg = ("Selected index: " + selectedIndex);
             binding.tvSelectedSubjects.setText(selectedIndex);
+
             Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
 
         }).setNegativeButton("Cancel", (dialog, id) -> {
         }).show();
     }
-
 
     @Override
     public void onResume() {

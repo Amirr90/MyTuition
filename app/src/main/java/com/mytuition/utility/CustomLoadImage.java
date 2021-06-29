@@ -22,7 +22,7 @@ public class CustomLoadImage {
     public static void loadCustomTeacherImage(ImageView imageView, String imagePath) {
         if (null != imagePath && !imagePath.isEmpty()) {
             try {
-                Glide.with(ParentScreen.getInstance())
+                Glide.with(App.context)
                         .load(imagePath)
                         .centerCrop()
                         .placeholder(R.drawable.ic_launcher_background)
@@ -41,7 +41,7 @@ public class CustomLoadImage {
     public static void loadCustomClassImage(ImageView imageView, String imagePath) {
         if (null != imagePath && !imagePath.isEmpty()) {
             try {
-                Glide.with(ParentScreen.getInstance())
+                Glide.with(App.context)
                         .load(imagePath)
                         .centerCrop()
                         .placeholder(R.drawable.class_demo_image)
@@ -60,7 +60,7 @@ public class CustomLoadImage {
     public static void loadCustomParentImage(ImageView imageView, String imagePath) {
         if (null != imagePath && !imagePath.isEmpty()) {
             try {
-                Glide.with(ParentScreen.getInstance())
+                Glide.with(App.context)
                         .load(imagePath)
                         .centerCrop()
                         .placeholder(R.drawable.profile_demo_image)
@@ -89,6 +89,25 @@ public class CustomLoadImage {
                 e.printStackTrace();
                 Log.d(TAG, "loadImage: " + e.getLocalizedMessage());
                 imageView.setImageResource(R.drawable.ic_launcher_foreground);
+            }
+        }
+
+    }
+
+    @BindingAdapter("android:loadCustomAadharImage")
+    public static void loadCustomAadharImage(ImageView imageView, String imagePath) {
+        if (null != imagePath && !imagePath.isEmpty()) {
+            try {
+                Glide.with(App.context)
+                        .load(imagePath)
+                        .centerCrop()
+                        .placeholder(R.drawable.capture_image_icon)
+                        .into(imageView);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "loadImage: " + e.getLocalizedMessage());
+                imageView.setImageResource(R.drawable.capture_image_icon);
             }
         }
 

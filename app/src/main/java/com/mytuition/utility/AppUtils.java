@@ -3,7 +3,6 @@ package com.mytuition.utility;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,19 +22,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
@@ -82,6 +75,8 @@ public class AppUtils {
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+    public static String Teachers = "Teachers";
+    public static String Users = "Users";
     static ProgressDialog progressDialog;
 
     public static final String MY_PREFS_NAME = "myPref";
@@ -102,6 +97,7 @@ public class AppUtils {
         speciality.add("All Subject");
         return speciality;
     }
+
 
     public static String getMimeType(Context context, Uri uri) {
         String mimeType = null;
@@ -254,8 +250,12 @@ public class AppUtils {
 
     public static void updateTeacherProfile(TeacherModel teacherModel, final ApiInterface apiInterface) {
         Log.d(TAG, "getUid: " + getUid());
-        getFirestoreReference().collection("Users").document(getUid()).update(getTeacherProfileMap(teacherModel))
-                .addOnSuccessListener(aVoid -> apiInterface.onSuccess("Profile Updated Successfully !!")).addOnFailureListener(e -> {
+        getFirestoreReference()
+                .collection("Teachers")
+                .document(getUid())
+                .update(getTeacherProfileMap(teacherModel))
+                .addOnSuccessListener(aVoid -> apiInterface.onSuccess("Profile Updated Successfully !!"))
+                .addOnFailureListener(e -> {
                     apiInterface.onFailed("failed to upload Image, try again !!");
                     Log.d(TAG, "onFailureUpdateProfile: " + e.getLocalizedMessage());
                 }).addOnCanceledListener(() -> apiInterface.onFailed("cancel to update profile, try again !!"));
@@ -265,6 +265,18 @@ public class AppUtils {
         Map<String, Object> map = new HashMap<>();
         map.put("image", teacherModel.getImage());
         map.put("name", teacherModel.getName());
+        map.put("id", teacherModel.getId());
+        map.put("isActive", teacherModel.isActive());
+        map.put("speciality", teacherModel.getSpeciality());
+        map.put("about", teacherModel.getAbout());
+        map.put("isProfileFilled", true);
+        map.put("phoneNumber", getMobileNumber());
+        map.put("timestamp", System.currentTimeMillis());
+        map.put("academicInformation", teacherModel.getAcademicInformation());
+        map.put("profile", teacherModel.getProfile());
+        map.put("teachingProfile", teacherModel.getTeachingProfile());
+        map.put("timeSlots", teacherModel.getTimeSlots());
+
       /*  map.put("fatherName", teacherModel.getFatherName());
         map.put("email", teacherModel.getEmail());
         map.put("experience", teacherModel.getExperience());
@@ -701,7 +713,7 @@ public class AppUtils {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (null != user)
             return user.getUid();
-        else return null;
+        else return "";
     }
 
     public static String getMobileNumber() {

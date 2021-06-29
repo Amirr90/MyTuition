@@ -167,20 +167,18 @@
                         android:gravity="center_vertical"
                         android:hint="Contact number"
                         app:counterEnabled="true"
-                        app:counterMaxLength="10"
-                        app:endIconMode="clear_text"
-                        app:prefixText="+91"
+                        app:counterMaxLength="13"
                         app:startIconDrawable="@drawable/ic_baseline_call_24"
                         app:startIconTint="@color/colorPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
-                            android:inputType="numberDecimal"
-                            android:maxLength="10"
-                            android:singleLine="true"
-                            android:text="@{teacherProfile.phoneNumber}" />
+                            android:inputType="phone"
+                            android:maxLength="13"
+                            android:singleLine="true" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -200,7 +198,7 @@
                             android:inputType="textEmailAddress"
                             android:maxLength="26"
                             android:singleLine="true"
-                            android:text="@={teacherProfile.profile.address}" />
+                            android:text="@={teacherProfile.profile.email}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -242,7 +240,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLength="30"
-                            android:singleLine="false" />
+                            android:singleLine="false"
+                            android:text="@={teacherProfile.profile.landMark}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -321,7 +320,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:inputType="none" />
+                            android:inputType="none"
+                            android:text="@={teacherProfile.academicInformation.highestEducation}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -342,7 +342,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLength="60"
-                            android:singleLine="true" />
+                            android:singleLine="true"
+                            android:text="@={teacherProfile.academicInformation.schoolName}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -363,7 +364,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLength="60"
-                            android:singleLine="false" />
+                            android:singleLine="false"
+                            android:text="@={teacherProfile.academicInformation.otherCertificate}" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
@@ -421,7 +423,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:inputType="none" />
+                            android:inputType="none"
+                            android:text="@={teacherProfile.teachingProfile.expertIn}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -439,7 +442,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:inputType="none" />
+                            android:inputType="none"
+                            android:text="@={teacherProfile.teachingProfile.monthlyFee}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -457,7 +461,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:inputType="none" />
+                            android:inputType="none"
+                            android:text="@={teacherProfile.teachingProfile.perVisitFee}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -475,7 +480,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:inputType="none" />
+                            android:inputType="none"
+                            android:text="@={teacherProfile.teachingProfile.experience}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -546,6 +552,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:contentDescription="TODO"
+                                android:loadCustomAadharImage="@{teacherProfile.profile.aadharFrontImage}"
                                 android:scaleType="centerCrop"
                                 android:src="@drawable/capture_image_icon" />
                         </androidx.cardview.widget.CardView>
@@ -579,6 +586,7 @@
 
 
                         <androidx.cardview.widget.CardView
+
                             android:layout_width="272dp"
                             android:layout_height="123dp"
                             android:layout_marginStart="8dp"
@@ -596,6 +604,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:contentDescription="TODO"
+                                android:loadCustomAadharImage="@{teacherProfile.profile.aadharBackImage}"
                                 android:scaleType="centerCrop"
                                 android:src="@drawable/capture_image_icon" />
                         </androidx.cardview.widget.CardView>

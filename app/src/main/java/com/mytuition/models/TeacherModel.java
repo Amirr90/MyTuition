@@ -2,9 +2,12 @@ package com.mytuition.models;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class TeacherModel extends BaseObservable {
 
@@ -16,6 +19,7 @@ public class TeacherModel extends BaseObservable {
     private TeachingProfile teachingProfile;
     private String speciality;
     private boolean isActive;
+    private boolean isProfileFilled;
     private String name;
     private String image;
     private String id;
@@ -32,6 +36,7 @@ public class TeacherModel extends BaseObservable {
                 ", teachingProfile=" + teachingProfile +
                 ", speciality='" + speciality + '\'' +
                 ", isActive=" + isActive +
+                ", isProfileFilled=" + isProfileFilled +
                 ", name='" + name + '\'' +
                 ", image='" + image + '\'' +
                 ", id='" + id + '\'' +
@@ -43,6 +48,15 @@ public class TeacherModel extends BaseObservable {
                 '}';
     }
 
+    public boolean isProfileFilled() {
+        return isProfileFilled;
+    }
+
+    public void setProfileFilled(boolean profileFilled) {
+        isProfileFilled = profileFilled;
+    }
+
+    @Bindable
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -148,6 +162,19 @@ public class TeacherModel extends BaseObservable {
         private String schoolName;
         private String scoreClassX;
         private String highestEducation;
+        private String otherCertificate;
+
+        @Inject
+        public AcademicInformation() {
+        }
+
+        public String getOtherCertificate() {
+            return otherCertificate;
+        }
+
+        public void setOtherCertificate(String otherCertificate) {
+            this.otherCertificate = otherCertificate;
+        }
 
         public void setCollegeName(String collegeName) {
             this.collegeName = collegeName;
@@ -207,7 +234,7 @@ public class TeacherModel extends BaseObservable {
 
         @Override
         public String toString() {
-            return "{" +
+            return "AcademicInformation{" +
                     "collegeName='" + collegeName + '\'' +
                     ", graduation='" + graduation + '\'' +
                     ", scoreClassXII='" + scoreClassXII + '\'' +
@@ -215,19 +242,57 @@ public class TeacherModel extends BaseObservable {
                     ", schoolName='" + schoolName + '\'' +
                     ", scoreClassX='" + scoreClassX + '\'' +
                     ", highestEducation='" + highestEducation + '\'' +
+                    ", otherCertificate='" + otherCertificate + '\'' +
                     '}';
         }
     }
 
     public static class TeachingProfile {
         public List<String> teachingSubject;
-        public long perVisitFee;
-        public long monthlyFee;
+        public String perVisitFee;
+        public String monthlyFee;
         public long tuitions;
         public String expertIn;
         public String experience;
         public String tuitionHours;
         public Boolean demoClass;
+
+
+        @Inject
+        public TeachingProfile() {
+        }
+
+        public void setTeachingSubject(List<String> teachingSubject) {
+            this.teachingSubject = teachingSubject;
+        }
+
+        public void setPerVisitFee(String perVisitFee) {
+            this.perVisitFee = perVisitFee;
+        }
+
+        public void setMonthlyFee(String monthlyFee) {
+            this.monthlyFee = monthlyFee;
+        }
+
+        public void setTuitions(long tuitions) {
+            this.tuitions = tuitions;
+        }
+
+        public void setExpertIn(String expertIn) {
+            this.expertIn = expertIn;
+        }
+
+        public void setExperience(String experience) {
+            this.experience = experience;
+        }
+
+        public void setTuitionHours(String tuitionHours) {
+            this.tuitionHours = tuitionHours;
+        }
+
+        public void setDemoClass(Boolean demoClass) {
+            this.demoClass = demoClass;
+        }
 
         public long getTuitions() {
             return tuitions;
@@ -245,11 +310,11 @@ public class TeacherModel extends BaseObservable {
             return demoClass;
         }
 
-        public long getPerVisitFee() {
+        public String getPerVisitFee() {
             return perVisitFee;
         }
 
-        public long getMonthlyFee() {
+        public String getMonthlyFee() {
             return monthlyFee;
         }
 
@@ -263,12 +328,14 @@ public class TeacherModel extends BaseObservable {
 
         @Override
         public String toString() {
-            return "{" +
+            return "TeachingProfile{" +
                     "teachingSubject=" + teachingSubject +
-                    ", perVisitFee=" + perVisitFee +
-                    ", monthlyFee=" + monthlyFee +
+                    ", perVisitFee='" + perVisitFee + '\'' +
+                    ", monthlyFee='" + monthlyFee + '\'' +
+                    ", tuitions=" + tuitions +
                     ", expertIn='" + expertIn + '\'' +
                     ", experience='" + experience + '\'' +
+                    ", tuitionHours='" + tuitionHours + '\'' +
                     ", demoClass=" + demoClass +
                     '}';
         }
@@ -276,7 +343,9 @@ public class TeacherModel extends BaseObservable {
 
     public static class Profile {
         public String name;
+        public String email;
         public String address;
+        public String landMark;
         public String state;
         public String mobile;
         public String city;
@@ -285,15 +354,41 @@ public class TeacherModel extends BaseObservable {
         public String aadharBackImage;
         public Boolean verified;
 
+
+        @Inject
+        public Profile() {
+        }
+
+        public String getLandMark() {
+            return landMark;
+        }
+
+        public void setLandMark(String landMark) {
+            this.landMark = landMark;
+
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+
+        }
+
         public Boolean getVerified() {
             return verified;
         }
+
 
         @Override
         public String toString() {
             return "Profile{" +
                     "name='" + name + '\'' +
+                    ", email='" + email + '\'' +
                     ", address='" + address + '\'' +
+                    ", landMark='" + landMark + '\'' +
                     ", state='" + state + '\'' +
                     ", mobile='" + mobile + '\'' +
                     ", city='" + city + '\'' +
@@ -310,10 +405,12 @@ public class TeacherModel extends BaseObservable {
 
         public void setAddress(String address) {
             this.address = address;
+
         }
 
         public void setState(String state) {
             this.state = state;
+            // notifyPropertyChanged(BR.sta);
         }
 
         public void setMobile(String mobile) {

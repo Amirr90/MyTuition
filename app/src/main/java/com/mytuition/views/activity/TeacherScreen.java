@@ -13,7 +13,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.firebase.ui.auth.AuthUI;
 import com.mytuition.R;
+import com.mytuition.component.AppComponent;
 import com.mytuition.databinding.ActivityTeacherScreenBinding;
+import com.mytuition.utility.App;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.SplashScreen;
 
@@ -34,7 +36,13 @@ public class TeacherScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         instance = this;
+        initDependency();
         teacherScreenBinding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_screen);
+    }
+
+    private void initDependency() {
+        AppComponent appComponent = ((App) getApplication()).getAppComponent();
+        appComponent.inject(this);
     }
 
     @Override

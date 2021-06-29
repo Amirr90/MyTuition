@@ -1,5 +1,9 @@
 package com.mytuition;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,26 +16,44 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.gson.Gson;
 import com.mytuition.databinding.FragmentDemoBinding;
+import com.mytuition.interfaces.ApiInterface;
+import com.mytuition.interfaces.UploadImageInterface;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.AppUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
+import static android.app.Activity.RESULT_OK;
 import static com.mytuition.utility.AppUtils.getAllSpeciality;
+import static com.mytuition.utility.AppUtils.getMobileNumber;
+import static com.mytuition.utility.AppUtils.hideDialog;
 import static com.mytuition.utility.Utils.getCityList;
 import static com.mytuition.utility.Utils.getStateList;
 
 public class DemoFragment extends Fragment {
     private static final String TAG = "DemoFragment";
+    private static final int REQUEST_CODE_FRONT_IMAGE = 11;
+    private static final int REQUEST_CODE_BACK_IMAGE = 12;
 
     FragmentDemoBinding binding;
     List<Integer> mSelectedItems;
     String higherEducation, frontImageUrl, backImageUrl;
+
     TeacherModel teacherModel;
+
+    boolean[] listSelected;
+    NavController navController;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -45,24 +67,144 @@ public class DemoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        teacherModel = new TeacherModel();
-       /* if (null != FirebaseAuth.getInstance().getCurrentUser())
-            teacherModel.setMobile(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());*/
-        binding.setTeacherProfile(teacherModel);
+        navController = Navigation.findNavController(view);
 
-        settingDropDownAdapters();
+
+        mSelectedItems = new ArrayList<>();
+
+        listSelected = getSelectedItemsList();
+        if (null == getArguments())
+            navController.navigateUp();
+
+        getTeacherProfile();
 
 
         binding.btnSubmit.setOnClickListener(v -> {
             Log.d(TAG, "onSubmitBtn Clicked !! : " + binding.getTeacherProfile().toString());
+            if (allFieldIsFilled()) {
+                uploadImage();
+            }
         });
 
+        binding.tvSelectedSubjectsLayout.setEndIconOnClickListener(view2 -> {
+            showAllSubjectDialog();
+        });
+
+        binding.ivAadharFront.setOnClickListener(v -> selectImage(REQUEST_CODE_FRONT_IMAGE));
+        binding.ivAadharBack.setOnClickListener(v -> selectImage(REQUEST_CODE_BACK_IMAGE));
+    }
+
+
+    private void getTeacherProfile() {
+        teacherModel = new TeacherModel();
+        teacherModel.setProfile(new TeacherModel.Profile());
+        teacherModel.setAcademicInformation(new TeacherModel.AcademicInformation());
+        teacherModel.setTeachingProfile(new TeacherModel.TeachingProfile());
+
+
+        Gson gson = new Gson();
+        teacherModel = gson.fromJson(getArguments().getString("teacherModel"), TeacherModel.class);
+
+        if (null != teacherModel) {
+            binding.setTeacherProfile(teacherModel);
+            List<String> selectedSubjects = teacherModel.getTeachingProfile().getTeachingSubject();
+            Log.d(TAG, "getTeacherProfile: " + selectedSubjects);
+            String selectedIndex = "";
+
+            for (int a = 0; a < selectedSubjects.size(); a++) {
+                selectedIndex += selectedSubjects.get(a) + ", ";
+
+                for (int b = 0; b < getAllSpeciality().size(); b++) {
+                    if (getAllSpeciality().get(b).equalsIgnoreCase(selectedSubjects.get(a))) {
+                        mSelectedItems.add(b);
+                        listSelected[b] = true;
+                        Log.d(TAG, "getTeacherProfile: " + getAllSpeciality().get(b));
+                    }
+                }
+
+            }
+
+            binding.tvSelectedSubjects.setText(selectedIndex);
+        }
+        binding.etNumber.setText(getMobileNumber());
+        binding.setTeacherProfile(teacherModel);
+        settingDropDownAdapters();
+    }
+
+    private boolean allFieldIsFilled() {
+        teacherModel = binding.getTeacherProfile();
+        /*if (null == teacherModel.getName() || teacherModel.getName().isEmpty()) {
+            Toast.makeText(requireActivity(), "Name required !!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (null == teacherModel.getFatherName() || teacherModel.getFatherName().isEmpty()) {
+            Toast.makeText(requireActivity(), "Father's name required !!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (null == teacherModel.getEmail() || teacherModel.getEmail().isEmpty()) {
+            Toast.makeText(requireActivity(), "email required !!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (null == teacherModel.getAddress() || teacherModel.getAddress().isEmpty()) {
+            Toast.makeText(requireActivity(), "Address required !!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (null == teacherModel.getLandMark() || teacherModel.getLandMark().isEmpty()) {
+            Toast.makeText(requireActivity(), "landMark required !!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (null == teacherModel.getCity() || teacherModel.getCity().isEmpty()) {
+            Toast.makeText(requireActivity(), "city required !!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (null == teacherModel.getState() || teacherModel.getState().isEmpty()) {
+            Toast.makeText(requireActivity(), "State required !!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (null == higherEducation || higherEducation.isEmpty()) {
+            Toast.makeText(requireActivity(), "highest education required !!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (null == frontImageUrl || frontImageUrl.isEmpty()) {
+            Toast.makeText(requireActivity(), "Select Aadhar's front Image!!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (null == backImageUrl || backImageUrl.isEmpty()) {
+            Toast.makeText(requireActivity(), "Select Aadhar's back image !!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (null == teacherModel.getSchoolName() || teacherModel.getSchoolName().isEmpty()) {
+            Toast.makeText(requireActivity(), "School/College Name required !!", Toast.LENGTH_SHORT).show();
+            return false;
+        }*/
+        return true;
+    }
+
+
+    private void selectImage(int tag) {
+        ImagePicker.Companion.with(this)
+                .crop(4f, 4f)
+                .compress(256)
+                .maxResultSize(540, 540)
+                .start(tag);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_FRONT_IMAGE: {
+                    Uri uri = data.getData();
+                    binding.ivAadharFront.setImageURI(uri);
+                    frontImageUrl = uri.toString();
+                    Log.d(TAG, "onActivityResult: FrontUri" + data.getData());
+                    break;
+                }
+                case REQUEST_CODE_BACK_IMAGE: {
+                    Uri uri = data.getData();
+                    binding.ivAadharBack.setImageURI(uri);
+                    backImageUrl = uri.toString();
+                    Log.d(TAG, "onActivityResult: BackUri" + data.getData());
+                    break;
+                }
+            }
+        }
     }
 
     private void settingDropDownAdapters() {
         //city Adapter
-
-        Log.d(TAG, "settingDropDownAdapters: " + teacherModel.toString());
         ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, getCityList());
         binding.etCity.setAdapter(cityAdapter);
 
@@ -100,12 +242,6 @@ public class DemoFragment extends Fragment {
         binding.etSpecialistIn.setAdapter(adapter);
 
 
-        binding.tvSelectedSubjectsLayout.setOnClickListener(view -> {
-            showAllSubjectDialog();
-
-        });
-
-
         if (null != teacherModel.getProfile() && null != teacherModel.getAcademicInformation() && null != teacherModel.getProfile())
             settingData();
     }
@@ -121,7 +257,7 @@ public class DemoFragment extends Fragment {
     }
 
     private void showAllSubjectDialog() {
-        mSelectedItems = new ArrayList<>();
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
@@ -129,7 +265,7 @@ public class DemoFragment extends Fragment {
         for (int a = 0; a < getAllSpeciality().size(); a++)
             choices[a] = getAllSpeciality().get(a);
         builder.setTitle("Choose One or More")
-                .setMultiChoiceItems(choices, null, (dialog, which, isChecked) -> {
+                .setMultiChoiceItems(choices, listSelected, (dialog, which, isChecked) -> {
                     if (isChecked) {
                         mSelectedItems.add(which);
                     } else if (mSelectedItems.contains(which)) {
@@ -148,4 +284,69 @@ public class DemoFragment extends Fragment {
         }).setNegativeButton("Cancel", (dialog, id) -> {
         }).show();
     }
+
+    private boolean[] getSelectedItemsList() {
+        boolean[] booleanList = new boolean[getAllSpeciality().size()];
+        for (int a = 0; a < getAllSpeciality().size(); a++) {
+            booleanList[a] = false;
+        }
+        return booleanList;
+    }
+
+    private void uploadImage() {
+        AppUtils.showRequestDialog(requireActivity());
+        List<Bitmap> imageUri = new ArrayList<>();
+        imageUri.add(((BitmapDrawable) binding.ivAadharFront.getDrawable()).getBitmap());
+        imageUri.add(((BitmapDrawable) binding.ivAadharBack.getDrawable()).getBitmap());
+        AppUtils.uploadImages(imageUri, new UploadImageInterface() {
+            @Override
+            public void onSuccess(Object msg) {
+                List<String> uploadedImageUri = (List<String>) msg;
+                if (!uploadedImageUri.isEmpty()) {
+                    Log.d(TAG, "onSuccess: " + uploadedImageUri.toString());
+                    TeacherModel.Profile profile = binding.getTeacherProfile().getProfile();
+                    profile.setAadharFrontImage(uploadedImageUri.get(0));
+                    if (uploadedImageUri.size() > 1)
+                        profile.setAadharBackImage(uploadedImageUri.get(1));
+                    teacherModel.setProfile(profile);
+
+                }
+
+
+                //Adding teaching subjects
+                TeacherModel.TeachingProfile teachingProfile = teacherModel.getTeachingProfile();
+                List<String> list = new ArrayList<>();
+                for (Integer index : mSelectedItems) {
+                    list.add(getAllSpeciality().get(index));
+                }
+                teachingProfile.setTeachingSubject(list);
+
+                teacherModel.setTeachingProfile(teachingProfile);
+
+                AppUtils.updateTeacherProfile(teacherModel, new ApiInterface() {
+                    @Override
+                    public void onSuccess(Object obj) {
+                        hideDialog();
+                        Toasty.success(requireActivity(), (String) obj, Toast.LENGTH_SHORT).show();
+                        navController.navigate(R.id.teacherTimeSlotsFragment);
+                    }
+
+                    @Override
+                    public void onFailed(String msg) {
+                        hideDialog();
+                        Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed(String msg) {
+
+                hideDialog();
+                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
 }

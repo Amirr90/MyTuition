@@ -1,6 +1,7 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,11 @@ import com.mytuition.utility.TeacherProfile;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.mytuition.utility.AppUtils.getJSONFromModel;
+
 
 public class TeacherDashboardFragment extends Fragment {
+    private static final String TAG = "TeacherDashboardFragmen";
 
 
     FragmentTeacherDashboardBinding binding;
@@ -52,11 +56,17 @@ public class TeacherDashboardFragment extends Fragment {
                 AppUtils.hideDialog();
                 TeacherModel teacherModel = (TeacherModel) obj;
                 if (null != teacherModel) {
-                    if (!teacherModel.getName().isEmpty()) {
+
+                    Log.d(TAG, "onSuccess: " + teacherModel.toString());
+                    /*if (!teacherModel.isProfileFilled()) {
                         Toast.makeText(requireActivity(), "incomplete profile !!", Toast.LENGTH_SHORT).show();
                         //navController.navigate(R.id.action_teacherDashboardFragment_to_TProfileFragment);
-                        navController.navigate(R.id.action_teacherDashboardFragment_to_demoFragment);
-                    }
+                        String model = getJSONFromModel(teacherModel);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("teacherModel", model);
+                        navController.navigate(R.id.action_teacherDashboardFragment_to_demoFragment, bundle);
+                    }*/
+                    navController.navigate(R.id.teacherTimeSlotsFragment);
                 }
 
             }
