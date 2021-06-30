@@ -46,7 +46,12 @@ public class TimeSlotsAdapter extends RecyclerView.Adapter<TimeSlotsAdapter.Slot
 
         holder.primaryNewBinding.setTiming(timeSlotsModel);
         if (null != timeSlotsModel.getType()) {
-            adapterSecondary = new TimeSlotsAdapterSecondary(timeSlotsModel.getSlots(), o -> adapterInterface.onItemClicked(o));
+            adapterSecondary = new TimeSlotsAdapterSecondary(timeSlotsModel.getSlots(), new AdapterInterface() {
+                @Override
+                public void onItemClicked(Object o) {
+                    adapterInterface.onItemClicked(o);
+                }
+            });
             holder.primaryNewBinding.Rec.setAdapter(adapterSecondary);
             holder.primaryNewBinding.getRoot().setAnimation(fadeIn(ParentScreen.getInstance()));
         }

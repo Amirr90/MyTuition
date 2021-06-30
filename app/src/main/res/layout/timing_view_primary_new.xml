@@ -29,6 +29,7 @@
                 android:drawablePadding="@dimen/_10sdp"
                 android:drawableTint="@color/yellow"
                 android:paddingLeft="@dimen/_5sdp"
+
                 android:paddingTop="@dimen/_5sdp"
                 android:paddingRight="@dimen/_5sdp"
                 android:text="@{timing.type}"

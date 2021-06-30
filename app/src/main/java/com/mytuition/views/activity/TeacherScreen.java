@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,10 +18,13 @@ import com.mytuition.utility.App;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.SplashScreen;
 
+import dagger.android.AndroidInjection;
+import dagger.android.support.DaggerAppCompatActivity;
+
 import static com.mytuition.utility.AppUtils.hideDialog;
 import static com.mytuition.utility.AppUtils.hideToolbar;
 
-public class TeacherScreen extends AppCompatActivity {
+public class TeacherScreen extends DaggerAppCompatActivity {
 
     ActivityTeacherScreenBinding teacherScreenBinding;
     NavController navController;
@@ -34,9 +36,10 @@ public class TeacherScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         instance = this;
-        initDependency();
+        //initDependency();
         teacherScreenBinding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_screen);
     }
 

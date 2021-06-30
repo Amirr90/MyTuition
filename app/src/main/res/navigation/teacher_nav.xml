@@ -42,6 +42,6 @@
     <fragment
         android:id="@+id/teacherTimeSlotsFragment"
         android:name="com.mytuition.TeacherTimeSlotsFragment"
-        android:label="fragment_teacher_time_slots"
+        android:label="Time Slots"
         tools:layout="@layout/fragment_teacher_time_slots" />
 </navigation>

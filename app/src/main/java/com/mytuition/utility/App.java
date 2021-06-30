@@ -1,12 +1,12 @@
 package com.mytuition.utility;
 
-import android.app.Application;
-
 import com.mytuition.component.AppComponent;
 import com.mytuition.component.DaggerAppComponent;
-import com.mytuition.module.TeacherModule;
 
-public class App extends Application {
+import dagger.android.AndroidInjector;
+import dagger.android.support.DaggerApplication;
+
+public class App extends DaggerApplication {
 
     public static App context;
     AppComponent appComponent;
@@ -14,15 +14,15 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        appComponent = DaggerAppComponent.builder()
-                .teacherModule(new TeacherModule())
-                .build();
-
         context = this;
     }
 
     public AppComponent getAppComponent() {
         return appComponent;
+    }
+
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder().application(this).build();
     }
 }

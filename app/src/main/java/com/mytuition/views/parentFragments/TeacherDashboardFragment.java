@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -22,10 +21,10 @@ import com.mytuition.utility.TeacherProfile;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.mytuition.utility.AppUtils.getJSONFromModel;
+import dagger.android.support.DaggerFragment;
 
 
-public class TeacherDashboardFragment extends Fragment {
+public class TeacherDashboardFragment extends DaggerFragment {
     private static final String TAG = "TeacherDashboardFragmen";
 
 

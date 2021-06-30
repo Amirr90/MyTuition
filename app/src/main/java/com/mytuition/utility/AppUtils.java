@@ -506,6 +506,10 @@ public class AppUtils {
         return AnimationUtils.loadAnimation(activity, R.anim.fade_in);
     }
 
+    public static Animation fadeIn(Context activity) {
+        return AnimationUtils.loadAnimation(activity, R.anim.fade_in);
+    }
+
     public static Animation fadeOut(Activity activity) {
         return AnimationUtils.loadAnimation(activity, R.anim.fade_out);
     }
