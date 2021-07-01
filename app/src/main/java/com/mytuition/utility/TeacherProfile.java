@@ -1,7 +1,5 @@
 package com.mytuition.utility;
 
-import android.util.Log;
-
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.models.TeacherModel;
 

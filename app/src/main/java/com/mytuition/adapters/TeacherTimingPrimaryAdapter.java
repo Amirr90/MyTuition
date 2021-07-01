@@ -17,6 +17,8 @@ import com.mytuition.interfaces.TeacherTimingInterface;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.App;
 
+import java.util.List;
+
 import static com.mytuition.utility.AppUtils.fadeIn;
 
 public class TeacherTimingPrimaryAdapter extends ListAdapter<TeacherModel.TimeSlotModel, TeacherTimingPrimaryAdapter.TeacherVH> {

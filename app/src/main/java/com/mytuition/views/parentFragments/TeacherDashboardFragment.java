@@ -57,7 +57,7 @@ public class TeacherDashboardFragment extends DaggerFragment {
                 if (null != teacherModel) {
 
                     Log.d(TAG, "onSuccess: " + teacherModel.toString());
-                    /*if (!teacherModel.isProfileFilled()) {
+                    /*if (teacherModel.isProfileFilled()) {
                         Toast.makeText(requireActivity(), "incomplete profile !!", Toast.LENGTH_SHORT).show();
                         //navController.navigate(R.id.action_teacherDashboardFragment_to_TProfileFragment);
                         String model = getJSONFromModel(teacherModel);

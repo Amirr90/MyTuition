@@ -30,13 +30,17 @@ import com.mytuition.utility.AppUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
 import static android.app.Activity.RESULT_OK;
 import static com.mytuition.utility.AppUtils.getAllSpeciality;
 import static com.mytuition.utility.AppUtils.getMobileNumber;
+import static com.mytuition.utility.AppUtils.getSlots;
+import static com.mytuition.utility.AppUtils.getSlotsType;
 import static com.mytuition.utility.AppUtils.hideDialog;
 import static com.mytuition.utility.Utils.getCityList;
 import static com.mytuition.utility.Utils.getStateList;
@@ -322,6 +326,10 @@ public class DemoFragment extends Fragment {
                 teachingProfile.setTeachingSubject(list);
 
                 teacherModel.setTeachingProfile(teachingProfile);
+
+
+
+
 
                 AppUtils.updateTeacherProfile(teacherModel, new ApiInterface() {
                     @Override

@@ -43,5 +43,18 @@
         android:id="@+id/teacherTimeSlotsFragment"
         android:name="com.mytuition.TeacherTimeSlotsFragment"
         android:label="Time Slots"
-        tools:layout="@layout/fragment_teacher_time_slots" />
+        tools:layout="@layout/fragment_teacher_time_slots" >
+        <action
+            android:id="@+id/action_teacherTimeSlotsFragment_to_addNewSlotsFragment"
+            app:destination="@id/addNewSlotsFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+    <dialog
+        android:id="@+id/addNewSlotsFragment"
+        android:name="com.mytuition.AddNewSlotsFragment"
+        android:label="Add New Slots"
+        tools:layout="@layout/fragment_add_new_slots" />
 </navigation>

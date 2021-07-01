@@ -240,10 +240,14 @@ public class AppUtils {
         Gson gson = new Gson();
         String jsonString = gson.toJson(o);
         try {
+            //final JSONObject emptyJsonObject = new JSONObject("{}");
+
             JSONObject request = new JSONObject(jsonString);
+            //emptyJsonObject.getJSONObject(jsonString);
             return request.toString();
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.d(TAG, "getJSONFromModel: errorMsg " + e.getMessage());
             return "";
         }
     }
@@ -269,13 +273,14 @@ public class AppUtils {
         map.put("isActive", teacherModel.isActive());
         map.put("speciality", teacherModel.getSpeciality());
         map.put("about", teacherModel.getAbout());
-        map.put("isProfileFilled", true);
+        map.put("profileFilled", true);
         map.put("phoneNumber", getMobileNumber());
         map.put("timestamp", System.currentTimeMillis());
         map.put("academicInformation", teacherModel.getAcademicInformation());
         map.put("profile", teacherModel.getProfile());
         map.put("teachingProfile", teacherModel.getTeachingProfile());
         map.put("timeSlots", teacherModel.getTimeSlots());
+        map.put("slots", teacherModel.getSlots());
 
       /*  map.put("fatherName", teacherModel.getFatherName());
         map.put("email", teacherModel.getEmail());
@@ -365,6 +370,10 @@ public class AppUtils {
             default:
                 return R.drawable.ic_baseline_filter_9_plus_24;
         }
+    }
+
+    public static String[] getSlotsType() {
+        return new String[]{"Morning", "Noon", "Evening", "Night"};
     }
 
 

@@ -6,6 +6,7 @@ import androidx.databinding.Bindable;
 import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -20,23 +21,45 @@ public class TeacherModel extends BaseObservable {
     private String speciality;
     private boolean isActive;
     private boolean isProfileFilled;
+    private boolean availableForDemoClass;
+    private boolean availableForSunday;
     private String name;
     private String image;
     private String id;
     private List<TimeSlotModel> timeSlots;
+    private Map<String, Object> slots;
+    private Map<String, Object> timeSlotsDemo;
     private String about;
     private String phoneNumber;
     private Profile profile;
     private long timestamp;
 
+    public Map<String, Object> getTimeSlotsDemo() {
+        return timeSlotsDemo;
+    }
+
+    public void setTimeSlotsDemo(Map<String, Object> timeSlotsDemo) {
+        this.timeSlotsDemo = timeSlotsDemo;
+    }
+
+    public Map<String, Object> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(Map<String, Object> slots) {
+        this.slots = slots;
+    }
+
     @Override
     public String toString() {
-        return "TeacherModel{" +
+        return "{" +
                 "academicInformation=" + academicInformation +
                 ", teachingProfile=" + teachingProfile +
                 ", speciality='" + speciality + '\'' +
                 ", isActive=" + isActive +
                 ", isProfileFilled=" + isProfileFilled +
+                ", availableForDemoClass=" + availableForDemoClass +
+                ", availableForSunday=" + availableForSunday +
                 ", name='" + name + '\'' +
                 ", image='" + image + '\'' +
                 ", id='" + id + '\'' +
@@ -46,6 +69,22 @@ public class TeacherModel extends BaseObservable {
                 ", profile=" + profile +
                 ", timestamp=" + timestamp +
                 '}';
+    }
+
+    public boolean isAvailableForDemoClass() {
+        return availableForDemoClass;
+    }
+
+    public void setAvailableForDemoClass(boolean availableForDemoClass) {
+        this.availableForDemoClass = availableForDemoClass;
+    }
+
+    public boolean isAvailableForSunday() {
+        return availableForSunday;
+    }
+
+    public void setAvailableForSunday(boolean availableForSunday) {
+        this.availableForSunday = availableForSunday;
     }
 
     public boolean isProfileFilled() {
@@ -234,7 +273,7 @@ public class TeacherModel extends BaseObservable {
 
         @Override
         public String toString() {
-            return "AcademicInformation{" +
+            return "{" +
                     "collegeName='" + collegeName + '\'' +
                     ", graduation='" + graduation + '\'' +
                     ", scoreClassXII='" + scoreClassXII + '\'' +
@@ -328,7 +367,7 @@ public class TeacherModel extends BaseObservable {
 
         @Override
         public String toString() {
-            return "TeachingProfile{" +
+            return "{" +
                     "teachingSubject=" + teachingSubject +
                     ", perVisitFee='" + perVisitFee + '\'' +
                     ", monthlyFee='" + monthlyFee + '\'' +
@@ -384,7 +423,7 @@ public class TeacherModel extends BaseObservable {
 
         @Override
         public String toString() {
-            return "Profile{" +
+            return "{" +
                     "name='" + name + '\'' +
                     ", email='" + email + '\'' +
                     ", address='" + address + '\'' +
@@ -480,7 +519,6 @@ public class TeacherModel extends BaseObservable {
     };
 
     public static class TimeSlotModel {
-
         String type;
         List<String> slots;
 

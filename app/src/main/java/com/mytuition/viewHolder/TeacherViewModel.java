@@ -24,7 +24,7 @@ public class TeacherViewModel extends ViewModel {
         Log.d(TAG, "TeacherViewModel: injected successfully !!");
     }
 
-    public LiveData<List<TeacherModel.TimeSlotModel>> slotList() {
+    public LiveData<TeacherModel> slotList() {
         return repository.getTeacherTimeSlots();
     }
 }

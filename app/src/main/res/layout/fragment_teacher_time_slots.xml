@@ -1,82 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".TeacherTimeSlotsFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <variable
+            name="teacherModel"
+            type="com.mytuition.models.TeacherModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".TeacherTimeSlotsFragment">
 
-        <TextView
-            android:background="#CCE8E8E8"
-            android:id="@+id/textView36"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:fontFamily="@font/rubik"
-            android:padding="@dimen/_10sdp"
-            android:text="Tuition Timing From Monday To Saturday"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switchDemoClass" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recMain"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView36"
-            tools:itemCount="1"
-            tools:listitem="@layout/timing_view_teacher_primary" />
+            android:layout_height="match_parent">
 
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/rubik"
-            android:padding="@dimen/_10sdp"
-            android:text="Available For Sunday"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            <TextView
+                android:id="@+id/textView36"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="#CCE8E8E8"
+                android:fontFamily="@font/rubik"
+                android:padding="@dimen/_10sdp"
+                android:text="Tuition Timing From Monday To Saturday"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/switchDemoClass" />
 
-        <Switch
-            android:id="@+id/switchDemoClass"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/rubik"
-            android:padding="@dimen/_10sdp"
-            android:text="Allow Free Demo Class"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch1"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recMain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView36"
+                tools:itemCount="1"
+                tools:listitem="@layout/timing_view_teacher_primary" />
 
-        <Button
-            android:id="@+id/btnSubmitTiming"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="22dp"
-            android:layout_marginBottom="32dp"
-            android:text="Save"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recMain" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Switch
+                android:id="@+id/switchSunday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:checked="@{teacherModel.isAvailableForSunday,default=false}"
+                android:fontFamily="@font/rubik"
+                android:padding="@dimen/_10sdp"
+                android:text="Available For Sunday"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-</androidx.core.widget.NestedScrollView>
+            <Switch
+                android:id="@+id/switchDemoClass"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:checked="@{teacherModel.isAvailableForDemoClass}"
+                android:fontFamily="@font/rubik"
+                android:padding="@dimen/_10sdp"
+                android:text="Allow Free Demo Class"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/switchSunday"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            <Button
+                android:id="@+id/btnSubmitTiming"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="32dp"
+                android:text="Save"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnAddNewSlots" />
+
+            <Button
+                android:id="@+id/btnAddNewSlots"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="22dp"
+                android:drawableEnd="@drawable/ic_baseline_add_24"
+                android:drawablePadding="@dimen/_10sdp"
+                android:gravity="center_vertical"
+                android:text="Add New Slot"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recMain" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>
