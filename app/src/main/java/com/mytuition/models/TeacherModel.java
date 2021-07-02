@@ -530,6 +530,7 @@ public class TeacherModel extends BaseObservable {
         public TimeSlotModel() {
         }
 
+
         public String getType() {
             return type;
         }

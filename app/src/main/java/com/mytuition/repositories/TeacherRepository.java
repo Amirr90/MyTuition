@@ -1,14 +1,14 @@
 package com.mytuition.repositories;
 
-import android.util.Log;
-
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.mytuition.interfaces.Api;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.AppUtils;
-
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -45,30 +45,13 @@ public class TeacherRepository {
         timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Noon", getSlots(false, 12, 17)));
         timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Evening", getSlots(false, 17, 21)));
         timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Night", getSlots(false, 21, 24)));*/
-
-        AppUtils.getFirestoreReference().collection(AppUtils.Teachers).document(getUid()).get().addOnSuccessListener(documentSnapshot -> {
-            TeacherModel teacherModel = documentSnapshot.toObject(TeacherModel.class);
-
-            // Log.d(TAG, "addData: " + teacherModel.getTimeSlots());
-
-            mutableLiveDataTimeSlots.setValue(teacherModel);
-        /*    Log.d(TAG, "onSuccess: TeacherModel" + teacherModel.getTimeSlots().toString());
-            for (int a = 0; a < teacherModel.getTimeSlots().size(); a++) {
-                for (int b = 0; b < teacherModel.getTimeSlots().get(a).getSlots().size(); b++) {
-                    String type = teacherModel.getTimeSlots().get(a).getType();
-                    String slot = teacherModel.getTimeSlots().get(a).getSlots().get(b);
-                    addSlots(type, slot);
-                    Log.d(TAG, "getDataFromDatabase: " + type + " " + slot);
-                }
-
-            }*/
-
-
-
-            Map<String, Object> slotsMap = teacherModel.getTimeSlotsDemo();
-            Log.d("TAG", "addData: "+slotsMap.toString());
-        });
-
-
+        AppUtils.getFirestoreReference().collection(AppUtils.Teachers)
+                .document(getUid())
+                .addSnapshotListener((value, error) -> {
+                    if (null == error && null != value) {
+                        TeacherModel teacherModel = value.toObject(TeacherModel.class);
+                        mutableLiveDataTimeSlots.setValue(teacherModel);
+                    }
+                });
     }
 }

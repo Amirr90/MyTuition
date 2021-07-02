@@ -1,6 +1,7 @@
 
 package com.mytuition;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,12 +67,11 @@ public class TeacherTimeSlotsFragment extends DaggerFragment implements TeacherT
 
         initList();
 
-        getDataFromDatabase();
 
         primaryAdapter = new TeacherTimingPrimaryAdapter(this);
 
         viewModel.slotList().observe(getViewLifecycleOwner(), teacherModel -> {
-            primaryAdapter.submitList(teacherModel.getTimeSlots());
+            getSlots(teacherModel);
             binding.setTeacherModel(teacherModel);
         });
 
@@ -93,23 +93,30 @@ public class TeacherTimeSlotsFragment extends DaggerFragment implements TeacherT
 
     }
 
-    private void getDataFromDatabase() {
-       /* AppUtils.getFirestoreReference().collection(AppUtils.Teachers).document(getUid()).get().addOnSuccessListener(documentSnapshot -> {
-            TeacherModel teacherModel = documentSnapshot.toObject(TeacherModel.class);
-            binding.setTeacherModel(teacherModel);
-            Log.d(TAG, "onSuccess: TeacherModel" + teacherModel.getTimeSlots().toString());
-            for (int a = 0; a < teacherModel.getTimeSlots().size(); a++) {
-                for (int b = 0; b < teacherModel.getTimeSlots().get(a).getSlots().size(); b++) {
-                    String type = teacherModel.getTimeSlots().get(a).getType();
-                    String slot = teacherModel.getTimeSlots().get(a).getSlots().get(b);
-                    addSlots(type, slot);
-                    Log.d(TAG, "getDataFromDatabase: " + type + " " + slot);
-                }
+    private void getSlots(TeacherModel teacherModel) {
+        List<TeacherModel.TimeSlotModel> slotModels = new ArrayList<>();
+        Map<String, Object> slotsMap = teacherModel.getTimeSlotsDemo();
+        Log.d("TAG", "addData: " + slotsMap.toString());
+        if (slotsMap.containsKey("Morning")) {
+            ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Morning");
+            slotModels.add(new TeacherModel.TimeSlotModel("Morning", slots));
+        }
+        if (slotsMap.containsKey("Noon")) {
+            ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Noon");
+            slotModels.add(new TeacherModel.TimeSlotModel("Noon", slots));
+        }
+        if (slotsMap.containsKey("Evening")) {
+            ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Evening");
+            slotModels.add(new TeacherModel.TimeSlotModel("Evening", slots));
+        }
+        if (slotsMap.containsKey("Night")) {
+            ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Night");
+            slotModels.add(new TeacherModel.TimeSlotModel("Night", slots));
+        }
 
-            }
 
-        });*/
-
+        teacherModel.setTimeSlots(slotModels);
+        primaryAdapter.submitList(teacherModel.getTimeSlots());
 
     }
 
@@ -157,39 +164,7 @@ public class TeacherTimeSlotsFragment extends DaggerFragment implements TeacherT
     @Override
     public void onClick(String type, String slot) {
         Log.d(TAG, "onItemClicked: " + type + "  " + slot);
-
-        //addSlots(type, slot);
+       // new AlertDialog.Builder(requireActivity()).setMessage("Deleting  slot")
     }
 
-    private void addSlots(String type, String slot) {
-        TeacherModel.TimeSlotModel timeSlotModel = new TeacherModel.TimeSlotModel();
-
-        if (type.equalsIgnoreCase("Morning")) {
-            if (!morning.contains(slot)) {
-                morning.add(slot);
-                timeSlotModel.setType(type);
-                timeSlotModel.setSlots(morning);
-            }
-        } else if (type.equalsIgnoreCase("Noon")) {
-            if (!noon.contains(slot)) {
-                noon.add(slot);
-                timeSlotModel.setType(type);
-                timeSlotModel.setSlots(noon);
-            }
-        } else if (type.equalsIgnoreCase("Evening")) {
-            if (!evening.contains(slot)) {
-                evening.add(slot);
-                timeSlotModel.setType(type);
-                timeSlotModel.setSlots(evening);
-            }
-        } else if (type.equalsIgnoreCase("Night")) {
-            if (!night.contains(slot)) {
-                night.add(slot);
-                timeSlotModel.setType(type);
-                timeSlotModel.setSlots(night);
-            }
-        }
-
-        timeSlotModelList.add(timeSlotModel);
-    }
 }

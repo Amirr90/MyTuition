@@ -18,7 +18,6 @@ import com.mytuition.utility.App;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.SplashScreen;
 
-import dagger.android.AndroidInjection;
 import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.mytuition.utility.AppUtils.hideDialog;

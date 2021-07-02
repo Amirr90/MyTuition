@@ -9,9 +9,6 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ActivityBuilderModule {
-
     @ContributesAndroidInjector(modules = {MainFragmentBuilderModule.class, TeacherModule.class})
     abstract TeacherScreen teacherScreen();
-
-
 }

@@ -13,18 +13,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.firestore.FieldValue;
 import com.google.gson.Gson;
 import com.mytuition.databinding.FragmentAddNewSlotsBinding;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.App;
 import com.mytuition.utility.AppUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 import static com.mytuition.utility.AppUtils.getJSONFromModel;
 import static com.mytuition.utility.AppUtils.getSlots;
@@ -77,29 +79,23 @@ public class AddNewSlotsFragment extends BottomSheetDialogFragment {
 
             }
         });
-        binding.button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String type = binding.etType.getText().toString();
-                String slot = binding.etSlot.getText().toString();
-                updateSlots(type, slot);
-            }
+        binding.btnAddNewTimeSlots.setOnClickListener(v -> {
+            String type = binding.etType.getText().toString();
+            String slot = binding.etSlot.getText().toString();
+            updateSlots(type, slot);
         });
 
     }
 
     private void updateSlots(String type, String slot) {
-       /* for (int a = 0; a < 4; a++) {
-            Map<String, Object> map = new HashMap<>();
-            map.put(getSlotsType()[a], slot);
-            AppUtils.getFirestoreReference().collection(AppUtils.Teachers).document(getUid()).update("timeSlots." + getSlotsType()[a], FieldValue.arrayUnion())
-        }*/
-        AppUtils.getFirestoreReference().collection(AppUtils.Teachers).document(getUid()).update("timeSlotsDemo." + type, FieldValue.arrayUnion(slot)).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(requireActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-            }
+        AppUtils.getFirestoreReference().collection(AppUtils.Teachers)
+                .document(getUid())
+                .update("timeSlotsDemo." + type, FieldValue.arrayUnion(slot)).addOnFailureListener(e -> {
+            Toast.makeText(requireActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
+        }).addOnSuccessListener(aVoid -> {
+            Toasty.success(App.context, "Slot added successfully !!", Toast.LENGTH_SHORT).show();
+            dismiss();
         });
 
 
