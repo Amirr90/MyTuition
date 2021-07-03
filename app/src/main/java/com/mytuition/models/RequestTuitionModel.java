@@ -11,6 +11,10 @@ public class RequestTuitionModel {
     String reqStatus;
     String id;
     Long acceptedAt;
+    private long timestamp;
+    private String time;
+    private boolean active;
+    private String date;
 
     public void setId(String id) {
         this.id = id;
@@ -29,7 +33,7 @@ public class RequestTuitionModel {
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     public void setDate(String date) {
@@ -44,10 +48,7 @@ public class RequestTuitionModel {
         return id;
     }
 
-    private long timestamp;
-    private String time;
-    private boolean isActive;
-    private String date;
+
 
 
     public long getTimestamp() {
@@ -59,7 +60,7 @@ public class RequestTuitionModel {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public String getDate() {
@@ -144,7 +145,7 @@ public class RequestTuitionModel {
                 ", id='" + id + '\'' +
                 ", timestamp=" + timestamp +
                 ", time='" + time + '\'' +
-                ", isActive=" + isActive +
+                ", isActive=" + active +
                 ", date='" + date + '\'' +
                 '}';
     }

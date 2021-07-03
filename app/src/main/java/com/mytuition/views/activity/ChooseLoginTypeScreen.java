@@ -68,8 +68,8 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
 
     private void loginUi(String loginType) {
         loginTypeScreenBinding.progressBar.setVisibility(View.VISIBLE);
-        showLoginScreen();
         this.loginType = loginType;
+        showLoginScreen();
 
 
     }

@@ -159,7 +159,6 @@ public class TProfileFragment extends Fragment {
 
             @Override
             public void onFailed(String msg) {
-
                 hideDialog();
                 Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
 

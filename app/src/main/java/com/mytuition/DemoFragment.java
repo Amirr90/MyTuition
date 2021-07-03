@@ -30,17 +30,13 @@ import com.mytuition.utility.AppUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
 import static android.app.Activity.RESULT_OK;
 import static com.mytuition.utility.AppUtils.getAllSpeciality;
 import static com.mytuition.utility.AppUtils.getMobileNumber;
-import static com.mytuition.utility.AppUtils.getSlots;
-import static com.mytuition.utility.AppUtils.getSlotsType;
 import static com.mytuition.utility.AppUtils.hideDialog;
 import static com.mytuition.utility.Utils.getCityList;
 import static com.mytuition.utility.Utils.getStateList;
@@ -77,8 +73,7 @@ public class DemoFragment extends Fragment {
         mSelectedItems = new ArrayList<>();
 
         listSelected = getSelectedItemsList();
-        if (null == getArguments())
-            navController.navigateUp();
+
 
         getTeacherProfile();
 
@@ -86,7 +81,9 @@ public class DemoFragment extends Fragment {
         binding.btnSubmit.setOnClickListener(v -> {
             Log.d(TAG, "onSubmitBtn Clicked !! : " + binding.getTeacherProfile().toString());
             if (allFieldIsFilled()) {
-                uploadImage();
+                if (null != frontImageUrl && null != backImageUrl)
+                    uploadImage();
+                else updateProfile();
             }
         });
 
@@ -100,36 +97,41 @@ public class DemoFragment extends Fragment {
 
 
     private void getTeacherProfile() {
-        teacherModel = new TeacherModel();
-        teacherModel.setProfile(new TeacherModel.Profile());
-        teacherModel.setAcademicInformation(new TeacherModel.AcademicInformation());
-        teacherModel.setTeachingProfile(new TeacherModel.TeachingProfile());
+        if (null == getArguments()) {
+            teacherModel = new TeacherModel();
+            teacherModel.setProfile(new TeacherModel.Profile());
+            teacherModel.setAcademicInformation(new TeacherModel.AcademicInformation());
+            teacherModel.setTeachingProfile(new TeacherModel.TeachingProfile());
+        } else {
+            Gson gson = new Gson();
+            teacherModel = gson.fromJson(getArguments().getString("teacherModel"), TeacherModel.class);
+            Log.d(TAG, "getTeacherProfile: " + teacherModel);
 
+            if (null != teacherModel && null != teacherModel.getAcademicInformation() && null != teacherModel.getProfile()) {
+                binding.setTeacherProfile(teacherModel);
+                List<String> selectedSubjects = teacherModel.getTeachingProfile().getTeachingSubject();
+                Log.d(TAG, "getTeacherProfile: " + selectedSubjects);
+                String selectedIndex = "";
 
-        Gson gson = new Gson();
-        teacherModel = gson.fromJson(getArguments().getString("teacherModel"), TeacherModel.class);
+                if (null != selectedSubjects && !selectedSubjects.isEmpty())
+                    for (int a = 0; a < selectedSubjects.size(); a++) {
+                        selectedIndex += selectedSubjects.get(a) + ", ";
 
-        if (null != teacherModel) {
-            binding.setTeacherProfile(teacherModel);
-            List<String> selectedSubjects = teacherModel.getTeachingProfile().getTeachingSubject();
-            Log.d(TAG, "getTeacherProfile: " + selectedSubjects);
-            String selectedIndex = "";
+                        for (int b = 0; b < getAllSpeciality().size(); b++) {
+                            if (getAllSpeciality().get(b).equalsIgnoreCase(selectedSubjects.get(a))) {
+                                mSelectedItems.add(b);
+                                listSelected[b] = true;
+                                Log.d(TAG, "getTeacherProfile: " + getAllSpeciality().get(b));
+                            }
+                        }
 
-            for (int a = 0; a < selectedSubjects.size(); a++) {
-                selectedIndex += selectedSubjects.get(a) + ", ";
-
-                for (int b = 0; b < getAllSpeciality().size(); b++) {
-                    if (getAllSpeciality().get(b).equalsIgnoreCase(selectedSubjects.get(a))) {
-                        mSelectedItems.add(b);
-                        listSelected[b] = true;
-                        Log.d(TAG, "getTeacherProfile: " + getAllSpeciality().get(b));
                     }
-                }
 
+                binding.tvSelectedSubjects.setText(selectedIndex);
             }
-
-            binding.tvSelectedSubjects.setText(selectedIndex);
         }
+
+
         binding.etNumber.setText(getMobileNumber());
         binding.setTeacherProfile(teacherModel);
         settingDropDownAdapters();
@@ -309,7 +311,8 @@ public class DemoFragment extends Fragment {
                 if (!uploadedImageUri.isEmpty()) {
                     Log.d(TAG, "onSuccess: " + uploadedImageUri.toString());
                     TeacherModel.Profile profile = binding.getTeacherProfile().getProfile();
-                    profile.setAadharFrontImage(uploadedImageUri.get(0));
+                    if (!uploadedImageUri.isEmpty())
+                        profile.setAadharFrontImage(uploadedImageUri.get(0));
                     if (uploadedImageUri.size() > 1)
                         profile.setAadharBackImage(uploadedImageUri.get(1));
                     teacherModel.setProfile(profile);
@@ -318,33 +321,7 @@ public class DemoFragment extends Fragment {
 
 
                 //Adding teaching subjects
-                TeacherModel.TeachingProfile teachingProfile = teacherModel.getTeachingProfile();
-                List<String> list = new ArrayList<>();
-                for (Integer index : mSelectedItems) {
-                    list.add(getAllSpeciality().get(index));
-                }
-                teachingProfile.setTeachingSubject(list);
-
-                teacherModel.setTeachingProfile(teachingProfile);
-
-
-
-
-
-                AppUtils.updateTeacherProfile(teacherModel, new ApiInterface() {
-                    @Override
-                    public void onSuccess(Object obj) {
-                        hideDialog();
-                        Toasty.success(requireActivity(), (String) obj, Toast.LENGTH_SHORT).show();
-                        navController.navigate(R.id.teacherTimeSlotsFragment);
-                    }
-
-                    @Override
-                    public void onFailed(String msg) {
-                        hideDialog();
-                        Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                updateProfile();
             }
 
             @Override
@@ -353,6 +330,31 @@ public class DemoFragment extends Fragment {
                 hideDialog();
                 Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
 
+            }
+        });
+    }
+
+    private void updateProfile() {
+        TeacherModel.TeachingProfile teachingProfile = binding.getTeacherProfile().getTeachingProfile();
+        List<String> list = new ArrayList<>();
+        for (Integer index : mSelectedItems) {
+            list.add(getAllSpeciality().get(index));
+        }
+        teachingProfile.setTeachingSubject(list);
+
+        teacherModel.setTeachingProfile(teachingProfile);
+        AppUtils.updateTeacherProfile(teacherModel, new ApiInterface() {
+            @Override
+            public void onSuccess(Object obj) {
+                hideDialog();
+                Toasty.success(requireActivity(), (String) obj, Toast.LENGTH_SHORT).show();
+                navController.navigate(R.id.teacherTimeSlotsFragment);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                hideDialog();
+                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
             }
         });
     }

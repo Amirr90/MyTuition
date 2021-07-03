@@ -22,10 +22,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
@@ -68,6 +71,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class AppUtils {
+    public static final String SLOTS = "slots";
     private static final String TAG = "AppUtils";
     public static Toast mToast;
 
@@ -254,13 +258,21 @@ public class AppUtils {
 
     public static void updateTeacherProfile(TeacherModel teacherModel, final ApiInterface apiInterface) {
         Log.d(TAG, "getUid: " + getUid());
-        getFirestoreReference()
-                .collection("Teachers")
-                .document(getUid())
-                .update(getTeacherProfileMap(teacherModel))
+        DocumentReference documentReference = getFirestoreReference()
+                .collection(AppUtils.Teachers)
+                .document(getUid());
+
+        documentReference.update(getTeacherProfileMap(teacherModel))
                 .addOnSuccessListener(aVoid -> apiInterface.onSuccess("Profile Updated Successfully !!"))
                 .addOnFailureListener(e -> {
-                    apiInterface.onFailed("failed to upload Image, try again !!");
+
+                    //No document Found for user!!
+                    documentReference.set(getTeacherProfileMap(teacherModel)).addOnSuccessListener(aVoid -> apiInterface.onSuccess("Profile Updated Successfully !!")).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            apiInterface.onFailed("failed to update profile, try again !!");
+                        }
+                    });
                     Log.d(TAG, "onFailureUpdateProfile: " + e.getLocalizedMessage());
                 }).addOnCanceledListener(() -> apiInterface.onFailed("cancel to update profile, try again !!"));
     }
@@ -269,12 +281,13 @@ public class AppUtils {
         Map<String, Object> map = new HashMap<>();
         map.put("image", teacherModel.getImage());
         map.put("name", teacherModel.getName());
-        map.put("id", teacherModel.getId());
+        map.put("id", getUid());
         map.put("isActive", teacherModel.isActive());
         map.put("speciality", teacherModel.getSpeciality());
         map.put("about", teacherModel.getAbout());
         map.put("profileFilled", true);
         map.put("phoneNumber", getMobileNumber());
+        map.put("verified", teacherModel.isVerified());
         map.put("timestamp", System.currentTimeMillis());
         map.put("academicInformation", teacherModel.getAcademicInformation());
         map.put("profile", teacherModel.getProfile());
@@ -282,22 +295,6 @@ public class AppUtils {
         map.put("timeSlots", teacherModel.getTimeSlots());
         map.put("slots", teacherModel.getSlots());
 
-      /*  map.put("fatherName", teacherModel.getFatherName());
-        map.put("email", teacherModel.getEmail());
-        map.put("experience", teacherModel.getExperience());
-        map.put("rating", teacherModel.getRating());
-        map.put("review", teacherModel.getReview());
-        map.put("speciality", teacherModel.getSpeciality());
-        map.put("fee", teacherModel.getFee());
-        map.put("perVisit", teacherModel.getPerVisit());
-        map.put("degree", teacherModel.getDegree());
-        map.put("collegeName", teacherModel.getCollegeName());
-        map.put("address", teacherModel.getAddress());
-        map.put("landMark", teacherModel.getLandMark());
-        map.put("city", teacherModel.getCity());
-        map.put("state", teacherModel.getState());
-        map.put("aadharFrontImage", teacherModel.getAadharFrontImage());
-        map.put("aadharBackImage", teacherModel.getAadharBackImage());*/
         Log.d(TAG, "getTeacherProfileMap: " + map);
         return map;
     }
@@ -322,14 +319,20 @@ public class AppUtils {
 
             uploadTask.addOnProgressListener(taskSnapshot -> {
                 //  double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-            }).addOnSuccessListener(taskSnapshot -> storageRef.child(STORAGE_PATH).getDownloadUrl().addOnSuccessListener(uri -> {
-                uploadedImageUrl.add(uri.toString());
-                if (uploadImageCounter == (bitmaps.size())) {
-                    Log.d(TAG, "onSuccessEqual: " + uploadImageCounter);
-                    uploadImageInterface.onSuccess(uploadedImageUrl);
-                } else Log.d(TAG, "onSuccess: notEqual " + uploadImageCounter);
+            }).addOnSuccessListener(taskSnapshot -> storageRef.child(STORAGE_PATH).getDownloadUrl()
+                    .addOnSuccessListener(uri -> {
+                        uploadedImageUrl.add(uri.toString());
+                        if (uploadImageCounter == (bitmaps.size())) {
+                            Log.d(TAG, "onSuccessEqual: " + uploadImageCounter);
+                            uploadImageInterface.onSuccess(uploadedImageUrl);
+                        } else Log.d(TAG, "onSuccess: notEqual " + uploadImageCounter);
 
-            })).addOnCanceledListener(() -> uploadImageInterface.onFailed("Upload cancelled, try again")).addOnFailureListener(e -> uploadImageInterface.onFailed("failed to upload Image " + e.getLocalizedMessage()));
+                    }))
+                    .addOnCanceledListener(() -> uploadImageInterface.onFailed("Upload cancelled, try again"))
+                    .addOnFailureListener(e -> {
+                        Log.d(TAG, "uploadImagesFailed : " + e.getLocalizedMessage());
+                        uploadImageInterface.onFailed("failed to upload Image " + e.getLocalizedMessage());
+                    });
 
         }
 
@@ -401,7 +404,6 @@ public class AppUtils {
         return str;
 
     }
-
 
     public static String getDayOfWeekDayFromDate(String date) {
         String dayName = "";

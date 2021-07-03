@@ -2,6 +2,7 @@ package com.mytuition.views.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -11,6 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.material.badge.BadgeDrawable;
 import com.mytuition.R;
 import com.mytuition.component.AppComponent;
 import com.mytuition.databinding.ActivityTeacherScreenBinding;
@@ -21,13 +23,14 @@ import com.mytuition.views.SplashScreen;
 import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.mytuition.utility.AppUtils.hideDialog;
-import static com.mytuition.utility.AppUtils.hideToolbar;
 
 public class TeacherScreen extends DaggerAppCompatActivity {
 
     ActivityTeacherScreenBinding teacherScreenBinding;
     NavController navController;
     public static TeacherScreen instance;
+
+    BadgeDrawable homeBadge;
 
     public static TeacherScreen getInstance() {
         return instance;
@@ -40,6 +43,7 @@ public class TeacherScreen extends DaggerAppCompatActivity {
         instance = this;
         //initDependency();
         teacherScreenBinding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_screen);
+
     }
 
     private void initDependency() {
@@ -47,13 +51,46 @@ public class TeacherScreen extends DaggerAppCompatActivity {
         appComponent.inject(this);
     }
 
+    public void setBadge(int count) {
+        homeBadge.setNumber(count);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
 
+        homeBadge = teacherScreenBinding.bottomNavigation.getOrCreateBadge(teacherScreenBinding.bottomNavigation.getMenu().findItem(R.id.home).getItemId());
+        homeBadge.setVisible(true);
+        homeBadge.setNumber(0);
+
         navController = Navigation.findNavController(this, R.id.nav_host_teacher);
         NavigationUI.setupActionBarWithNavController(this, navController);
-        hideToolbar(this);
+        // hideToolbar(this);
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (controller.getCurrentDestination().getId() == R.id.teacherDashboardFragment) {
+                teacherScreenBinding.bottomNavigation.setVisibility(View.VISIBLE);
+            } else teacherScreenBinding.bottomNavigation.setVisibility(View.GONE);
+        });
+
+
+
+
+
+        teacherScreenBinding.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.home:
+                    homeBadge.setVisible(false);
+                    homeBadge.clearNumber();
+                    break;
+                case R.id.page_2:
+                    homeBadge.setVisible(true);
+                    homeBadge.setNumber(20);
+                    break;
+
+            }
+            return false;
+        });
     }
 
     @Override
@@ -65,6 +102,15 @@ public class TeacherScreen extends DaggerAppCompatActivity {
         }
         return navController.navigateUp();
     }
+
+/*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        homeBadge = teacherScreenBinding.bottomNavigation.getOrCreateBadge(menu.findItem(R.id.home).getItemId());
+        homeBadge.setVisible(true);
+        homeBadge.setNumber(99);
+        return super.onCreateOptionsMenu(menu);
+    }*/
 
     private void showLogoutDialog() {
         new AlertDialog.Builder(TeacherScreen.this)

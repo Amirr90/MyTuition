@@ -14,10 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.firebase.firestore.FieldValue;
 import com.mytuition.adapters.TeacherTimingPrimaryAdapter;
 import com.mytuition.databinding.FragmentTeacherTimeSlotsBinding;
 import com.mytuition.interfaces.TeacherTimingInterface;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.App;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.viewHolder.TeacherViewModel;
 
@@ -95,23 +97,29 @@ public class TeacherTimeSlotsFragment extends DaggerFragment implements TeacherT
 
     private void getSlots(TeacherModel teacherModel) {
         List<TeacherModel.TimeSlotModel> slotModels = new ArrayList<>();
-        Map<String, Object> slotsMap = teacherModel.getTimeSlotsDemo();
+        Map<String, Object> slotsMap = teacherModel.getSlots();
+        if (null == slotsMap)
+            return;
         Log.d("TAG", "addData: " + slotsMap.toString());
         if (slotsMap.containsKey("Morning")) {
             ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Morning");
-            slotModels.add(new TeacherModel.TimeSlotModel("Morning", slots));
+            if (!slots.isEmpty())
+                slotModels.add(new TeacherModel.TimeSlotModel("Morning", slots));
         }
         if (slotsMap.containsKey("Noon")) {
             ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Noon");
-            slotModels.add(new TeacherModel.TimeSlotModel("Noon", slots));
+            if (!slots.isEmpty())
+                slotModels.add(new TeacherModel.TimeSlotModel("Noon", slots));
         }
         if (slotsMap.containsKey("Evening")) {
             ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Evening");
-            slotModels.add(new TeacherModel.TimeSlotModel("Evening", slots));
+            if (!slots.isEmpty())
+                slotModels.add(new TeacherModel.TimeSlotModel("Evening", slots));
         }
         if (slotsMap.containsKey("Night")) {
             ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Night");
-            slotModels.add(new TeacherModel.TimeSlotModel("Night", slots));
+            if (!slots.isEmpty())
+                slotModels.add(new TeacherModel.TimeSlotModel("Night", slots));
         }
 
 
@@ -131,6 +139,7 @@ public class TeacherTimeSlotsFragment extends DaggerFragment implements TeacherT
                     AppUtils.hideDialog();
                     Toasty.success(requireActivity(), "Time Slots updated successfully !!", Toast.LENGTH_SHORT).show();
                     clearAllList();
+                    navController.navigateUp();
                 }).addOnFailureListener(e -> {
             AppUtils.hideDialog();
             Toasty.warning(requireActivity(), "something went wrong !!", Toast.LENGTH_SHORT).show();
@@ -164,7 +173,14 @@ public class TeacherTimeSlotsFragment extends DaggerFragment implements TeacherT
     @Override
     public void onClick(String type, String slot) {
         Log.d(TAG, "onItemClicked: " + type + "  " + slot);
-       // new AlertDialog.Builder(requireActivity()).setMessage("Deleting  slot")
+        new AlertDialog.Builder(requireActivity()).setMessage("Deleting  slot")
+                .setPositiveButton("Yes", (dialog, which) -> deleteSlot(type, slot)).setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
+    }
+
+    private void deleteSlot(String type, String slot) {
+        AppUtils.getFirestoreReference().collection(AppUtils.Teachers).document(getUid()).update(
+                AppUtils.SLOTS + "." + type, FieldValue.arrayRemove(slot)
+        ).addOnSuccessListener(aVoid -> Toasty.success(App.context, "slot removed successfully !!", Toast.LENGTH_SHORT).show());
     }
 
 }

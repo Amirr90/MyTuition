@@ -90,7 +90,7 @@ public class AddNewSlotsFragment extends BottomSheetDialogFragment {
     private void updateSlots(String type, String slot) {
         AppUtils.getFirestoreReference().collection(AppUtils.Teachers)
                 .document(getUid())
-                .update("timeSlotsDemo." + type, FieldValue.arrayUnion(slot)).addOnFailureListener(e -> {
+                .update(AppUtils.SLOTS+"." + type, FieldValue.arrayUnion(slot)).addOnFailureListener(e -> {
             Toast.makeText(requireActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
         }).addOnSuccessListener(aVoid -> {

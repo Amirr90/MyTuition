@@ -3,7 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.parentFragments.TeacherDashboardFragment">
 
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:padding="@dimen/_10sdp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:id="@+id/dashboardRec"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/tuition_view" />
 </FrameLayout>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="tuitionModel"
+            type="com.mytuition.models.RequestTuitionModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:background="@drawable/border_rectangle_with_white_bg"
+        android:padding="@dimen/_12sdp">
+
+        <TextView
+            android:id="@+id/textView38"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Area"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView39" />
+
+        <TextView
+            android:id="@+id/textView39"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/rubik"
+            android:text="Rajajipuram,Lucknow"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorText"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintStart_toEndOf="@+id/textView38"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+
+            android:id="@+id/textView41"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Parent"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="@+id/textView38"
+            app:layout_constraintTop_toTopOf="@+id/textView42" />
+
+        <TextView
+            android:id="@+id/textView42"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/rubik"
+            android:text="@{tuitionModel.name,default=`Sadia`}"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorText"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView41"
+            app:layout_constraintTop_toBottomOf="@+id/textView39" />
+
+        <TextView
+            android:id="@+id/textView44"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Tuition for"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="@+id/textView41"
+            app:layout_constraintTop_toTopOf="@+id/textView43" />
+
+        <TextView
+            android:id="@+id/textView43"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/rubik"
+            android:text="@{tuitionModel.tuitionFor}"
+            android:textAlignment="textEnd"
+            android:textColor="@color/successColor"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView44"
+            app:layout_constraintTop_toBottomOf="@+id/textView42" />
+
+        <TextView
+            android:id="@+id/textView45"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Job Description"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="@+id/textView44"
+            app:layout_constraintTop_toBottomOf="@+id/textView47" />
+
+        <TextView
+            android:id="@+id/textView46"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/rubik"
+            android:text="want teacher for 12th class ISC Board , sringar nagar metro station"
+            android:textAlignment="textStart"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textView45"
+            app:layout_constraintTop_toBottomOf="@+id/textView45" />
+
+        <TextView
+
+            android:id="@+id/textView47"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Job Posted"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="@+id/textView45"
+            app:layout_constraintTop_toTopOf="@+id/textView48" />
+
+        <TextView
+            android:id="@+id/textView48"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/rubik"
+            android:text="@{tuitionModel.date,default=`10 mins ago`}"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorText"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView47"
+            app:layout_constraintTop_toBottomOf="@+id/textView43" />
+
+        <Button
+            android:id="@+id/button2"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:text="@{tuitionModel.isActive?`get tuition`:`Hired`}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView46" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

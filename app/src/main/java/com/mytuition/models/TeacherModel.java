@@ -23,23 +23,24 @@ public class TeacherModel extends BaseObservable {
     private boolean isProfileFilled;
     private boolean availableForDemoClass;
     private boolean availableForSunday;
+    private boolean verified;
     private String name;
     private String image;
     private String id;
     private List<TimeSlotModel> timeSlots;
     private Map<String, Object> slots;
-    private Map<String, Object> timeSlotsDemo;
     private String about;
     private String phoneNumber;
     private Profile profile;
     private long timestamp;
 
-    public Map<String, Object> getTimeSlotsDemo() {
-        return timeSlotsDemo;
+
+    public boolean isVerified() {
+        return verified;
     }
 
-    public void setTimeSlotsDemo(Map<String, Object> timeSlotsDemo) {
-        this.timeSlotsDemo = timeSlotsDemo;
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 
     public Map<String, Object> getSlots() {

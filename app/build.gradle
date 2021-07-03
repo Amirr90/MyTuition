@@ -129,4 +129,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
 
+    //Lottie
+    implementation 'com.airbnb.android:lottie:3.4.2'
+
+
+
 }

@@ -24,7 +24,7 @@
         <activity
             android:name=".views.activity.TeacherSignUpActivity"
             android:label="@string/title_activity_teacher_signup"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".views.activity.RegistrationActivity"
             android:theme="@style/AppTheme.NoToolbar" />

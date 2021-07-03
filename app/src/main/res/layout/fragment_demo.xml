@@ -485,6 +485,30 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:hint="About yourself *"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="100"
+                        app:endIconMode="clear_text"
+                        app:helperText="required*"
+                        app:helperTextTextColor="@android:color/holo_red_dark"
+                        app:startIconDrawable="@drawable/ic_baseline_account_circle_24"
+                        app:startIconTint="@color/colorPrimary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="101"
+                            android:singleLine="false"
+                            android:text="@={teacherProfile.about}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
                 </LinearLayout>
 
                 <LinearLayout
