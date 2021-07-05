@@ -1,6 +1,5 @@
 package com.mytuition;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 import com.mytuition.databinding.FragmentRequestTuitionDetailBinding;
 import com.mytuition.interfaces.ApiInterface;
@@ -47,17 +43,6 @@ import static com.mytuition.utility.AppUtils.hideDialog;
 
 
 public class RequestTuitionDetailFragment extends Fragment {
-    private static final String TAG = "RequestTuitionDetailFra";
-
-    FragmentRequestTuitionDetailBinding requestTuitionBinding;
-    NavController navController;
-
-    int selectedPosition = -1;
-
-    TeacherModel teacherModel;
-
-    RequestTuitionModel requestTuitionModel;
-
     public static final String REQUEST_TUITION = "TuitionRequest";
     public static final String REQUEST_STATUS_PENDING = "Pending";
     public static final String REQUEST_STATUS_PENDING_S = "pending";
@@ -66,6 +51,12 @@ public class RequestTuitionDetailFragment extends Fragment {
     public static final String REQUEST_STATUS_REJECTED = "Rejected";
     public static final String REQUEST_STATUS_ACCEPTED_S = "accepted";
     public static final String REQUEST_STATUS_REJECTED_S = "rejected";
+    private static final String TAG = "RequestTuitionDetailFra";
+    FragmentRequestTuitionDetailBinding requestTuitionBinding;
+    NavController navController;
+    int selectedPosition = -1;
+    TeacherModel teacherModel;
+    RequestTuitionModel requestTuitionModel;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -200,14 +191,14 @@ public class RequestTuitionDetailFragment extends Fragment {
         final String[] choices = {"Less experience", "Timing issue", "Fee Issue"};
         builder.setTitle("Please select the reason of change Teacher ")
                 .setSingleChoiceItems(choices, 0, (arg0, arg1) -> selectedPosition = arg1).setPositiveButton("OK", (dialog, id) -> {
-                    if (selectedPosition < 0) {
-                        Toast.makeText(requireActivity(), "Select an issue", Toast.LENGTH_SHORT).show();
-                    } else {
-                        swapTeacher(choices[selectedPosition]);
-                    }
+            if (selectedPosition < 0) {
+                Toast.makeText(requireActivity(), "Select an issue", Toast.LENGTH_SHORT).show();
+            } else {
+                swapTeacher(choices[selectedPosition]);
+            }
 
-                }).setNegativeButton("Cancel", (dialog, id) -> {
-                }).show();
+        }).setNegativeButton("Cancel", (dialog, id) -> {
+        }).show();
 
     }
 
@@ -222,10 +213,10 @@ public class RequestTuitionDetailFragment extends Fragment {
                         Toast.makeText(requireActivity(), "request Submitted successfully !!", Toast.LENGTH_SHORT).show();
                         ParentScreen.getInstance().onSupportNavigateUp();
                     }).addOnFailureListener(e -> {
-                        hideDialog();
-                        Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-                        Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
-                    });
+                hideDialog();
+                Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
+                Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
+            });
     }
 
     private Map<String, Object> getUpdateMap(String choice) {

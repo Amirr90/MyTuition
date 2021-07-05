@@ -6,8 +6,6 @@ import androidx.databinding.Bindable;
 public class ParentModel extends BaseObservable {
 
 
-    private String user;
-    private String lastRequestStatus;
     public String email;
     public String image;
     public String dob;
@@ -15,6 +13,9 @@ public class ParentModel extends BaseObservable {
     public String address;
     public String name;
     public String mobile;
+    public String id;
+    private String user;
+    private String lastRequestStatus;
 
     @Bindable
     public String getLastRequestStatus() {
@@ -32,8 +33,6 @@ public class ParentModel extends BaseObservable {
     public void setId(String id) {
         this.id = id;
     }
-
-    public String id;
 
     public String getMobile() {
         return mobile;
@@ -105,8 +104,6 @@ public class ParentModel extends BaseObservable {
     public void setAddress(String address) {
         this.address = address;
     }
-
-
 
 
     @Override

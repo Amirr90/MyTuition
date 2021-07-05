@@ -11,11 +11,38 @@ public class RequestTuitionModel {
     String reqStatus;
     String rejectedTeacherId;
     String id;
-    Long acceptedAt;
     private long timestamp;
+    private long requestActionTimestamp;
+    private Long acceptedAt;
     private String time;
-    private boolean active;
     private String date;
+    private Boolean active;
+
+
+    public Long getAcceptedAt() {
+        return acceptedAt;
+    }
+
+    public void setAcceptedAt(Long acceptedAt) {
+        this.acceptedAt = acceptedAt;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+
+    public long getRequestActionTimestamp() {
+        return requestActionTimestamp;
+    }
+
+    public void setRequestActionTimestamp(long requestActionTimestamp) {
+        this.requestActionTimestamp = requestActionTimestamp;
+    }
 
     public String getRejectedTeacherId() {
         return rejectedTeacherId;
@@ -25,55 +52,36 @@ public class RequestTuitionModel {
         this.rejectedTeacherId = rejectedTeacherId;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setAcceptedAt(Long acceptedAt) {
-        this.acceptedAt = acceptedAt;
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public Long getAcceptedAt() {
-        return acceptedAt;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-
-
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
     public String getTime() {
         return time;
     }
 
-    public boolean isActive() {
-        return active;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getDate() {
         return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getReqStatus() {

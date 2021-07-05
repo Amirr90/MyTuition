@@ -1,7 +1,9 @@
 package com.mytuition.views.parentFragments;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -24,6 +34,7 @@ import com.mytuition.adapters.MainSliderAdapter;
 import com.mytuition.adapters.TestimonialsAdapter;
 import com.mytuition.databinding.FragmentParentDashboardBinding;
 import com.mytuition.models.Banner;
+import com.mytuition.models.BannerAddModel;
 import com.mytuition.models.CoachingModel;
 import com.mytuition.models.DashboardModel;
 import com.mytuition.models.DashboardModel1;
@@ -53,7 +64,7 @@ public class ParentDashboardFragment extends Fragment {
     public static final String BANNER = "Banner";
     public static final String BANNER_SLIDER = "SliderBanner";
     private static final String TAG = "ParentDashboardFragment";
-
+    public static ParentDashboardFragment instance;
     //aamirr.3212@gmail.com
     FragmentParentDashboardBinding parentDashboardBinding;
     DashboardPatientAdapter1 adapter1;
@@ -65,10 +76,13 @@ public class ParentDashboardFragment extends Fragment {
     ImageLoadingService imageLoadingService;
     RequestModel2 requestModel2;
     List<TestimonialsModel> testimonialsModels;
-
-    public static ParentDashboardFragment instance;
-
     List<DashboardModel> models;
+
+    AdView adView;
+    AdRequest adRequest;
+    AdLoader adLoader;
+    List<BannerAddModel> bannerImages = new ArrayList<>();
+    HomeBannerAdapter homeBannerAdapter;
 
     public static ParentDashboardFragment getInstance() {
         return instance;
@@ -88,6 +102,8 @@ public class ParentDashboardFragment extends Fragment {
         navController = Navigation.findNavController(view);
         requestModel2 = new RequestModel2();
 
+        initAds();
+        initNativeAds();
         parentDashboardBinding.setParent(getParentModel(requireActivity()));
         adapter1 = new DashboardPatientAdapter1();
         adapter2 = new TeacherAdapter();
@@ -95,9 +111,13 @@ public class ParentDashboardFragment extends Fragment {
         testimonialsModels = new ArrayList<>();
         testimonialsAdapter = new TestimonialsAdapter(testimonialsModels);
 
+        homeBannerAdapter = new HomeBannerAdapter(bannerImages);
+        parentDashboardBinding.bannerViewPager.setAdapter(homeBannerAdapter);
+
         parentDashboardBinding.rec1.setAdapter(adapter1);
         parentDashboardBinding.rec2.setAdapter(adapter2);
         parentDashboardBinding.rec3.setAdapter(adapter3);
+
         parentDashboardBinding.recTestimonials.setAdapter(testimonialsAdapter);
 
 
@@ -153,26 +173,85 @@ public class ParentDashboardFragment extends Fragment {
         });
 
 
+    }
+
+    private void initNativeAds() {
+        adLoader = new AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
+     /*   adLoader = new AdLoader.Builder(requireContext(), "ca-app-pub-4669458320732543/1192567403")*/
+                .forNativeAd(NativeAd -> {
+                    Log.d(TAG, "onNativeAdLoaded: " + NativeAd.getStore());
+                    for (int a = 0; a < NativeAd.getImages().size(); a++) {
+                        String image = (NativeAd.getImages().get(a).getUri().toString());
+                        homeBannerAdapter.addItem(new BannerAddModel(image, NativeAd.getBody(), NativeAd.getHeadline(), NativeAd.getCallToAction(), NativeAd.getAdvertiser()));
+                    }
+                })
+                .withAdListener(new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(LoadAdError adError) {
+                        // Handle the failure by logging, altering the UI, and so on.
+                        Log.d(TAG, "onAdFailedToLoad: " + adError.getMessage());
+                    }
+                })
+                .withNativeAdOptions(new NativeAdOptions.Builder()
+                        // Methods in the NativeAdOptions.Builder class can be
+                        // used here to specify individual options settings.
+                        .build())
+                .build();
+
+        adLoader.loadAds(new AdRequest.Builder().build(), 3);
+
 
     }
 
 
+    private void initAds() {
+
+        adView = new AdView(requireActivity());
+        adView.setAdUnitId(getString(R.string.adaptive_banner_ad_unit_id_test));
+        parentDashboardBinding.adContainer.addView(adView);
+
+        MobileAds.initialize(requireActivity(), initializationStatus -> {
+            setUpAds();
+        });
+    }
+
+    private void setUpAds() {
+
+        loadBanner();
+    }
+
+
+    private void loadBanner() {
+
+        adRequest = new AdRequest.Builder().build();
+        AdSize adSize = getAdSize();
+        adView.setAdSize(adSize);
+        adView.loadAd(adRequest);
+    }
+
+    private AdSize getAdSize() {
+        Display display = requireActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+        int adWidth = (int) (widthPixels / density);
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(requireActivity(), adWidth);
+    }
+
     private void loadBigBannerImage(DashboardModel.BannerData bannerData) {
-        List<String> bannerImages = new ArrayList<>();
-        bannerImages.add(bannerData.getBanner().getBannerImage());
+        bannerImages.clear();
+        bannerImages.add(new BannerAddModel(bannerData.getBanner().getBannerImage(), "", "", "", ""));
         if (null != bannerData.getBanner().getBannerImage2())
-            bannerImages.add(bannerData.getBanner().getBannerImage2());
+            bannerImages.add(new BannerAddModel(bannerData.getBanner().getBannerImage2(), "", "", "", ""));
         if (null != bannerData.getBanner().getBannerImage3())
-            bannerImages.add(bannerData.getBanner().getBannerImage3());
+            bannerImages.add(new BannerAddModel(bannerData.getBanner().getBannerImage3(), "", "", "", ""));
         if (null != bannerData.getBanner().getBannerImage4())
-            bannerImages.add(bannerData.getBanner().getBannerImage4());
+            bannerImages.add(new BannerAddModel(bannerData.getBanner().getBannerImage4(), "", "", "", ""));
         if (null != bannerData.getBanner().getBannerImage5())
-            bannerImages.add(bannerData.getBanner().getBannerImage5());
-        parentDashboardBinding.bannerViewPager.setAdapter(new HomeBannerAdapter(bannerImages));
-
+            bannerImages.add(new BannerAddModel(bannerData.getBanner().getBannerImage5(), "", "", "", ""));
+        homeBannerAdapter.notifyDataSetChanged();
         parentDashboardBinding.dotsIndicator.setViewPager2(parentDashboardBinding.bannerViewPager);
-
-
     }
 
 

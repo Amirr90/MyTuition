@@ -34,11 +34,9 @@ import static com.mytuition.utility.Utils.getTeacherModel;
 
 
 public class TeacherListFragment extends Fragment implements AdapterInterface {
+    private static final String TAG = "TeacherListFragment";
     FragmentTeacherListBinding teacherListBinding;
     NavController navController;
-    private static final String TAG = "TeacherListFragment";
-
-
     RecommendedTeachersAdapter doctorsAdapter;
     PopularTeachersAdapter popularDoctorsAdapter;
 

@@ -7,6 +7,17 @@ import androidx.recyclerview.widget.DiffUtil;
 import java.util.Objects;
 
 public class CoachingModel extends BaseObservable {
+    public static DiffUtil.ItemCallback<CoachingModel> itemCallback = new DiffUtil.ItemCallback<CoachingModel>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull CoachingModel oldItem, @NonNull CoachingModel newItem) {
+            return oldItem.getName().equals(newItem.getName());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull CoachingModel oldItem, @NonNull CoachingModel newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
     String image;
     String address;
     String name;
@@ -69,16 +80,4 @@ public class CoachingModel extends BaseObservable {
     public int hashCode() {
         return Objects.hash(getImage(), getAddress(), getName(), getCity(), getState());
     }
-
-    public static DiffUtil.ItemCallback<CoachingModel> itemCallback = new DiffUtil.ItemCallback<CoachingModel>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull CoachingModel oldItem, @NonNull CoachingModel newItem) {
-            return oldItem.getName().equals(newItem.getName());
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull CoachingModel oldItem, @NonNull CoachingModel newItem) {
-            return oldItem.equals(newItem);
-        }
-    };
 }

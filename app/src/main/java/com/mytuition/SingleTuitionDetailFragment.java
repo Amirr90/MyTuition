@@ -1,8 +1,6 @@
 package com.mytuition;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.mytuition.databinding.FragmentSingleTuitionDetailBinding;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.models.RequestModel2;
@@ -103,13 +98,13 @@ public class SingleTuitionDetailFragment extends Fragment {
         AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
                 .document(requestTuitionModel.getId())
                 .update(map).addOnSuccessListener(aVoid -> {
-                    AppUtils.hideDialog();
-                    Toast.makeText(requireActivity(), "Updated Successfully !!", Toast.LENGTH_SHORT).show();
-                    getTuitionDetails();
-                }).addOnFailureListener(e -> {
-                    AppUtils.hideDialog();
-                    Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
-                });
+            AppUtils.hideDialog();
+            Toast.makeText(requireActivity(), "Updated Successfully !!", Toast.LENGTH_SHORT).show();
+            getTuitionDetails();
+        }).addOnFailureListener(e -> {
+            AppUtils.hideDialog();
+            Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
+        });
     }
 
 

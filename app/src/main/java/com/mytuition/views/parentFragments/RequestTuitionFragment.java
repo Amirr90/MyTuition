@@ -33,15 +33,12 @@ import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.Utils.getParentModel;
 
 public class RequestTuitionFragment extends Fragment {
-    private static final String TAG = "RequestTuitionFragment";
-
-
     public static final String REQUEST_TUITION = "TuitionRequest";
     public static final String REQUEST_STATUS_PENDING = "Pending";
     public static final String TIME_SLOT = "slot";
     public static final String REQUEST_STATUS_ACCEPTED = "Accepted";
     public static final String REQUEST_STATUS_REJECTED = "Rejected";
-
+    private static final String TAG = "RequestTuitionFragment";
     FragmentRequestTuitionBinding requestTuitionBinding;
     NavController navController;
 

@@ -9,8 +9,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mytuition.databinding.FragmentCancelTuitionReqDialogBinding;
 import com.mytuition.utility.App;
@@ -60,15 +58,15 @@ public class CancelTuitionReqDialog extends BottomSheetDialogFragment {
             AppUtils.getFirestoreReference()
                     .collection(AppConstant.REQUEST_TUITION)
                     .document(getArguments().getString(AppConstant.TUITION_ID)).update(getUpdateMap()).addOnSuccessListener(aVoid -> {
-                        AppUtils.hideDialog();
-                        Toasty.success(App.context, "cancelled successfully !!", Toast.LENGTH_SHORT, true).show();
-                        dismiss();
+                AppUtils.hideDialog();
+                Toasty.success(App.context, "cancelled successfully !!", Toast.LENGTH_SHORT, true).show();
+                dismiss();
 
-                    }).addOnFailureListener(e -> {
-                        AppUtils.hideDialog();
-                        Toasty.error(App.context, "try again !!", Toast.LENGTH_SHORT, true).show();
+            }).addOnFailureListener(e -> {
+                AppUtils.hideDialog();
+                Toasty.error(App.context, "try again !!", Toast.LENGTH_SHORT, true).show();
 
-                    });
+            });
         }
     }
 

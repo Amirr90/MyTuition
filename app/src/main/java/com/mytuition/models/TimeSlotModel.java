@@ -8,6 +8,11 @@ public class TimeSlotModel {
     List<TimeDetails> timeDetails;
     List<TimeDetails> slots;
 
+    public TimeSlotModel(String slotType, List<TimeDetails> timeDetails) {
+        this.slotType = slotType;
+        this.timeDetails = timeDetails;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -34,11 +39,6 @@ public class TimeSlotModel {
         this.slots = slots;
     }
 
-    public TimeSlotModel(String slotType, List<TimeDetails> timeDetails) {
-        this.slotType = slotType;
-        this.timeDetails = timeDetails;
-    }
-
     public String getSlotType() {
         return slotType;
     }
@@ -59,17 +59,17 @@ public class TimeSlotModel {
         String slotTime;
         Boolean booked;
 
+        public TimeDetails(String slotTime, Boolean booked) {
+            this.slotTime = slotTime;
+            this.booked = booked;
+        }
+
         @Override
         public String toString() {
             return "{" +
                     "slotTime='" + slotTime + '\'' +
                     ", booked=" + booked +
                     '}';
-        }
-
-        public TimeDetails(String slotTime, Boolean booked) {
-            this.slotTime = slotTime;
-            this.booked = booked;
         }
 
         public Boolean getBooked() {

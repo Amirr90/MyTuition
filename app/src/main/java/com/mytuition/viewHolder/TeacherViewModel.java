@@ -8,8 +8,6 @@ import androidx.lifecycle.ViewModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.repositories.TeacherRepository;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 public class TeacherViewModel extends ViewModel {
@@ -20,7 +18,7 @@ public class TeacherViewModel extends ViewModel {
 
     @Inject
     public TeacherViewModel(TeacherRepository repository) {
-         this.repository = repository;
+        this.repository = repository;
         Log.d(TAG, "TeacherViewModel: injected successfully !!");
     }
 

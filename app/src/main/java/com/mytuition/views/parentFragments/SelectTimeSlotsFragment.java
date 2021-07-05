@@ -37,14 +37,13 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
 
 
     public static final String TEACHER = "teacher";
+    private static final String TAG = "SelectTimeSlotsFragment";
     TeacherModel teacherModel = new TeacherModel();
     FragmentSelectTimeSlotsBinding slotsBinding;
     NavController navController;
-
     CalendarAdapter calendarAdapter;
     TimeSlotsAdapter slotsAdapter;
     List<TeacherModel.TimeSlotModel> timeSlotsModelList;
-    private static final String TAG = "SelectTimeSlotsFragment";
     String classId = null;
     String date;
 
@@ -67,9 +66,9 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
 
         if (null != getArguments().getString("docModel")) {
             String jsonString = getArguments().getString("docModel");
+            Log.d(TAG, "onViewCreatedJson: " + jsonString);
             Gson gson = new Gson();
             teacherModel = gson.fromJson(jsonString, TeacherModel.class);
-            Log.d(TAG, "onViewCreated: " + teacherModel.toString());
         }
         if (null != getArguments().getString("class")) {
             classId = getArguments().getString("class");
@@ -80,6 +79,7 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
 
         // AddTimeSlot(teacherModel.getId());
         date = getNextWeekDays().get(0).getDateSend();
+
         getTimeSlots(0);
         slotsBinding.tvCurrentDate.setText(getCurrentDateInWeekMonthDayFormat());
 
@@ -114,7 +114,14 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
             Log.d(TAG, "setSlots: " + getSlots(b, 21, 24));
 
         } else {
-            timeSlotsModelList.addAll(teacherModel.getTimeSlots());
+            // timeSlotsModelList.addAll(teacherModel.getTimeSlots());
+            boolean b = false;
+
+            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Morning", getSlots(b, 6, 12)));
+            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Noon", getSlots(b, 12, 17)));
+            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Evening", getSlots(b, 17, 21)));
+            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Night", getSlots(b, 21, 24)));
+            Log.d(TAG, "setSlots: " + getSlots(b, 21, 24));
         }
         slotsAdapter = new TimeSlotsAdapter(timeSlotsModelList, this);
         slotsBinding.timingRec.setAdapter(slotsAdapter);

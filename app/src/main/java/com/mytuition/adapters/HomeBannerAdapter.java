@@ -1,5 +1,8 @@
 package com.mytuition.adapters;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -9,17 +12,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.mytuition.R;
 import com.mytuition.databinding.HomeBannerViewBinding;
+import com.mytuition.models.BannerAddModel;
 import com.mytuition.utility.App;
+import com.mytuition.utility.AppUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeBannerAdapter extends RecyclerView.Adapter<HomeBannerAdapter.BannerVH> {
 
 
-    List<String> bannerImages;
+    private static final String TAG = "HomeBannerAdapter";
+    List<BannerAddModel> bannerImages;
 
-    public HomeBannerAdapter(List<String> bannerImages) {
+    public HomeBannerAdapter(List<BannerAddModel> bannerImages) {
         this.bannerImages = bannerImages;
+
     }
 
     @NonNull
@@ -32,10 +40,29 @@ public class HomeBannerAdapter extends RecyclerView.Adapter<HomeBannerAdapter.Ba
 
     @Override
     public void onBindViewHolder(@NonNull BannerVH holder, int position) {
-        String bannerImage = bannerImages.get(position);
-        Glide.with(App.context).load(bannerImage)
+        BannerAddModel bannerImage = bannerImages.get(position);
+        holder.binding.setAdModel(bannerImage);
+        Glide.with(App.context).load(bannerImage.getImage())
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(holder.binding.dashboardHomeImage);
+        holder.binding.textView51.setAnimation(AppUtils.slideUp(App.context));
+
+
+        holder.binding.getRoot().setOnClickListener(v -> {
+            if (null != bannerImage.getCallToAction() && !bannerImage.getCallToAction().isEmpty()) {
+                Log.d(TAG, "onClick: " + bannerImage.getCallToAction());
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(bannerImage.getCallToAction()));
+                App.context.startActivity(browserIntent);
+            }
+        });
+    }
+
+
+    public void addItem(BannerAddModel addModel) {
+        if (null == bannerImages)
+            bannerImages = new ArrayList<>();
+        bannerImages.add(0, addModel);
+        notifyDataSetChanged();
     }
 
     @Override

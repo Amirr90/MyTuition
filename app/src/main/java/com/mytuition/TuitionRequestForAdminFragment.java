@@ -16,11 +16,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.paging.PagedList;
 
-import com.firebase.ui.firestore.SnapshotParser;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.mytuition.adapters.CategoryViewHolder;
 import com.mytuition.databinding.FragmentTuitionRequestForAdminBinding;
@@ -103,20 +101,16 @@ public class TuitionRequestForAdminFragment extends Fragment {
 
                 switch (status) {
                     case AppConstant.REQUEST_STATUS_PENDING:
-                    case AppConstant.REQUEST_STATUS_PENDING_S:
                         holder.binding.llImage.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.yellow2)));
                         break;
                     case AppConstant.REQUEST_STATUS_REJECTED:
-                    case AppConstant.REQUEST_STATUS_REJECTED_S:
                         holder.binding.llImage.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.pink)));
                         break;
 
                     case AppConstant.REQUEST_STATUS_ACCEPTED:
-                    case AppConstant.REQUEST_STATUS_ACCEPTED_S:
                         holder.binding.llImage.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
                         break;
                     case AppConstant.REQUEST_STATUS_CANCELLED:
-                    case AppConstant.REQUEST_STATUS_CANCELLED_S:
                         holder.binding.llImage.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.red700)));
                         break;
                 }

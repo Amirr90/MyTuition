@@ -1,7 +1,6 @@
 package com.mytuition.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -76,6 +75,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         return calendarModelList.size();
     }
 
+    public interface CalenderInterface {
+        void onItemClicked(CalendarModel calendarModel, int position);
+    }
+
     public static class CalenderVH extends RecyclerView.ViewHolder {
         CalenderViewBinding calenderViewBinding;
 
@@ -83,10 +86,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             super(calenderViewBinding.getRoot());
             this.calenderViewBinding = calenderViewBinding;
         }
-    }
-
-    public interface CalenderInterface {
-        void onItemClicked(CalendarModel calendarModel, int position);
     }
 }
 

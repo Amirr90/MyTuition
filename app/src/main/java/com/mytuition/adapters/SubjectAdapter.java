@@ -3,7 +3,6 @@ package com.mytuition.adapters;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -19,9 +18,8 @@ import com.mytuition.views.activity.ParentScreen;
 import static com.mytuition.adapters.DashboardPatientAdapter1.SPECIALITY;
 
 public class SubjectAdapter extends ListAdapter<SpecialityModel, SubjectAdapter.SpecialityVH> {
-    private static final String TAG = "SpecialityAdapter";
     public static final String ID = "id";
-
+    private static final String TAG = "SpecialityAdapter";
     Activity activity;
 
     public SubjectAdapter(Activity activity) {
@@ -45,7 +43,7 @@ public class SubjectAdapter extends ListAdapter<SpecialityModel, SubjectAdapter.
 
 
         holder.specialitiyViewBinding.llspeality.setOnClickListener(v -> {
-           // AddNewSpeciality(subjectModel);
+            // AddNewSpeciality(subjectModel);
             AppUtils.hideSoftKeyboard(activity);
             Bundle bundle = new Bundle();
             bundle.putString(ID, String.valueOf(subjectModel.getId()));

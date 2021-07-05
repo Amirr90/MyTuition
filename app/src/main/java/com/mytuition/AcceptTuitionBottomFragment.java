@@ -71,11 +71,13 @@ public class AcceptTuitionBottomFragment extends BottomSheetDialogFragment {
         reference.get().addOnSuccessListener(documentSnapshot -> {
             RequestTuitionModel requestTuitionModel = documentSnapshot.toObject(RequestTuitionModel.class);
             if (null != requestTuitionModel) {
-                if (requestTuitionModel.isActive() && requestTuitionModel.getReqStatus().equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING_S)) {
+                if (requestTuitionModel.getActive() && requestTuitionModel.getReqStatus().equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING)) {
                     Map<String, Object> map = new HashMap<>();
-                    map.put("reqStatus", AppConstant.REQUEST_STATUS_ACCEPTED_S);
+                    map.put("reqStatus", AppConstant.REQUEST_STATUS_ACCEPTED);
                     map.put("teacherId", getUid());
                     map.put("active", false);
+                    map.put("acceptedAt", System.currentTimeMillis());
+                    map.put("name", AppUtils.getString("name", requireActivity()));
                     reference.update(map)
                             .addOnSuccessListener(aVoid -> {
                                 dismiss();

@@ -7,6 +7,17 @@ import java.util.Objects;
 
 public class SpecialityModel {
 
+    public static DiffUtil.ItemCallback<SpecialityModel> itemCallback = new DiffUtil.ItemCallback<SpecialityModel>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull SpecialityModel oldItem, @NonNull SpecialityModel newItem) {
+            return oldItem.getName().equals(newItem.getName());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull SpecialityModel oldItem, @NonNull SpecialityModel newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
     String icon;
     String name;
     String id;
@@ -68,17 +79,4 @@ public class SpecialityModel {
     public void setName(String name) {
         this.name = name;
     }
-
-
-    public static DiffUtil.ItemCallback<SpecialityModel>itemCallback=new DiffUtil.ItemCallback<SpecialityModel>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull SpecialityModel oldItem, @NonNull SpecialityModel newItem) {
-            return oldItem.getName().equals(newItem.getName());
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull SpecialityModel oldItem, @NonNull SpecialityModel newItem) {
-            return oldItem.equals(newItem);
-        }
-    };
 }

@@ -26,15 +26,12 @@ import static com.mytuition.views.activity.ChooseLoginTypeScreen.getUserMap;
 
 
 public class Utils {
-    public static Map<LocalTime, Boolean> slots = new HashMap();
-
-    private static final String TAG = "Utils";
-
     public static final String LOGIN_TYPE = "loginType";
     public static final String LOGIN_TYPE_PARENT = "parent";
     public static final String LOGIN_TYPE_TEACHER = "teacher";
+    private static final String TAG = "Utils";
     private static final String TEACHER_TIMING = "TeacherTiming";
-
+    public static Map<LocalTime, Boolean> slots = new HashMap();
 
     public static void updateUI(final String loginType) {
         if (getUid() == null) {
@@ -121,6 +118,64 @@ public class Utils {
 
     }
 
+    public static void initializeSlots() {
+        LocalTime time = LocalTime.of(9, 0);
+        slots.put(time, true);
+        for (int i = 1; i < 24; i++) {
+            slots.put(time.plusHours(i), true);
+        }
+    }
+
+    private static void allocateSlots(String strTime, String edTime) {
+        LocalTime startTime = LocalTime.parse(strTime);
+        LocalTime endTime = LocalTime.parse(edTime);
+
+        while (startTime.isBefore(endTime)) {
+            //check if the time slots between start and end time are available
+            if (!slots.get(startTime) || !slots.get(endTime)) {
+                System.out.println("slots not available" + " start time: " + strTime + " end time: " + edTime);
+                return;
+            }
+            startTime = startTime.plusHours(1);
+            endTime = endTime.minusHours(1);
+        }
+
+        System.out.println("slots are available" + " start time: " + strTime + " end time: " + edTime);
+        //then here u can mark all slots between to unavailable.
+        startTime = LocalTime.parse(strTime);
+        endTime = LocalTime.parse(edTime);
+        while (startTime.isBefore(endTime)) {
+            slots.put(startTime, false);
+            slots.put(endTime, false);
+            startTime = startTime.plusHours(1);
+            endTime = endTime.minusHours(1);
+        }
+    }
+
+    public static ParentModel getParentModel(Activity activity) {
+        SharedPreferences pref = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = pref.getString(PARENT, "");
+        return gson.fromJson(json, ParentModel.class);
+    }
+
+    public static void setParentModel(Activity activity, ParentModel myObject) {
+        SharedPreferences pref = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(myObject);
+        prefsEditor.putString(PARENT, json);
+        prefsEditor.commit();
+    }
+
+    public static String[] getCityList() {
+        return new String[]{"Lucknow", "Kanpur", "Sitapur", "Kakori"};
+    }
+
+    public static String[] getStateList() {
+        return new String[]{"Uttar Pradesh"};
+    }
+
     public static class TimeSlots {
 
         public List<Slot> timing;
@@ -136,8 +191,8 @@ public class Utils {
     }
 
     public static class Slot {
-        String slot;
         public List<SlotTiming> slotTiming;
+        String slot;
 
         public List<SlotTiming> getSlotTiming() {
             return slotTiming;
@@ -187,41 +242,6 @@ public class Utils {
         }
     }
 
-
-    public static void initializeSlots() {
-        LocalTime time = LocalTime.of(9, 0);
-        slots.put(time, true);
-        for (int i = 1; i < 24; i++) {
-            slots.put(time.plusHours(i), true);
-        }
-    }
-
-    private static void allocateSlots(String strTime, String edTime) {
-        LocalTime startTime = LocalTime.parse(strTime);
-        LocalTime endTime = LocalTime.parse(edTime);
-
-        while (startTime.isBefore(endTime)) {
-            //check if the time slots between start and end time are available
-            if (!slots.get(startTime) || !slots.get(endTime)) {
-                System.out.println("slots not available" + " start time: " + strTime + " end time: " + edTime);
-                return;
-            }
-            startTime = startTime.plusHours(1);
-            endTime = endTime.minusHours(1);
-        }
-
-        System.out.println("slots are available" + " start time: " + strTime + " end time: " + edTime);
-        //then here u can mark all slots between to unavailable.
-        startTime = LocalTime.parse(strTime);
-        endTime = LocalTime.parse(edTime);
-        while (startTime.isBefore(endTime)) {
-            slots.put(startTime, false);
-            slots.put(endTime, false);
-            startTime = startTime.plusHours(1);
-            endTime = endTime.minusHours(1);
-        }
-    }
-
     public static class TimeDemo {
         List<String> timeSlots;
 
@@ -232,31 +252,5 @@ public class Utils {
         public List<String> getTimeSlots() {
             return timeSlots;
         }
-    }
-
-
-    public static ParentModel getParentModel(Activity activity) {
-        SharedPreferences pref = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = pref.getString(PARENT, "");
-        return gson.fromJson(json, ParentModel.class);
-    }
-
-
-    public static void setParentModel(Activity activity, ParentModel myObject) {
-        SharedPreferences pref = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = pref.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(myObject);
-        prefsEditor.putString(PARENT, json);
-        prefsEditor.commit();
-    }
-
-    public static String[] getCityList() {
-        return new String[]{"Lucknow", "Kanpur", "Sitapur", "Kakori"};
-    }
-
-    public static String[] getStateList() {
-        return new String[]{"Uttar Pradesh"};
     }
 }

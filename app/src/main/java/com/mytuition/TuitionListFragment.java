@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mytuition.databinding.FragmentTuitionListBinding;
 import com.mytuition.databinding.TuitionListViewBinding;
 import com.mytuition.models.RequestTuitionModel;
-import com.mytuition.responseModel.TuitionDetailResponse;
 import com.mytuition.viewHolder.ParentViewHolder;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,11 +29,10 @@ import static com.mytuition.utility.AppUtils.fadeIn;
 
 public class TuitionListFragment extends Fragment {
 
+    private static final String TAG = "TuitionListFragment";
     FragmentTuitionListBinding binding;
     NavController navController;
     ParentViewHolder viewModel;
-    private static final String TAG = "TuitionListFragment";
-
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -73,6 +70,12 @@ public class TuitionListFragment extends Fragment {
                 binding.prescriptionRec.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).show();
     }
 
     private class AdapterTuitionList extends RecyclerView.Adapter<AdapterTuitionList.TuitionVH> {
@@ -117,11 +120,5 @@ public class TuitionListFragment extends Fragment {
                 this.binding = binding;
             }
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).show();
     }
 }

@@ -24,7 +24,7 @@
         <activity
             android:name=".views.activity.TeacherSignUpActivity"
             android:label="@string/title_activity_teacher_signup"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.RegistrationActivity"
             android:theme="@style/AppTheme.NoToolbar" />
@@ -59,9 +59,19 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <service
+            android:name=".utility.FirebaseMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5778282166425967~7912043179" />
+            android:value="ca-app-pub-4669458320732543~4109540636" />
+
     </application>
 
 </manifest>

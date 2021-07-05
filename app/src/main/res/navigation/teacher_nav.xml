@@ -30,6 +30,13 @@
         <action
             android:id="@+id/action_teacherDashboardFragment_to_acceptTuitionBootomFragment"
             app:destination="@id/acceptTuitionBootomFragment" />
+        <action
+            android:id="@+id/action_teacherDashboardFragment_to_myTuitionsFragment"
+            app:destination="@id/myTuitionsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/TProfileFragment"
@@ -78,4 +85,9 @@
         android:name="com.mytuition.AcceptTuitionBottomFragment"
         android:label="fragment_accept_tuition_bootom"
         tools:layout="@layout/fragment_accept_tuition_bootom" />
+    <fragment
+        android:id="@+id/myTuitionsFragment"
+        android:name="com.mytuition.MyTuitionsFragment"
+        android:label="My Tuitions"
+        tools:layout="@layout/fragment_my_tuitions" />
 </navigation>

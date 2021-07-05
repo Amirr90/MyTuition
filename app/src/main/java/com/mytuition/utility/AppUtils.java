@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -72,18 +74,16 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class AppUtils {
     public static final String SLOTS = "slots";
+    public static final String MY_PREFS_NAME = "myPref";
     private static final String TAG = "AppUtils";
-    public static Toast mToast;
-
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+    public static Toast mToast;
     public static String Teachers = "Teachers";
     public static String Users = "Users";
     static ProgressDialog progressDialog;
-
-    public static final String MY_PREFS_NAME = "myPref";
     static int uploadImageCounter = 0;
 
 
@@ -213,20 +213,31 @@ public class AppUtils {
     }
 
 
-    public static void updateToken(final onSuccessListener onSuccessListener) {
+    public static void updateToken(onSuccessListener successListener) {
+        /*        fzYdFNoYSt6KVqbnIajo8e*/
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (null != user) {
             final Map<String, Object> map = new HashMap<>();
-
             FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
                 String newToken = instanceIdResult.getToken();
                 map.put(AppConstant.TOKEN, newToken);
                 getFirestoreReference().collection(AppConstant.USER)
                         .document(Objects.requireNonNull(getUid()))
-                        .update(map).addOnSuccessListener(aVoid -> onSuccessListener.onSuccess("Updated !!")).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
+                        .update(map).addOnSuccessListener(aVoid -> successListener.onSuccess("Updated !!"))
+                        .addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
                 Log.e("newToken2", newToken);
             });
         }
+/*
+        final Map<String, Object> map = new HashMap<>();
+        map.put(AppConstant.TOKEN, token);
+        getFirestoreReference().collection(AppConstant.USER)
+                .document(Objects.requireNonNull(getUid()))
+                .update(map).addOnSuccessListener(aVoid -> {
+            Log.d(TAG, "updateToken: updated !!");
+        })
+                .addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
+        Log.e("newToken2", token);*/
     }
 
     public static void hideDialog() {
@@ -282,7 +293,7 @@ public class AppUtils {
         map.put("image", teacherModel.getImage());
         map.put("name", teacherModel.getName());
         map.put("id", getUid());
-        map.put("isActive", teacherModel.isActive());
+        map.put("active", teacherModel.isActive());
         map.put("speciality", teacherModel.getSpeciality());
         map.put("about", teacherModel.getAbout());
         map.put("profileFilled", true);
@@ -294,6 +305,7 @@ public class AppUtils {
         map.put("teachingProfile", teacherModel.getTeachingProfile());
         map.put("timeSlots", teacherModel.getTimeSlots());
         map.put("slots", teacherModel.getSlots());
+        map.put("profile.verified", teacherModel.getProfile().getVerified());
 
         Log.d(TAG, "getTeacherProfileMap: " + map);
         return map;
@@ -377,13 +389,6 @@ public class AppUtils {
 
     public static String[] getSlotsType() {
         return new String[]{"Morning", "Noon", "Evening", "Night"};
-    }
-
-
-    private void showPdf(String filePath) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(filePath), "application/pdf");
-
     }
 
     public static String parseDate(String inDate, String outPattern) {
@@ -479,9 +484,7 @@ public class AppUtils {
         if (connectivity != null) {
             NetworkInfo info = connectivity.getActiveNetworkInfo();
             if (info != null) {
-                if (info.getState() == NetworkInfo.State.CONNECTED) {
-                    return true;
-                }
+                return info.getState() == NetworkInfo.State.CONNECTED;
             }
         }
 
@@ -500,18 +503,19 @@ public class AppUtils {
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getTimeFormat(long currentTimeMillis, String outFormat) {
+        Log.d(TAG, "getTimeFormat:currentTimeMillis  " + currentTimeMillis);
         try {
-            String value = new java.text.SimpleDateFormat(outFormat).
-                    format(new java.util.Date(currentTimeMillis));
-            return value;
+            return new SimpleDateFormat(outFormat).
+                    format(new Date(currentTimeMillis));
         } catch (Exception e) {
             e.printStackTrace();
+            Log.d(TAG, "getTimeFormat: " + e.getLocalizedMessage());
             return null;
         }
 
     }
-
 
     public static Animation fadeIn(Activity activity) {
         return AnimationUtils.loadAnimation(activity, R.anim.fade_in);
@@ -524,7 +528,6 @@ public class AppUtils {
     public static Animation fadeOut(Activity activity) {
         return AnimationUtils.loadAnimation(activity, R.anim.fade_out);
     }
-
 
     public static void setString(String key, String value, Activity activity) {
         SharedPreferences sharedpreferences = activity.getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
@@ -578,7 +581,6 @@ public class AppUtils {
         return list;
     }
 
-
     public static String getDayFromDate(String incomingDate) {
         String inputPattern = "dd/MM/yyyy";
         String outputPattern = "EEE";
@@ -596,7 +598,6 @@ public class AppUtils {
         }
         return str;
     }
-
 
     public static JSONObject objectToJSONObject(Object object) {
         Object json = null;
@@ -670,7 +671,6 @@ public class AppUtils {
         return str;
     }
 
-
     public static String getTimeAgo(long time) {
         if (time < 1000000000000L) {
             time *= 1000;
@@ -704,7 +704,6 @@ public class AppUtils {
         return formatter.format(calendar.getTime());
     }
 
-
     public static void getFcmToken(final Activity activity) {
 /*
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
@@ -714,7 +713,6 @@ public class AppUtils {
         });*/
 
     }
-
 
     public static FirebaseUser getCurrentUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
@@ -764,5 +762,34 @@ public class AppUtils {
 
     public static void hideToolbar(Activity activity) {
         Objects.requireNonNull(((AppCompatActivity) activity).getSupportActionBar()).hide();
+    }
+
+    static Ringtone r;
+
+    public static void playNotificationSound() {
+        try {
+            Uri notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            if (null == r)
+                r = RingtoneManager.getRingtone(App.context, notificationSoundUri);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void stopNotificationSound() {
+        if (null != r) {
+            r.stop();
+        }
+    }
+
+    public static Animation slideUp(Context activity) {
+        return AnimationUtils.loadAnimation(activity, R.anim.slide_up);
+    }
+
+    private void showPdf(String filePath) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse(filePath), "application/pdf");
+
     }
 }

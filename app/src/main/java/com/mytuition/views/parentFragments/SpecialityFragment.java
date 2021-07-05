@@ -34,12 +34,10 @@ import static com.mytuition.utility.Utils.getFirebaseReference;
 
 public class SpecialityFragment extends Fragment implements AdapterInterface {
     private static final String TAG = "SpecialityFragment";
-
-
+    public static List<String> specialitiesIds;
     FragmentSpecialityBinding specialityBinding;
     NavController navController;
     SpecialityAdapter specialityAdapter;
-    public static List<String> specialitiesIds;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,

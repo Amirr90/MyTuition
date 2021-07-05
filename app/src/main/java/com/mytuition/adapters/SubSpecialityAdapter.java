@@ -3,7 +3,6 @@ package com.mytuition.adapters;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -75,6 +74,10 @@ public class SubSpecialityAdapter extends ListAdapter<TeacherModel, SubSpecialit
         Utils.getFirebaseReference("Teachers").child(String.valueOf(System.currentTimeMillis())).setValue(teacherModel);
     }
 
+    public interface SubSpecialityInterface {
+        void onItemClick(String item);
+    }
+
     public static class SubSpecialityVH extends RecyclerView.ViewHolder {
         SubSpecialityViewBinding subSpecialityViewBinding;
 
@@ -82,9 +85,5 @@ public class SubSpecialityAdapter extends ListAdapter<TeacherModel, SubSpecialit
             super(subSpecialityViewBinding.getRoot());
             this.subSpecialityViewBinding = subSpecialityViewBinding;
         }
-    }
-
-    public interface SubSpecialityInterface {
-        void onItemClick(String item);
     }
 }

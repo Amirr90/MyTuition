@@ -35,10 +35,10 @@ public class FirebaseMessageService extends FirebaseMessagingService {
 
     private static final String TAG = "FirebaseMessageService";
     final String CHANNEL_ID = "com.mytuition";
-    private NotificationManager mManager;
     Bitmap bitmap;
     Context context;
     int destinationId;
+    private NotificationManager mManager;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

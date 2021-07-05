@@ -11,11 +11,11 @@ public class BannerModel {
     public BannerModel() {
     }
 
-    public void setSliderImages(String sliderImages) {
-        this.sliderImages = sliderImages;
-    }
-
     public String getSliderImages() {
         return sliderImages;
+    }
+
+    public void setSliderImages(String sliderImages) {
+        this.sliderImages = sliderImages;
     }
 }

@@ -277,7 +277,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
-                            android:text="@{`Per Visit Fee : `+AppUtils.getCurrencyFormat(teacher.teachingProfile.perVisitFee)}"
+                            android:text="@{`Per Visit Fee : `+teacher.teachingProfile.perVisitFee}"
                             android:textColor="#3F4E6E"
                             android:textSize="12sp" />
 
@@ -285,7 +285,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
-                            android:text="@{`Monthly Fee : `+AppUtils.getCurrencyFormat(teacher.teachingProfile.monthlyFee)}"
+                            android:text="@{`Monthly Fee : `+teacher.teachingProfile.monthlyFee}"
                             android:textColor="#3F4E6E"
                             android:textSize="12sp" />
 

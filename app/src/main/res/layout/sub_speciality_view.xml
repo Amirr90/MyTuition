@@ -229,7 +229,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/poppins_bold"
-                        android:text="@{AppUtils.getCurrencyFormat(teacher.teachingProfile.perVisitFee)}"
+                        android:text="@{teacher.teachingProfile.perVisitFee}"
                         android:textColor="#262E3F"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -259,7 +259,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/poppins_bold"
-                        android:text="@{AppUtils.getCurrencyFormat(teacher.teachingProfile.monthlyFee)}"
+                        android:text="@{teacher.teachingProfile.monthlyFee}"
                         android:textColor="#262E3F"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -295,7 +295,20 @@
                     android:textColor="#58d68d "
                     android:textSize="12sp"
                     android:textStyle="normal"
-                    android:visibility="@{teacher.teachingProfile.demoClass?View.VISIBLE:View.GONE}" />
+                    android:visibility="@{teacher.availableForDemoClass?View.VISIBLE:View.GONE}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/poppins"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:text="Available on Sunday"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:visibility="@{teacher.availableForSunday?View.VISIBLE:View.GONE}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

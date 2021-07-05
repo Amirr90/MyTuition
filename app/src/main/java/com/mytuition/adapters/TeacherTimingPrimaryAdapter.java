@@ -17,20 +17,30 @@ import com.mytuition.interfaces.TeacherTimingInterface;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.App;
 
-import java.util.List;
-
 import static com.mytuition.utility.AppUtils.fadeIn;
 
 public class TeacherTimingPrimaryAdapter extends ListAdapter<TeacherModel.TimeSlotModel, TeacherTimingPrimaryAdapter.TeacherVH> {
 
+    public static DiffUtil.ItemCallback<TeacherModel.TimeSlotModel> itemCallback = new DiffUtil.ItemCallback<TeacherModel.TimeSlotModel>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull TeacherModel.TimeSlotModel oldItem, @NonNull TeacherModel.TimeSlotModel newItem) {
+            return oldItem.getType().equalsIgnoreCase(newItem.getType());
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        @Override
+        public boolean areContentsTheSame(@NonNull TeacherModel.TimeSlotModel oldItem, @NonNull TeacherModel.TimeSlotModel newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
     TimeSlotsAdapterSecondary adapterSecondary;
     TeacherTimingInterface adapterInterface;
+
 
     public TeacherTimingPrimaryAdapter(TeacherTimingInterface adapterInterface) {
         super(itemCallback);
         this.adapterInterface = adapterInterface;
     }
-
 
     @NonNull
     @Override
@@ -52,6 +62,10 @@ public class TeacherTimingPrimaryAdapter extends ListAdapter<TeacherModel.TimeSl
         }
     }
 
+    private void changeLayoutColor(TimeSlotsAdapterSecondary.SecondaryVH holder, Drawable drawable, int color) {
+        holder.viewSecondaryNewBinding.timingText.setBackground(drawable);
+        holder.viewSecondaryNewBinding.timingText.setTextColor(color);
+    }
 
     public class TeacherVH extends RecyclerView.ViewHolder {
         TimingViewTeacherPrimaryBinding primaryBinding;
@@ -61,19 +75,6 @@ public class TeacherTimingPrimaryAdapter extends ListAdapter<TeacherModel.TimeSl
             this.primaryBinding = primaryBinding;
         }
     }
-
-    public static DiffUtil.ItemCallback<TeacherModel.TimeSlotModel> itemCallback = new DiffUtil.ItemCallback<TeacherModel.TimeSlotModel>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull TeacherModel.TimeSlotModel oldItem, @NonNull TeacherModel.TimeSlotModel newItem) {
-            return oldItem.getType().equalsIgnoreCase(newItem.getType());
-        }
-
-        @SuppressLint("DiffUtilEquals")
-        @Override
-        public boolean areContentsTheSame(@NonNull TeacherModel.TimeSlotModel oldItem, @NonNull TeacherModel.TimeSlotModel newItem) {
-            return oldItem.equals(newItem);
-        }
-    };
 
     private class TimeSlotsAdapterSecondary extends RecyclerView.Adapter<TimeSlotsAdapterSecondary.SecondaryVH> {
         TeacherModel.TimeSlotModel timeSlotModel;
@@ -148,10 +149,5 @@ public class TeacherTimingPrimaryAdapter extends ListAdapter<TeacherModel.TimeSl
                 this.viewSecondaryNewBinding = secondaryBinding;
             }
         }
-    }
-
-    private void changeLayoutColor(TimeSlotsAdapterSecondary.SecondaryVH holder, Drawable drawable, int color) {
-        holder.viewSecondaryNewBinding.timingText.setBackground(drawable);
-        holder.viewSecondaryNewBinding.timingText.setTextColor(color);
     }
 }

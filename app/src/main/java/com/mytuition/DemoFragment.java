@@ -343,6 +343,8 @@ public class DemoFragment extends Fragment {
         teachingProfile.setTeachingSubject(list);
 
         teacherModel.setTeachingProfile(teachingProfile);
+        if (teacherModel.getProfile().getVerified() == null)
+            teacherModel.getProfile().setVerified(false);
         AppUtils.updateTeacherProfile(teacherModel, new ApiInterface() {
             @Override
             public void onSuccess(Object obj) {

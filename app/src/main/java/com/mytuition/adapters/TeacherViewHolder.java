@@ -3,7 +3,6 @@ package com.mytuition.adapters;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.mytuition.databinding.UserListViewBinding;
 
 public class TeacherViewHolder extends RecyclerView.ViewHolder {

@@ -12,15 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -30,11 +27,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.mytuition.R;
 import com.mytuition.adapters.NavAdapter;
 import com.mytuition.databinding.ActivityParentScreenBinding;
@@ -66,26 +58,20 @@ import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST
 import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_TUITION;
 
 public class ParentScreen extends AppCompatActivity implements NavigationInterface {
+    public static final int LOCATION_PERMISSION_REQUEST_CODE = 2020;
     private static final String TAG = "ParentScreen";
     private static final String REQUEST_STATUS_CONFIRMED = "confirmed";
-    public static final int LOCATION_PERMISSION_REQUEST_CODE = 2020;
-
-    ActivityParentScreenBinding mainBinding;
-    NavController navController;
-
-    NavAdapter navAdapter;
-    List<NavModel> navModels;
-
+    public static ParentScreen instance;
     public String cityName;
     public String areaName;
-
+    ActivityParentScreenBinding mainBinding;
+    NavController navController;
+    NavAdapter navAdapter;
+    List<NavModel> navModels;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationAddressResultReceiver addressResultReceiver;
     private Location currentLocation;
     private LocationCallback locationCallback;
-
-
-    public static ParentScreen instance;
 
     public static ParentScreen getInstance() {
         return instance;
@@ -215,16 +201,20 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                                     mainBinding.constraintLayout.setVisibility(View.GONE);
                                 }
                             } else {
-                                if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_PENDING)) {
-                                    mainBinding.textView9.setText("Waiting for Teacher to accept your Demo Class");
-                                } else if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_ACCEPTED)) {
-                                    //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Accepted your tuition request");
-                                    mainBinding.btLoading.setAnimation(R.raw.accepted);
-                                    mainBinding.btLoading.playAnimation();
-                                } else if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_REJECTED)) {
-                                    //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Rejected your tuition request");
-                                    mainBinding.btLoading.setAnimation(R.raw.rejected);
-                                    mainBinding.btLoading.playAnimation();
+                                switch (tuitionModel.getReqStatus()) {
+                                    case REQUEST_STATUS_PENDING:
+                                        mainBinding.textView9.setText("Waiting for Teacher to accept your Demo Class");
+                                        break;
+                                    case REQUEST_STATUS_ACCEPTED:
+                                        //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Accepted your tuition request");
+                                        mainBinding.btLoading.setAnimation(R.raw.accepted);
+                                        mainBinding.btLoading.playAnimation();
+                                        break;
+                                    case REQUEST_STATUS_REJECTED:
+                                        //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Rejected your tuition request");
+                                        mainBinding.btLoading.setAnimation(R.raw.rejected);
+                                        mainBinding.btLoading.playAnimation();
+                                        break;
                                 }
                             }
 
@@ -258,32 +248,6 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         navAdapter.notifyDataSetChanged();
     }
 
-
-    private class LocationAddressResultReceiver extends ResultReceiver {
-        LocationAddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            if (resultCode == 0) {
-                Log.d("Address", "Location null retrying");
-                getAddress();
-            }
-
-            if (resultCode == 1) {
-                Toast.makeText(ParentScreen.this, "Address not found, ", Toast.LENGTH_SHORT).show();
-            }
-
-            String currentAdd = resultData.getString("address_result");
-            String lat = resultData.getString("lat");
-            String lng = resultData.getString("lng");
-            Log.d(TAG, "onReceiveResult: " + currentAdd);
-            showResults(currentAdd, lat, lng);
-
-        }
-    }
-
     private void getAddress() {
         if (!Geocoder.isPresent()) {
             Toast.makeText(ParentScreen.this, "Can't find current address, ", Toast.LENGTH_SHORT).show();
@@ -295,7 +259,6 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         startService(intent);
 
     }
-
 
     public void getNotificationData() {
 
@@ -365,7 +328,6 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         return navController.navigateUp();
     }
 
-
     public void navigate(int id) {
         navController.navigate(id);
     }
@@ -390,7 +352,6 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             showLogoutDialog();
         else Toast.makeText(instance, "coming soon !!", Toast.LENGTH_SHORT).show();
     }
-
 
     private void showLogoutDialog() {
         new AlertDialog.Builder(ParentScreen.this)
@@ -420,5 +381,30 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
 
     private void updateToken() {
         AppUtils.updateToken(obj -> Log.d(TAG, "updateToken: " + (String) obj));
+    }
+
+    private class LocationAddressResultReceiver extends ResultReceiver {
+        LocationAddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            if (resultCode == 0) {
+                Log.d("Address", "Location null retrying");
+                getAddress();
+            }
+
+            if (resultCode == 1) {
+                Toast.makeText(ParentScreen.this, "Address not found, ", Toast.LENGTH_SHORT).show();
+            }
+
+            String currentAdd = resultData.getString("address_result");
+            String lat = resultData.getString("lat");
+            String lng = resultData.getString("lng");
+            Log.d(TAG, "onReceiveResult: " + currentAdd);
+            showResults(currentAdd, lat, lng);
+
+        }
     }
 }

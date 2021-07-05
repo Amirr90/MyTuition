@@ -63,7 +63,8 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
 
         requestModel.setSpecialityId(specialityName);
         viewModel.getTeacher(requestModel).observe(getViewLifecycleOwner(), teacherModels -> {
-            AppUtils.hideDialog();AppUtils.hideDialog();
+            AppUtils.hideDialog();
+            AppUtils.hideDialog();
             adapter.submitList(teacherModels);
         });
 

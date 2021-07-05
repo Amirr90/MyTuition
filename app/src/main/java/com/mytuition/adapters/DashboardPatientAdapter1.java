@@ -3,7 +3,6 @@ package com.mytuition.adapters;
 import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -15,11 +14,8 @@ import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mytuition.R;
@@ -32,9 +28,9 @@ import static com.mytuition.utility.Utils.getTeacherModel;
 
 public class DashboardPatientAdapter1 extends ListAdapter<DashboardModel1, DashboardPatientAdapter1.DashboardModelVH> {
 
-    private static final String TAG = "DashboardPatientAdapter";
     public static final String SPECIALITY = "Speciality";
     public static final String TEACHERS = "Teachers";
+    private static final String TAG = "DashboardPatientAdapter";
     RewardedAd mRewardedAd;
     Integer[] images = new Integer[]{
             R.drawable.teacher,

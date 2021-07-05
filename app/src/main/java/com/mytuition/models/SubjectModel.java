@@ -7,6 +7,17 @@ import java.util.Objects;
 
 public class SubjectModel {
 
+    public static DiffUtil.ItemCallback<SubjectModel> itemCallback = new DiffUtil.ItemCallback<SubjectModel>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull SubjectModel oldItem, @NonNull SubjectModel newItem) {
+            return oldItem.getSubjectName().equals(newItem.getSubjectName());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull SubjectModel oldItem, @NonNull SubjectModel newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
     String image;
     String subjectName;
     String teachers;
@@ -59,16 +70,4 @@ public class SubjectModel {
     public int hashCode() {
         return Objects.hash(image, subjectName, teachers, id);
     }
-
-    public static DiffUtil.ItemCallback<SubjectModel>itemCallback=new DiffUtil.ItemCallback<SubjectModel>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull SubjectModel oldItem, @NonNull SubjectModel newItem) {
-            return oldItem.getSubjectName().equals(newItem.getSubjectName());
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull SubjectModel oldItem, @NonNull SubjectModel newItem) {
-            return oldItem.equals(newItem);
-        }
-    };
 }

@@ -1,5 +1,6 @@
 package com.mytuition.views.parentFragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +13,18 @@ import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.paging.PagedList;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.firebase.firestore.Query;
 import com.mytuition.R;
 import com.mytuition.adapters.CategoryViewHolder;
@@ -25,6 +33,7 @@ import com.mytuition.databinding.TuitionViewBinding;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.App;
 import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.TeacherProfile;
@@ -45,6 +54,9 @@ public class TeacherDashboardFragment extends DaggerFragment {
     FragmentTeacherDashboardBinding binding;
     NavController navController;
     FirestorePagingAdapter adapter;
+    Query query;
+    AdRequest adRequest;
+    RewardedAd mRewardedAd;
 
 
     @Override
@@ -59,9 +71,49 @@ public class TeacherDashboardFragment extends DaggerFragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(view);
+        query = AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION);
         checkForProfileComplete();
 
-        binding.swipeDashboard.setOnRefreshListener(() -> setUpRecData());
+        initAd();
+        binding.swipeDashboard.setOnRefreshListener(() -> {
+            filterData(binding.radioGroup2.getCheckedRadioButtonId());
+        });
+
+
+        binding.radioGroup2.setOnCheckedChangeListener((group, checkedId) -> {
+            filterData(checkedId);
+
+        });
+    }
+
+    private void initAd() {
+        adRequest = new AdRequest.Builder().build();
+
+        RewardedAd.load(requireActivity(), "ca-app-pub-3940256099942544/5224354917",
+                adRequest, new RewardedAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        Log.d(TAG, loadAdError.getMessage());
+                        mRewardedAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                        mRewardedAd = rewardedAd;
+                        Log.d(TAG, "Ad was loaded.");
+                    }
+                });
+
+    }
+
+
+    private void filterData(int checkedId) {
+        if (checkedId == R.id.radioAll)
+            setUpRecData(query);
+        else if (checkedId == R.id.radioHired)
+            setUpRecData(query.whereEqualTo("reqStatus", AppConstant.REQUEST_STATUS_ACCEPTED));
+        else if (checkedId == R.id.radioAvailable)
+            setUpRecData(query.whereEqualTo("reqStatus", AppConstant.REQUEST_STATUS_PENDING));
     }
 
     private void checkForProfileComplete() {
@@ -71,8 +123,8 @@ public class TeacherDashboardFragment extends DaggerFragment {
             public void onSuccess(Object obj) {
                 hideDialog();
                 TeacherModel teacherModel = (TeacherModel) obj;
+                AppUtils.setString("name", teacherModel.getName(), requireActivity());
                 if (null != teacherModel) {
-
                     Log.d(TAG, "onSuccess: " + teacherModel.toString());
                     if (!teacherModel.isProfileFilled()) {
                         Toast.makeText(requireActivity(), "incomplete profile !!", Toast.LENGTH_SHORT).show();
@@ -83,7 +135,7 @@ public class TeacherDashboardFragment extends DaggerFragment {
                     } else if (!teacherModel.isVerified())
                         navController.navigate(R.id.action_teacherDashboardFragment_to_userNotVerifiedFragment);
                     else {
-                        setUpRecData();
+                        setUpRecData(query);
                     }
                 }
 
@@ -98,15 +150,8 @@ public class TeacherDashboardFragment extends DaggerFragment {
         });
     }
 
-    private void setUpRecData() {
-
-
-        Log.d(TAG, "setUpRecData: ");
-        /* AppUtils.showRequestDialog(requireActivity());*/
-        Query query = AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
-                .orderBy(AppConstant.TIMESTAMP, Query.Direction.DESCENDING);
-
-
+    private void setUpRecData(Query query) {
+        query.orderBy(AppConstant.TIMESTAMP, Query.Direction.DESCENDING);
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(10)
                 .setPageSize(5)
@@ -126,7 +171,6 @@ public class TeacherDashboardFragment extends DaggerFragment {
             public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
                 TuitionViewBinding binding = TuitionViewBinding.inflate(inflater, parent, false);
-                Log.d(TAG, "onCreateViewHolder: ");
                 return new CategoryViewHolder(binding);
             }
 
@@ -134,13 +178,16 @@ public class TeacherDashboardFragment extends DaggerFragment {
             @Override
             protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull final RequestTuitionModel model) {
                 holder.tuitionViewBinding.setTuitionModel(model);
-                holder.tuitionViewBinding.button2.setEnabled(model.isActive());
+                try {
+                    holder.tuitionViewBinding.button2.setEnabled(model.getActive());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
                 holder.tuitionViewBinding.button2.setOnClickListener(view -> {
+                    showInterstialAd(model);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("RequestTuitionModel", getJSONFromModel(model));
-                    navController.navigate(R.id.action_teacherDashboardFragment_to_acceptTuitionBootomFragment, bundle);
                 });
             }
 
@@ -194,6 +241,58 @@ public class TeacherDashboardFragment extends DaggerFragment {
         binding.dashboardRec.setHasFixedSize(true);
         binding.dashboardRec.setAdapter(adapter);
         TeacherScreen.getInstance().setBadge(adapter.getItemCount());
+    }
+
+    private void showInterstialAd(RequestTuitionModel model) {
+
+        if (mRewardedAd != null) {
+            Activity activityContext = requireActivity();
+            mRewardedAd.show(activityContext, rewardItem -> {
+                Log.d(TAG, "The user earned the reward.");
+                int rewardAmount = rewardItem.getAmount();
+                String rewardType = rewardItem.getType();
+                Log.d(TAG, "onUserEarnedReward: " + rewardAmount + "    " + rewardType);
+                proceedToNextPage(model);
+                initAd();
+            });
+        } else {
+            proceedToNextPage(model);
+            Log.d(TAG, "The rewarded ad wasn't ready yet.");
+        }
+
+        mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+            @Override
+            public void onAdShowedFullScreenContent() {
+                // Called when ad is shown.
+                Log.d(TAG, "Ad was shown.");
+            }
+
+            @Override
+            public void onAdFailedToShowFullScreenContent(AdError adError) {
+                // Called when ad fails to show.
+                Log.d(TAG, "Ad failed to show.");
+                proceedToNextPage(model);
+            }
+
+            @Override
+            public void onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                // Set the ad reference to null so you don't show the ad a second time.
+                Log.d(TAG, "Ad was dismissed.");
+                mRewardedAd = null;
+                Toast.makeText(App.context, "View Full Ad to accept tuition !!", Toast.LENGTH_SHORT).show();
+                initAd();
+            }
+
+
+        });
+
+    }
+
+    private void proceedToNextPage(RequestTuitionModel model) {
+        Bundle bundle = new Bundle();
+        bundle.putString("RequestTuitionModel", getJSONFromModel(model));
+        navController.navigate(R.id.action_teacherDashboardFragment_to_acceptTuitionBootomFragment, bundle);
     }
 
     @Override

@@ -15,11 +15,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.badge.BadgeDrawable;
 import com.mytuition.R;
-import com.mytuition.component.AppComponent;
 import com.mytuition.databinding.ActivityTeacherScreenBinding;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.models.TeacherModel;
-import com.mytuition.utility.App;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.TeacherProfile;
 import com.mytuition.views.SplashScreen;
@@ -31,11 +29,9 @@ import static com.mytuition.utility.AppUtils.hideDialog;
 
 public class TeacherScreen extends DaggerAppCompatActivity {
     private static final String TAG = "TeacherScreen";
-
+    public static TeacherScreen instance;
     ActivityTeacherScreenBinding teacherScreenBinding;
     NavController navController;
-    public static TeacherScreen instance;
-
     BadgeDrawable homeBadge;
 
     public static TeacherScreen getInstance() {
@@ -44,17 +40,10 @@ public class TeacherScreen extends DaggerAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         instance = this;
-        //initDependency();
         teacherScreenBinding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_screen);
 
-    }
-
-    private void initDependency() {
-        AppComponent appComponent = ((App) getApplication()).getAppComponent();
-        appComponent.inject(this);
     }
 
     public void setBadge(int count) {
@@ -71,7 +60,6 @@ public class TeacherScreen extends DaggerAppCompatActivity {
 
         navController = Navigation.findNavController(this, R.id.nav_host_teacher);
         NavigationUI.setupActionBarWithNavController(this, navController);
-        // hideToolbar(this);
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (controller.getCurrentDestination().getId() == R.id.teacherDashboardFragment) {
@@ -87,8 +75,7 @@ public class TeacherScreen extends DaggerAppCompatActivity {
                     homeBadge.clearNumber();
                     break;
                 case R.id.page_2:
-                    homeBadge.setVisible(true);
-                    homeBadge.setNumber(20);
+                    navController.navigate(R.id.action_teacherDashboardFragment_to_myTuitionsFragment);
                     break;
                 case R.id.page_5:
                     AppUtils.showRequestDialog(this);
@@ -114,12 +101,22 @@ public class TeacherScreen extends DaggerAppCompatActivity {
                             navController.navigate(R.id.action_teacherDashboardFragment_to_demoFragment);
                         }
                     });
-                    navController.navigate(R.id.demoFragment);
                     break;
 
             }
             return false;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateToken();
+        // updateRequestView();
+    }
+
+    private void updateToken() {
+        AppUtils.updateToken(obj -> Log.d(TAG, "updateToken: " + (String) obj));
     }
 
     @Override
@@ -132,14 +129,6 @@ public class TeacherScreen extends DaggerAppCompatActivity {
         return navController.navigateUp();
     }
 
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        homeBadge = teacherScreenBinding.bottomNavigation.getOrCreateBadge(menu.findItem(R.id.home).getItemId());
-        homeBadge.setVisible(true);
-        homeBadge.setNumber(99);
-        return super.onCreateOptionsMenu(menu);
-    }*/
 
     private void showLogoutDialog() {
         new AlertDialog.Builder(TeacherScreen.this)

@@ -69,7 +69,7 @@ public class TeacherProfileFragment extends Fragment {
 
         Drawable img = teacherProfileBinding.textView92.getContext().getResources().getDrawable(R.drawable.ic_baseline_verified_user_24);
 
-        if (teacherModel.getProfile().verified)
+        if (teacherModel.getProfile().getVerified())
             teacherProfileBinding.textView92.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
         else
             teacherProfileBinding.textView92.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);

@@ -23,11 +23,10 @@ import java.util.Objects;
 
 public class SubjectListFragment extends Fragment {
 
+    private static final String TAG = "SubjectListFragment";
     FragmentSubjectListBinding subjectListBinding;
     SubjectAdapter subjectAdapter;
-
     ParentViewHolder viewModel;
-    private static final String TAG = "SubjectListFragment";
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,

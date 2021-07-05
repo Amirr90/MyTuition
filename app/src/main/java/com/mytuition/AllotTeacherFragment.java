@@ -112,6 +112,23 @@ public class AllotTeacherFragment extends Fragment {
 
     }
 
+    private void AllotTeacher(String teacherId, String name) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(AppConstant.TEACHER_ID, teacherId);
+        map.put(AppConstant.NAME, name);
+
+        AppUtils.showRequestDialog(requireActivity());
+        AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
+                .document(tuitionId)
+                .update(map).addOnSuccessListener(aVoid -> {
+            AppUtils.hideDialog();
+            Toast.makeText(requireActivity(), "Teacher Allotted Successfully !!", Toast.LENGTH_SHORT).show();
+            navController.navigateUp();
+        }).addOnFailureListener(e -> {
+            AppUtils.hideDialog();
+            Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
+        });
+    }
 
     private class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.MyViewHolder> {
         List<TeacherModel> list;
@@ -166,23 +183,5 @@ public class AllotTeacherFragment extends Fragment {
                 this.userListViewBinding = userListViewBinding;
             }
         }
-    }
-
-    private void AllotTeacher(String teacherId, String name) {
-        Map<String, Object> map = new HashMap<>();
-        map.put(AppConstant.TEACHER_ID, teacherId);
-        map.put(AppConstant.NAME, name);
-
-        AppUtils.showRequestDialog(requireActivity());
-        AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
-                .document(tuitionId)
-                .update(map).addOnSuccessListener(aVoid -> {
-                    AppUtils.hideDialog();
-                    Toast.makeText(requireActivity(), "Teacher Allotted Successfully !!", Toast.LENGTH_SHORT).show();
-                    navController.navigateUp();
-                }).addOnFailureListener(e -> {
-                    AppUtils.hideDialog();
-                    Toast.makeText(requireActivity(), "Something went wrong, try again !!", Toast.LENGTH_SHORT).show();
-                });
     }
 }

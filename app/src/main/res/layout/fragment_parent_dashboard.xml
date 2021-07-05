@@ -110,7 +110,7 @@
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/bannerViewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
+                        android:layout_height="200dp"
                         android:layout_below="@+id/profile_image"
                         android:layout_marginTop="8dp"
                         android:clipToPadding="false"
@@ -150,10 +150,23 @@
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dots_indicator"
+                    app:layout_constraintTop_toBottomOf="@+id/adContainer"
                     app:spanCount="2"
                     tools:itemCount="4"
                     tools:listitem="@layout/dash_board_view" />
+
+                <FrameLayout
+                    android:id="@+id/adContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dots_indicator">
+
+                </FrameLayout>
 
                 <ss.com.bannerslider.Slider
                     android:id="@+id/banner_slider1"

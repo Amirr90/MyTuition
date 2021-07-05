@@ -13,9 +13,17 @@ import javax.inject.Inject;
 public class TeacherModel extends BaseObservable {
 
 
-    public TeacherModel() {
-    }
+    public static DiffUtil.ItemCallback<TeacherModel> itemCallback = new DiffUtil.ItemCallback<TeacherModel>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull TeacherModel oldItem, @NonNull TeacherModel newItem) {
+            return oldItem.name.equalsIgnoreCase(newItem.name);
+        }
 
+        @Override
+        public boolean areContentsTheSame(@NonNull TeacherModel oldItem, @NonNull TeacherModel newItem) {
+            return oldItem.speciality.equalsIgnoreCase(newItem.speciality);
+        }
+    };
     private AcademicInformation academicInformation;
     private TeachingProfile teachingProfile;
     private String speciality;
@@ -34,6 +42,9 @@ public class TeacherModel extends BaseObservable {
     private Profile profile;
     private long timestamp;
 
+
+    public TeacherModel() {
+    }
 
     public boolean isVerified() {
         return verified;
@@ -113,60 +124,36 @@ public class TeacherModel extends BaseObservable {
         this.timestamp = timestamp;
     }
 
-    public void setTimeSlots(List<TimeSlotModel> timeSlots) {
-        this.timeSlots = timeSlots;
-    }
-
     public List<TimeSlotModel> getTimeSlots() {
         return timeSlots;
     }
 
-    public void setAcademicInformation(AcademicInformation academicInformation) {
-        this.academicInformation = academicInformation;
-    }
-
-    public void setTeachingProfile(TeachingProfile teachingProfile) {
-        this.teachingProfile = teachingProfile;
-    }
-
-    public void setSpeciality(String speciality) {
-        this.speciality = speciality;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setAbout(String about) {
-        this.about = about;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setTimeSlots(List<TimeSlotModel> timeSlots) {
+        this.timeSlots = timeSlots;
     }
 
     public String getImage() {
         return image;
     }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public AcademicInformation getAcademicInformation() {
         return academicInformation;
     }
 
+    public void setAcademicInformation(AcademicInformation academicInformation) {
+        this.academicInformation = academicInformation;
+    }
+
     public TeachingProfile getTeachingProfile() {
         return teachingProfile;
+    }
+
+    public void setTeachingProfile(TeachingProfile teachingProfile) {
+        this.teachingProfile = teachingProfile;
     }
 
     public String getSpeciality() {
@@ -174,24 +161,48 @@ public class TeacherModel extends BaseObservable {
         return speciality;
     }
 
+    public void setSpeciality(String speciality) {
+        this.speciality = speciality;
+    }
+
     public boolean isActive() {
         return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getAbout() {
         return about;
     }
 
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
     public Profile getProfile() {
         return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public static class AcademicInformation {
@@ -216,60 +227,60 @@ public class TeacherModel extends BaseObservable {
             this.otherCertificate = otherCertificate;
         }
 
-        public void setCollegeName(String collegeName) {
-            this.collegeName = collegeName;
-        }
-
-        public void setGraduation(String graduation) {
-            this.graduation = graduation;
-        }
-
-        public void setScoreClassXII(String scoreClassXII) {
-            this.scoreClassXII = scoreClassXII;
-        }
-
-        public void setPostGraduation(String postGraduation) {
-            this.postGraduation = postGraduation;
-        }
-
-        public void setSchoolName(String schoolName) {
-            this.schoolName = schoolName;
-        }
-
-        public void setScoreClassX(String scoreClassX) {
-            this.scoreClassX = scoreClassX;
+        public String getHighestEducation() {
+            return highestEducation;
         }
 
         public void setHighestEducation(String highestEducation) {
             this.highestEducation = highestEducation;
         }
 
-        public String getHighestEducation() {
-            return highestEducation;
-        }
-
         public String getCollegeName() {
             return collegeName;
+        }
+
+        public void setCollegeName(String collegeName) {
+            this.collegeName = collegeName;
         }
 
         public String getGraduation() {
             return graduation;
         }
 
+        public void setGraduation(String graduation) {
+            this.graduation = graduation;
+        }
+
         public String getScoreClassXII() {
             return scoreClassXII;
+        }
+
+        public void setScoreClassXII(String scoreClassXII) {
+            this.scoreClassXII = scoreClassXII;
         }
 
         public String getPostGraduation() {
             return postGraduation;
         }
 
+        public void setPostGraduation(String postGraduation) {
+            this.postGraduation = postGraduation;
+        }
+
         public String getSchoolName() {
             return schoolName;
         }
 
+        public void setSchoolName(String schoolName) {
+            this.schoolName = schoolName;
+        }
+
         public String getScoreClassX() {
             return scoreClassX;
+        }
+
+        public void setScoreClassX(String scoreClassX) {
+            this.scoreClassX = scoreClassX;
         }
 
         @Override
@@ -302,68 +313,68 @@ public class TeacherModel extends BaseObservable {
         public TeachingProfile() {
         }
 
-        public void setTeachingSubject(List<String> teachingSubject) {
-            this.teachingSubject = teachingSubject;
-        }
-
-        public void setPerVisitFee(String perVisitFee) {
-            this.perVisitFee = perVisitFee;
-        }
-
-        public void setMonthlyFee(String monthlyFee) {
-            this.monthlyFee = monthlyFee;
+        public long getTuitions() {
+            return tuitions;
         }
 
         public void setTuitions(long tuitions) {
             this.tuitions = tuitions;
         }
 
-        public void setExpertIn(String expertIn) {
-            this.expertIn = expertIn;
-        }
-
-        public void setExperience(String experience) {
-            this.experience = experience;
+        public String getTuitionHours() {
+            return tuitionHours;
         }
 
         public void setTuitionHours(String tuitionHours) {
             this.tuitionHours = tuitionHours;
         }
 
-        public void setDemoClass(Boolean demoClass) {
-            this.demoClass = demoClass;
-        }
-
-        public long getTuitions() {
-            return tuitions;
-        }
-
-        public String getTuitionHours() {
-            return tuitionHours;
-        }
-
         public List<String> getTeachingSubject() {
             return teachingSubject;
+        }
+
+        public void setTeachingSubject(List<String> teachingSubject) {
+            this.teachingSubject = teachingSubject;
         }
 
         public Boolean getDemoClass() {
             return demoClass;
         }
 
+        public void setDemoClass(Boolean demoClass) {
+            this.demoClass = demoClass;
+        }
+
         public String getPerVisitFee() {
             return perVisitFee;
+        }
+
+        public void setPerVisitFee(String perVisitFee) {
+            this.perVisitFee = perVisitFee;
         }
 
         public String getMonthlyFee() {
             return monthlyFee;
         }
 
+        public void setMonthlyFee(String monthlyFee) {
+            this.monthlyFee = monthlyFee;
+        }
+
         public String getExpertIn() {
             return expertIn;
         }
 
+        public void setExpertIn(String expertIn) {
+            this.expertIn = expertIn;
+        }
+
         public String getExperience() {
             return experience;
+        }
+
+        public void setExperience(String experience) {
+            this.experience = experience;
         }
 
         @Override
@@ -394,7 +405,6 @@ public class TeacherModel extends BaseObservable {
         public String aadharBackImage;
         public Boolean verified;
 
-
         @Inject
         public Profile() {
         }
@@ -421,6 +431,9 @@ public class TeacherModel extends BaseObservable {
             return verified;
         }
 
+        public void setVerified(Boolean verified) {
+            this.verified = verified;
+        }
 
         @Override
         public String toString() {
@@ -437,32 +450,6 @@ public class TeacherModel extends BaseObservable {
                     ", aadharBackImage='" + aadharBackImage + '\'' +
                     ", verified=" + verified +
                     '}';
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-
-        }
-
-        public void setState(String state) {
-            this.state = state;
-            // notifyPropertyChanged(BR.sta);
-        }
-
-        public void setMobile(String mobile) {
-            this.mobile = mobile;
-        }
-
-        public void setCity(String city) {
-            this.city = city;
-        }
-
-        public void setFatherName(String fatherName) {
-            this.fatherName = fatherName;
         }
 
         public String getAadharFrontImage() {
@@ -485,39 +472,52 @@ public class TeacherModel extends BaseObservable {
             return name;
         }
 
+        public void setName(String name) {
+            this.name = name;
+        }
+
         public String getAddress() {
             return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+
         }
 
         public String getState() {
             return state;
         }
 
+        public void setState(String state) {
+            this.state = state;
+            // notifyPropertyChanged(BR.sta);
+        }
+
         public String getMobile() {
             return mobile;
+        }
+
+        public void setMobile(String mobile) {
+            this.mobile = mobile;
         }
 
         public String getCity() {
             return city;
         }
 
+        public void setCity(String city) {
+            this.city = city;
+        }
+
         public String getFatherName() {
             return fatherName;
         }
+
+        public void setFatherName(String fatherName) {
+            this.fatherName = fatherName;
+        }
     }
-
-
-    public static DiffUtil.ItemCallback<TeacherModel> itemCallback = new DiffUtil.ItemCallback<TeacherModel>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull TeacherModel oldItem, @NonNull TeacherModel newItem) {
-            return oldItem.name.equalsIgnoreCase(newItem.name);
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull TeacherModel oldItem, @NonNull TeacherModel newItem) {
-            return oldItem.speciality.equalsIgnoreCase(newItem.speciality);
-        }
-    };
 
     public static class TimeSlotModel {
         String type;

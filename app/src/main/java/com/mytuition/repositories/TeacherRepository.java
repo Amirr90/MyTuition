@@ -1,11 +1,7 @@
 package com.mytuition.repositories;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.mytuition.interfaces.Api;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.AppUtils;

@@ -36,6 +36,12 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
 
     String loginType = null;
 
+    public static Map<String, Object> getUserMap(String loginType) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(LOGIN_TYPE, loginType);
+        return map;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +92,8 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
                         .build(), 10);
     }
 
+    /*    startActivity(new Intent(this, TeacherSignUpActivity.class));*/
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -109,8 +117,6 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
         }
     }
 
-    /*    startActivity(new Intent(this, TeacherSignUpActivity.class));*/
-
     private void updateParentModel() {
         if (null != getUid())
             getFirestoreReference().collection(USERS)
@@ -122,12 +128,5 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
                         startActivity(new Intent(ChooseLoginTypeScreen.this, ParentScreen.class));
                         finish();
                     });
-    }
-
-
-    public static Map<String, Object> getUserMap(String loginType) {
-        Map<String, Object> map = new HashMap<>();
-        map.put(LOGIN_TYPE, loginType);
-        return map;
     }
 }
