@@ -118,6 +118,7 @@ dependencies {
     // Dagger2 core
     implementation "com.google.dagger:dagger:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
 
     // Dagger Android
     implementation "com.google.dagger:dagger-android:2.35.1"

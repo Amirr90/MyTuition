@@ -9,12 +9,21 @@ public class RequestTuitionModel {
     String tuitionFor;
     String reqType;
     String reqStatus;
+    String rejectedTeacherId;
     String id;
     Long acceptedAt;
     private long timestamp;
     private String time;
     private boolean active;
     private String date;
+
+    public String getRejectedTeacherId() {
+        return rejectedTeacherId;
+    }
+
+    public void setRejectedTeacherId(String rejectedTeacherId) {
+        this.rejectedTeacherId = rejectedTeacherId;
+    }
 
     public void setId(String id) {
         this.id = id;

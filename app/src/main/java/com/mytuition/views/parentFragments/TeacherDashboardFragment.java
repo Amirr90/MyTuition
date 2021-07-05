@@ -1,6 +1,5 @@
 package com.mytuition.views.parentFragments;
 
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,24 +12,22 @@ import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.paging.PagedList;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.firebase.firestore.Query;
 import com.mytuition.R;
-import com.mytuition.TuitionRequestForAdminFragmentDirections;
 import com.mytuition.adapters.CategoryViewHolder;
 import com.mytuition.databinding.FragmentTeacherDashboardBinding;
 import com.mytuition.databinding.TuitionViewBinding;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.models.TeacherModel;
-import com.mytuition.utility.App;
 import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.TeacherProfile;
-import com.mytuition.views.activity.ParentScreen;
 import com.mytuition.views.activity.TeacherScreen;
 
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +60,8 @@ public class TeacherDashboardFragment extends DaggerFragment {
 
         navController = Navigation.findNavController(view);
         checkForProfileComplete();
+
+        binding.swipeDashboard.setOnRefreshListener(() -> setUpRecData());
     }
 
     private void checkForProfileComplete() {
@@ -101,6 +100,7 @@ public class TeacherDashboardFragment extends DaggerFragment {
 
     private void setUpRecData() {
 
+
         Log.d(TAG, "setUpRecData: ");
         /* AppUtils.showRequestDialog(requireActivity());*/
         Query query = AppUtils.getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
@@ -113,8 +113,12 @@ public class TeacherDashboardFragment extends DaggerFragment {
                 .build();
 
         FirestorePagingOptions<RequestTuitionModel> options1 = new FirestorePagingOptions.Builder<RequestTuitionModel>()
-                .setLifecycleOwner(getActivity())
-                .setQuery(query, config, RequestTuitionModel.class).build();
+                .setLifecycleOwner(requireActivity())
+                .setQuery(query, config, snapshot -> {
+                    RequestTuitionModel requestTuitionModel = snapshot.toObject(RequestTuitionModel.class);
+                    requestTuitionModel.setId(snapshot.getId());
+                    return requestTuitionModel;
+                }).build();
 
         adapter = new FirestorePagingAdapter<RequestTuitionModel, CategoryViewHolder>(options1) {
             @NonNull
@@ -130,7 +134,14 @@ public class TeacherDashboardFragment extends DaggerFragment {
             @Override
             protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull final RequestTuitionModel model) {
                 holder.tuitionViewBinding.setTuitionModel(model);
-                String status = model.getReqStatus();
+                holder.tuitionViewBinding.button2.setEnabled(model.isActive());
+
+                holder.tuitionViewBinding.button2.setOnClickListener(view -> {
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("RequestTuitionModel", getJSONFromModel(model));
+                    navController.navigate(R.id.action_teacherDashboardFragment_to_acceptTuitionBootomFragment, bundle);
+                });
             }
 
 
@@ -147,18 +158,23 @@ public class TeacherDashboardFragment extends DaggerFragment {
                 switch (state) {
                     case ERROR: {
                         hideDialog();
+                        if (binding.swipeDashboard.isRefreshing())
+                            binding.swipeDashboard.setRefreshing(false);
                         Log.d(TAG, "onLoadingStateChanged: error ");
                         Toast.makeText(requireActivity(), "failed to get Data !!", Toast.LENGTH_SHORT).show();
                     }
                     break;
                     case FINISHED: {
                         hideDialog();
+                        if (binding.swipeDashboard.isRefreshing())
+                            binding.swipeDashboard.setRefreshing(false);
                         Log.d(TAG, "onLoadingStateChanged: FINISHED");
-                        Toast.makeText(requireActivity(), "No more data !!", Toast.LENGTH_SHORT).show();
                     }
                     break;
                     case LOADED: {
                         hideDialog();
+                        if (binding.swipeDashboard.isRefreshing())
+                            binding.swipeDashboard.setRefreshing(false);
                         Log.d(TAG, "onLoadingStateChanged: LOADED " + getItemCount());
                     }
                     case LOADING_MORE: {
@@ -166,6 +182,8 @@ public class TeacherDashboardFragment extends DaggerFragment {
                     }
                     case LOADING_INITIAL: {
                         hideDialog();
+                        if (binding.swipeDashboard.isRefreshing())
+                            binding.swipeDashboard.setRefreshing(false);
                         Log.d(TAG, "onLoadingStateChanged: LOADING_INITIAL");
 
                     }
@@ -175,7 +193,6 @@ public class TeacherDashboardFragment extends DaggerFragment {
         };
         binding.dashboardRec.setHasFixedSize(true);
         binding.dashboardRec.setAdapter(adapter);
-
         TeacherScreen.getInstance().setBadge(adapter.getItemCount());
     }
 
@@ -188,5 +205,14 @@ public class TeacherDashboardFragment extends DaggerFragment {
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (null != adapter) {
+            adapter.retry();
+            Log.d(TAG, "onResume: refreshed !!");
+        }
     }
 }

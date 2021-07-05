@@ -27,6 +27,9 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_teacherDashboardFragment_to_acceptTuitionBootomFragment"
+            app:destination="@id/acceptTuitionBootomFragment" />
     </fragment>
     <fragment
         android:id="@+id/TProfileFragment"
@@ -36,8 +39,8 @@
     <fragment
         android:id="@+id/demoFragment"
         android:name="com.mytuition.DemoFragment"
-        android:label="fragment_demo"
-        tools:layout="@layout/fragment_demo" >
+        android:label="Profile"
+        tools:layout="@layout/fragment_demo">
         <action
             android:id="@+id/action_demoFragment_to_teacherTimeSlotsFragment"
             app:destination="@id/teacherTimeSlotsFragment"
@@ -51,7 +54,7 @@
         android:id="@+id/teacherTimeSlotsFragment"
         android:name="com.mytuition.TeacherTimeSlotsFragment"
         android:label="Time Slots"
-        tools:layout="@layout/fragment_teacher_time_slots" >
+        tools:layout="@layout/fragment_teacher_time_slots">
         <action
             android:id="@+id/action_teacherTimeSlotsFragment_to_addNewSlotsFragment"
             app:destination="@id/addNewSlotsFragment"
@@ -70,4 +73,9 @@
         android:name="com.mytuition.UserNotVerifiedFragment"
         android:label="fragment_user_not_verified"
         tools:layout="@layout/fragment_user_not_verified" />
+    <dialog
+        android:id="@+id/acceptTuitionBootomFragment"
+        android:name="com.mytuition.AcceptTuitionBottomFragment"
+        android:label="fragment_accept_tuition_bootom"
+        tools:layout="@layout/fragment_accept_tuition_bootom" />
 </navigation>

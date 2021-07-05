@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="com.mytuition.utility.AppUtils" />
+
         <variable
             name="tuitionModel"
             type="com.mytuition.models.RequestTuitionModel" />
@@ -136,7 +138,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/rubik"
-            android:text="@{tuitionModel.date,default=`10 mins ago`}"
+            android:text="@{AppUtils.getTimeAgo(tuitionModel.timestamp),default=`10 mins ago`}"
             android:textAlignment="textEnd"
             android:textColor="@color/colorText"
             android:textSize="16sp"
@@ -151,7 +153,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:enabled="false"
-            android:text="@{tuitionModel.isActive?`get tuition`:`Hired`}"
+            android:text="@{tuitionModel.rejectedTeacherId.equalsIgnoreCase(AppUtils.getUid())?`Rejected your request`:tuitionModel.isActive?`get tuition`:`Hired`}"
+            android:textColor="@{tuitionModel.rejectedTeacherId.equalsIgnoreCase(AppUtils.getUid())?@android:color/holo_red_light:tuitionModel.isActive?@android:color/holo_green_light:@android:color/holo_orange_light}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView46" />
