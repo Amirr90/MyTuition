@@ -167,6 +167,8 @@
     <string name="adaptive_banner_ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="msg_subscribed">subscribe\\</string>
     <string name="msg_subscribe_failed">not subscribe</string>
+    <string name="view_all_tuitions">View All Tuitions</string>
+    <string name="admin_controller">Admin Controller</string>
 
     <!--    Live Ad Id-->
 <!--    <string name="adaptive_banner_ad_unit_id_test">ca-app-pub-4669458320732543/9170295624</string>-->

@@ -20,8 +20,8 @@ public class AppConstant {
     public static final String NOTIFICATION_ID = "notificationId";
     public static final String NOTIFICATION_TUITION_DETAIL = "tuitionDetail";
     public static final String TESTIMONIALS = "Testimonials";
-    public static final String ADMIN_UID = "toGPvqlmPxPN6IQaFlRlFN3F8W22";
-    public static final String ADMIN_UID2 = "mGUhE1KzBcO5QKag1sI2KnNSKls2";
+    public static final String ADMIN_UID = "D9K2Z8zq9VUHGeOJX3ojtLI8YGD2";
+    public static final String ADMIN_UID2 = "L1k5Sq2uSogevFKdJFD4uPT20e23";
     public static final String TIMESTAMP = "timestamp";
 
     public static final String REQUEST_STATUS_PENDING = "pending";

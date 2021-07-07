@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -116,10 +117,6 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
 
         mainBinding.constraintLayout.setOnClickListener(v -> navController.navigate(R.id.DetailsFragment2));
 
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            // mainBinding.constraintLayout.setVisibility(destination.getId() == R.id.DetailsFragment2 ? View.GONE : View.VISIBLE);
-        });
-
 
         mainBinding.navView.setNavigationItemSelectedListener(item -> {
             item.setChecked(true);
@@ -129,7 +126,15 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             } else if (item.getItemId() == R.id.itemAboutUs) {
                 navController.navigate(R.id.aboutUsFragment);
             } else if (item.getItemId() == R.id.itemTuitionList) {
-                navController.navigate(R.id.tuitionRequestForAdminFragment);
+                //navController.navigate(R.id.tuitionRequestForAdminFragment);
+            } else if (item.getItemId() == R.id.admin_item1) {
+                if (null != getUid()) {
+                    switch (getUid()) {
+                        case AppConstant.ADMIN_UID:
+                        case AppConstant.ADMIN_UID2:
+                            navController.navigate(R.id.tuitionRequestForAdminFragment);
+                    }
+                }
             } else if (item.getItemId() == R.id.itemAllTuition) {
                 AppUtils.shareApp(instance);
             } else if (item.getItemId() == R.id.itemLogout)
@@ -139,7 +144,14 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         });
 
 
-        //mainBinding.
+        if (null != getUid()) {
+            switch (getUid()) {
+                case AppConstant.ADMIN_UID:
+                case AppConstant.ADMIN_UID2:
+                    MenuItem menuItem = mainBinding.navView.getMenu().findItem(R.id.admin);
+                    menuItem.setVisible(true);
+            }
+        }
 
     }
 
@@ -243,8 +255,6 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                     navModels.add(new NavModel(getString(R.string.requests), R.drawable.ic_baseline_verified_user_24));
             }
         }
-
-
         navAdapter.notifyDataSetChanged();
     }
 
@@ -348,6 +358,15 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             navController.navigate(R.id.tuitionRequestForAdminFragment);
         } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.share_app))) {
             AppUtils.shareApp(instance);
+        } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.view_all_tuitions))) {
+            if (null != getUid()) {
+                switch (getUid()) {
+                    case AppConstant.ADMIN_UID:
+                    case AppConstant.ADMIN_UID2:
+                        navModels.add(new NavModel(getString(R.string.requests), R.drawable.ic_baseline_verified_user_24));
+                }
+            }
+
         } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.logout)))
             showLogoutDialog();
         else Toast.makeText(instance, "coming soon !!", Toast.LENGTH_SHORT).show();

@@ -72,18 +72,16 @@
 
             <Button
                 android:id="@+id/btnAllotTeacher"
-                style="@style/FirebaseUI.Button"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:autoSizeTextType="none"
-                android:backgroundTint="@color/yellow"
-                android:backgroundTintMode="multiply"
                 android:fontFamily="@font/poppins"
                 android:stateListAnimator="@anim/zoom_in"
                 android:text="Allot Teacher"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
-                android:textColor="@color/white" />
+                app:strokeColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimary" />
         </LinearLayout>
 
     </LinearLayout>

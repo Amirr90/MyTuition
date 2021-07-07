@@ -16,8 +16,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.mytuition.databinding.FragmentAllotTeacherBinding;
 import com.mytuition.databinding.UserListViewBinding;
@@ -65,18 +67,30 @@ public class AllotTeacherFragment extends Fragment {
             return;
 
         tuitionId = AllotTeacherFragmentArgs.fromBundle(getArguments()).getId();
-        binding.ivSearch.setOnClickListener(v -> {
+
+
+        binding.textInputLayout2.setEndIconOnClickListener(v -> {
             CharSequence text = Objects.requireNonNull(binding.nameMobile.getText()).toString().trim();
             if (text.length() > 0)
                 searchTeachers(text);
             else
                 Toast.makeText(requireActivity(), "Enter Name or number to search !!", Toast.LENGTH_SHORT).show();
         });
-
         teacherModelList = new ArrayList<>();
         adapter = new TeacherAdapter(teacherModelList);
         binding.recTeacherList.setAdapter(adapter);
-        searchTeachers("text");
+
+        getAllTeacherData();
+    }
+
+    private void getAllTeacherData() {
+        final Query query = AppUtils.getFirestoreReference().collection(AppConstant.TEACHER)
+                .orderBy(AppConstant.TIMESTAMP, Query.Direction.DESCENDING)
+                .limit(25);
+        query.get().addOnCompleteListener(task -> {
+            AppUtils.hideDialog();
+            addData(task);
+        }).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
     }
 
     private void searchTeachers(CharSequence text) {
@@ -92,17 +106,19 @@ public class AllotTeacherFragment extends Fragment {
 
         query.get().addOnCompleteListener(task -> {
             AppUtils.hideDialog();
-
-            teacherModelList.clear();
-            for (DocumentSnapshot snapshot : task.getResult()) {
-                TeacherModel model = snapshot.toObject(TeacherModel.class);
-                teacherModelList.add(model);
-                Log.d(TAG, "Added: " + model.getName());
-            }
-            adapter.notifyDataSetChanged();
-
+            addData(task);
         });
 
+    }
+
+    private void addData(Task<QuerySnapshot> task) {
+        teacherModelList.clear();
+        for (DocumentSnapshot snapshot : task.getResult()) {
+            TeacherModel model = snapshot.toObject(TeacherModel.class);
+            teacherModelList.add(model);
+            Log.d(TAG, "Added: " + model.getName());
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
