@@ -14,10 +14,13 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.badge.BadgeDrawable;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mytuition.R;
 import com.mytuition.databinding.ActivityTeacherScreenBinding;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.App;
+import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.TeacherProfile;
 import com.mytuition.views.SplashScreen;
@@ -67,6 +70,8 @@ public class TeacherScreen extends DaggerAppCompatActivity {
             } else teacherScreenBinding.bottomNavigation.setVisibility(View.GONE);
         });
 
+        subscribeForNewQueryAddedNotification();
+
 
         teacherScreenBinding.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -106,6 +111,19 @@ public class TeacherScreen extends DaggerAppCompatActivity {
             }
             return false;
         });
+    }
+
+    private void subscribeForNewQueryAddedNotification() {
+        if (!AppUtils.getBoolean(AppConstant.NEW_QUERY_TOPIC, this))
+            FirebaseMessaging.getInstance().subscribeToTopic(AppConstant.NEW_QUERY_TOPIC)
+                    .addOnCompleteListener(task -> {
+                        String msg = getString(R.string.msg_subscribed);
+                        if (!task.isSuccessful()) {
+                            msg = getString(R.string.msg_subscribe_failed);
+                        } else
+                            AppUtils.setBoolean(AppConstant.NEW_QUERY_TOPIC, true, App.context);
+                        Log.d(TAG, msg);
+                    });
     }
 
     @Override

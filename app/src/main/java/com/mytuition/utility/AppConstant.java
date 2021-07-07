@@ -34,4 +34,5 @@ public class AppConstant {
     public static final String ACCEPT = "Accept";
     public static final String REJECT = "Reject";
     public static final String ACTION_TIMESTAMP = "actionTimeStamp";
+    public static final String NEW_QUERY_TOPIC = "newQuery";
 }

@@ -543,6 +543,13 @@ public class AppUtils {
         editor.commit();
     }
 
+    public static void setBoolean(String key, boolean value, Context activity) {
+        SharedPreferences sharedpreferences = activity.getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
     public static String getString(String key, Activity activity) {
         if (activity != null) {
             SharedPreferences pref = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
@@ -553,7 +560,7 @@ public class AppUtils {
 
     public static boolean getBoolean(String key, Activity activity) {
         SharedPreferences pref = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        return pref.getBoolean(key, true);
+        return pref.getBoolean(key, false);
     }
 
     public static ArrayList<HashMap<String, String>> getNextWeekDay() {

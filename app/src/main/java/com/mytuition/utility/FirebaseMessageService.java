@@ -8,7 +8,8 @@ import androidx.annotation.NonNull;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mytuition.R;
-import com.mytuition.interfaces.onSuccessListener;
+
+import java.util.Map;
 
 public class FirebaseMessageService extends FirebaseMessagingService {
     private static final String TAG = "FirebaseMessageService";
@@ -28,5 +29,12 @@ public class FirebaseMessageService extends FirebaseMessagingService {
 
         mp = MediaPlayer.create(getApplicationContext(), R.raw.notificationsound);
         mp.start();
+
+
+        showNotification(remoteMessage.getData());
+    }
+
+    private void showNotification(Map<String, String> data) {
+
     }
 }
