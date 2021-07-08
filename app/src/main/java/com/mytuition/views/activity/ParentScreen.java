@@ -171,7 +171,8 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                     CircleImageView image = header.findViewById(R.id.ivUserImage);
                     title.setText(user.getName());
                     number.setText(user.getMobile());
-                    Picasso.get().load(user.getImage()).placeholder(R.drawable.app_icon).into(image);
+                    if (null != user.getImage() && !user.getImage().isEmpty())
+                        Picasso.get().load(user.getImage()).placeholder(R.drawable.app_icon).into(image);
                 }
 
             }

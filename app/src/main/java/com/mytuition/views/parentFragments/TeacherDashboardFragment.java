@@ -107,11 +107,14 @@ public class TeacherDashboardFragment extends DaggerFragment {
 
     private void filterData(int checkedId) {
         if (checkedId == R.id.radioAll)
-            setUpRecData(query);
+            setUpRecData(query
+                   /* .whereEqualTo(AppConstant.TEACHER_ID, "")*/);
         else if (checkedId == R.id.radioHired)
-            setUpRecData(query.whereEqualTo("reqStatus", AppConstant.REQUEST_STATUS_ACCEPTED));
+            setUpRecData(query
+                    .whereEqualTo("reqStatus", AppConstant.REQUEST_STATUS_ACCEPTED));
         else if (checkedId == R.id.radioAvailable)
-            setUpRecData(query.whereEqualTo("reqStatus", AppConstant.REQUEST_STATUS_PENDING));
+            setUpRecData(query
+                    .whereEqualTo("reqStatus", AppConstant.REQUEST_STATUS_PENDING));
     }
 
     private void checkForProfileComplete() {
