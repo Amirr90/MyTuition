@@ -23,6 +23,30 @@
           }
         },
         {
+          "client_id": "450624743766-h432k3orljnbhjvuevh8h3fu254jigv8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mytuition",
+            "certificate_hash": "b8bd74315ae1bbe5466dbf109d989f90a93ee740"
+          }
+        },
+        {
+          "client_id": "450624743766-lnhiu3hndlb2fo173m0uas6um8bpv6uk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mytuition",
+            "certificate_hash": "d5442f9938db4c279fdf6fefaa644aeabec8da52"
+          }
+        },
+        {
+          "client_id": "450624743766-mmjjsgn96of10tkdc7bpifu8gmosqotk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mytuition",
+            "certificate_hash": "c98bd3cf172a7649e414f966c2a7a9d9e21386bb"
+          }
+        },
+        {
           "client_id": "450624743766-fmbad13somfunnndh86inf40rd9ag4oq.apps.googleusercontent.com",
           "client_type": 3
         }

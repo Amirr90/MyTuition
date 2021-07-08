@@ -98,7 +98,8 @@ public class MyTuitionsFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull final RequestTuitionModel model) {
                 holder.myTuitionViewBinding.setTuitionModel(model);
-                holder.myTuitionViewBinding.button2.setEnabled(model.getActive());
+                if (null != model.getActive())
+                    holder.myTuitionViewBinding.button2.setEnabled(model.getActive());
                 holder.myTuitionViewBinding.button2.setOnClickListener(view -> {
                     Bundle bundle = new Bundle();
                     bundle.putString("RequestTuitionModel", getJSONFromModel(model));

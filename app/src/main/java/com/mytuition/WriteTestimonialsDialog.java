@@ -58,11 +58,13 @@ public class WriteTestimonialsDialog extends BottomSheetDialogFragment {
         testimonialsModel.setImage(getParentModel(requireActivity()).getImage());
         testimonialsModel.setTimestamp(System.currentTimeMillis());
         testimonialsModel.setUid(getUid());
+        testimonialsModel.setActive(false);
         testimonialsModel.setName(getParentModel(requireActivity()).getName());
 
-
         if (getUid() != null) {
-            AppUtils.getFirestoreReference().collection(AppConstant.TESTIMONIALS).document(getUid()).set(testimonialsModel).addOnSuccessListener(aVoid -> {
+            AppUtils.getFirestoreReference().collection(AppConstant.TESTIMONIALS)
+                    .document(getUid())
+                    .set(testimonialsModel).addOnSuccessListener(aVoid -> {
                 AppUtils.hideDialog();
                 dismiss();
                 Toasty.success(App.context, "Added successfully!!", Toast.LENGTH_SHORT, true).show();

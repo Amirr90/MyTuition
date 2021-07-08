@@ -1,12 +1,14 @@
 package com.mytuition.views;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.mytuition.R;
 import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
@@ -28,6 +30,12 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gerDynamicLinks();
     }
 
     @Override
@@ -68,5 +76,20 @@ public class SplashScreen extends AppCompatActivity {
             }
 
         } else Log.d(TAG, "getData: null");
+    }
+
+
+    public void gerDynamicLinks() {
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, pendingDynamicLinkData -> {
+                    Uri deepLink = null;
+                    if (pendingDynamicLinkData != null) {
+                        deepLink = pendingDynamicLinkData.getLink();
+                        Log.d(TAG, "getDynamicLink: onSuccess: " + deepLink);
+                        Log.d(TAG, "invitationCode => : " + pendingDynamicLinkData.getLink().getQueryParameter("invitationCode"));
+                    }
+                })
+                .addOnFailureListener(this, e -> Log.w(TAG, "getDynamicLink:onFailure", e));
     }
 }

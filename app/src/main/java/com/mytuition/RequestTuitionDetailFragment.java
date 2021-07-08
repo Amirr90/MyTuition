@@ -105,21 +105,25 @@ public class RequestTuitionDetailFragment extends Fragment {
     }
 
     private void getTeacherProfile() {
-        getFirestoreReference().collection(AppConstant.TEACHER).document(requestTuitionModel.getTeacherId()).get().addOnSuccessListener(documentSnapshot -> {
-            hideDialog();
-            if (documentSnapshot.exists()) {
-                teacherModel = documentSnapshot.toObject(TeacherModel.class);
-                requestTuitionBinding.setTeacher(teacherModel);
-                if (null != teacherModel.getTeachingProfile().getExperience())
-                    requestTuitionBinding.imageView9.setImageResource(AppUtils.setExperience(teacherModel.getTeachingProfile().getExperience()));
-            }
-        });
+        getFirestoreReference().collection(AppConstant.TEACHER)
+                .document(requestTuitionModel.getTeacherId())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    hideDialog();
+                    if (documentSnapshot.exists()) {
+                        teacherModel = documentSnapshot.toObject(TeacherModel.class);
+                        requestTuitionBinding.setTeacher(teacherModel);
+                        if (null != teacherModel.getTeachingProfile().getExperience())
+                            requestTuitionBinding.imageView9.setImageResource(AppUtils.setExperience(teacherModel.getTeachingProfile().getExperience()));
+                    }
+                });
 
     }
 
 
     private void getTuitionDetails() {
         if (getArguments() != null) {
+            AppUtils.showRequestDialog(requireActivity());
             final String tuitionId = RequestTuitionDetailFragmentArgs.fromBundle(getArguments()).getTuitionId();
             RequestModel2 model = new RequestModel2();
             model.setTuitionId(tuitionId);

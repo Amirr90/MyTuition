@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.mytuition.R;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.models.DashboardModel;
 import com.mytuition.models.RequestModel2;
@@ -19,6 +20,8 @@ import com.mytuition.utility.DatabaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 public class ParentRepo {
     MutableLiveData<List<SpecialityModel>> mutableLiveSpecialityData;
@@ -116,19 +119,21 @@ public class ParentRepo {
     }
 
     private void loadDashboardData(RequestModel2 requestModel2, FragmentActivity fragmentActivity) {
-        AppUtils.showRequestDialog(fragmentActivity);
-        DatabaseUtils.getDashboardData(requestModel2, new ApiInterface() {
-            @Override
-            public void onSuccess(Object obj) {
-                AppUtils.hideDialog();
-                mutableDashboardLiveData.setValue((List<DashboardModel>) obj);
-            }
+        if (AppUtils.isNetworkConnected(App.context)) {
+            AppUtils.showRequestDialog(fragmentActivity);
+            DatabaseUtils.getDashboardData(requestModel2, new ApiInterface() {
+                @Override
+                public void onSuccess(Object obj) {
+                    AppUtils.hideDialog();
+                    mutableDashboardLiveData.setValue((List<DashboardModel>) obj);
+                }
 
-            @Override
-            public void onFailed(String msg) {
-                AppUtils.hideDialog();
-                Toast.makeText(App.context, "No data Found !! " + msg, Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailed(String msg) {
+                    AppUtils.hideDialog();
+                    Toast.makeText(App.context, "No data Found !! " + msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else Toasty.warning(App.context, R.string.no_internet, Toast.LENGTH_SHORT).show();
     }
 }

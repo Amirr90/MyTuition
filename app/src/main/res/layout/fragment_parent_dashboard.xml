@@ -190,7 +190,7 @@
                     android:fontFamily="@font/poppins_semibold"
                     android:paddingLeft="@dimen/dimen_10dp"
                     android:paddingRight="@dimen/dimen_10dp"
-                    android:text="Top Teachers"
+                    android:text="@string/top_teachers"
                     android:textColor="#2B3344"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -309,7 +309,7 @@
                     android:layout_marginBottom="60dp"
                     android:fontFamily="@font/krona_one"
                     android:gravity="center"
-                    android:text="S Y U M A"
+                    android:text="@string/s_y_u_m_a"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@color/colorAccent"
                     android:textStyle="italic"
@@ -317,21 +317,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line1" />
 
-                <TextView
+                <Button
                     android:id="@+id/tvWriteReview"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
                     android:drawablePadding="@dimen/_10sdp"
-                    android:focusable="true"
                     android:fontFamily="@font/poppins"
-                    android:gravity="center"
-                    android:padding="@dimen/_5sdp"
-                    android:text="Say something about us"
+                    android:paddingHorizontal="@dimen/_5sdp"
+                    android:text="@string/say_something_about_us"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="11sp"
                     app:drawableRightCompat="@drawable/ic_baseline_rate_review_24"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recTestimonials" />

@@ -11,6 +11,7 @@ import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -41,10 +42,13 @@ import com.mytuition.utility.GetAddressIntentService;
 import com.mytuition.views.SplashScreen;
 import com.mytuition.views.parentFragments.ParentDashboardFragment;
 import com.mytuition.views.parentFragments.ParentDashboardFragmentDirections;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.mytuition.utility.AppUtils.getFirestoreReference;
 import static com.mytuition.utility.AppUtils.getMobileNumber;
@@ -109,7 +113,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
 
         updateUI(getIntent().getStringExtra(LOGIN_TYPE));
 
-        if (getUid() != null) {
+        if (null != getUid()) {
             updateUserInfo();
         }
         setNavAdapter();
@@ -125,8 +129,8 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                 navController.navigate(R.id.tuitionListFragment);
             } else if (item.getItemId() == R.id.itemAboutUs) {
                 navController.navigate(R.id.aboutUsFragment);
-            } else if (item.getItemId() == R.id.itemTuitionList) {
-                //navController.navigate(R.id.tuitionRequestForAdminFragment);
+            } else if (item.getItemId() == R.id.itemShareApp) {
+                AppUtils.shareApp(instance);
             } else if (item.getItemId() == R.id.admin_item1) {
                 if (null != getUid()) {
                     switch (getUid()) {
@@ -135,8 +139,6 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
                             navController.navigate(R.id.tuitionRequestForAdminFragment);
                     }
                 }
-            } else if (item.getItemId() == R.id.itemAllTuition) {
-                AppUtils.shareApp(instance);
             } else if (item.getItemId() == R.id.itemLogout)
                 showLogoutDialog();
             else Toast.makeText(instance, "coming soon !!", Toast.LENGTH_SHORT).show();
@@ -156,17 +158,24 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     }
 
     private void updateUserInfo() {
-        if (null != getUid())
-            getFirestoreReference().collection(AppConstant.USERS).document(getUid()).addSnapshotListener((value, error) -> {
-                if (error == null && null != value) {
-                    ParentModel user = value.toObject(ParentModel.class);
-                    if (null != user)
-                        user.setMobile(getMobileNumber());
+        getFirestoreReference().collection(AppConstant.USERS).document(getUid()).addSnapshotListener((value, error) -> {
+            if (error == null && null != value) {
+                ParentModel user = value.toObject(ParentModel.class);
+                if (null != user) {
+                    user.setMobile(getMobileNumber());
                     mainBinding.setUser(user);
                     setParentModel(ParentScreen.this, user);
-
+                    View header = mainBinding.navView.getHeaderView(0);
+                    TextView title = header.findViewById(R.id.tvUserTitle);
+                    TextView number = header.findViewById(R.id.tvUserNmuber);
+                    CircleImageView image = header.findViewById(R.id.ivUserImage);
+                    title.setText(user.getName());
+                    number.setText(user.getMobile());
+                    Picasso.get().load(user.getImage()).placeholder(R.drawable.app_icon).into(image);
                 }
-            });
+
+            }
+        });
     }
 
     @Override

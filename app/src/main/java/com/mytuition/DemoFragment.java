@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.firebase.ui.auth.AuthUI;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.gson.Gson;
 import com.mytuition.databinding.FragmentDemoBinding;
@@ -26,6 +27,7 @@ import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.interfaces.UploadImageInterface;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.utility.AppUtils;
+import com.mytuition.views.SplashScreen;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -93,8 +95,34 @@ public class DemoFragment extends Fragment {
 
         binding.ivAadharFront.setOnClickListener(v -> selectImage(REQUEST_CODE_FRONT_IMAGE));
         binding.ivAadharBack.setOnClickListener(v -> selectImage(REQUEST_CODE_BACK_IMAGE));
+        binding.btnLogout.setOnClickListener(v -> showLogoutDialog());
     }
 
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(requireActivity())
+                .setMessage("Do you really want to logout?")
+                .setIcon(R.drawable.app_icon)
+                .setPositiveButton("Yes",
+                        (dialog, id) -> {
+                            dialog.cancel();
+                            logout();
+                        })
+                .setNegativeButton("No", (dialog, id) -> dialog.cancel()).show();
+
+    }
+
+    private void logout() {
+        AppUtils.showRequestDialog(requireActivity());
+        AuthUI.getInstance()
+                .signOut(requireActivity())
+                .addOnCompleteListener(task -> {
+                    hideDialog();
+                    Intent intent = new Intent(requireActivity(), SplashScreen.class);
+                    startActivity(intent);
+                    Toast.makeText(requireActivity(), "logged out successfully", Toast.LENGTH_SHORT).show();
+                    requireActivity().finish();
+                });
+    }
 
     private void getTeacherProfile() {
         if (null == getArguments()) {

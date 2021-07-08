@@ -177,7 +177,7 @@ public class ParentDashboardFragment extends Fragment {
 
     private void initNativeAds() {
         adLoader = new AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
-     /*   adLoader = new AdLoader.Builder(requireContext(), "ca-app-pub-4669458320732543/1192567403")*/
+                /*   adLoader = new AdLoader.Builder(requireContext(), "ca-app-pub-4669458320732543/1192567403")*/
                 .forNativeAd(NativeAd -> {
                     Log.d(TAG, "onNativeAdLoaded: " + NativeAd.getStore());
                     for (int a = 0; a < NativeAd.getImages().size(); a++) {
@@ -222,7 +222,6 @@ public class ParentDashboardFragment extends Fragment {
 
 
     private void loadBanner() {
-
         adRequest = new AdRequest.Builder().build();
         AdSize adSize = getAdSize();
         adView.setAdSize(adSize);

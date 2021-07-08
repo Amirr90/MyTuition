@@ -28,8 +28,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -37,7 +41,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
-import com.mytuition.BuildConfig;
 import com.mytuition.R;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.interfaces.UploadImageInterface;
@@ -45,7 +48,6 @@ import com.mytuition.interfaces.onSuccessListener;
 import com.mytuition.models.CalendarModel;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
-import com.mytuition.views.activity.ParentScreen;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -351,13 +353,54 @@ public class AppUtils {
 
     }
 
-    public static void shareApp(ParentScreen instance) {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT,
-                "Hey check out my app at: https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID);
-        sendIntent.setType("text/plain");
-        instance.startActivity(sendIntent);
+    public static void shareApp(Activity instance) {
+        String uri = "https://myTution.in/invitation?invitationCode=" + getUid();
+        AppUtils.showRequestDialog(instance);
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse(uri))
+                .setDomainUriPrefix("https://mytuition.page.link")
+                .setAndroidParameters(
+                        new DynamicLink.AndroidParameters.Builder("com.mytuition")
+                                .setMinimumVersion(30)
+                                .build())
+                /* .setIosParameters(
+                         new DynamicLink.IosParameters.Builder("")
+                                 .setAppStoreId("1517201659")
+                                 .setMinimumVersion("1.0")
+                                 .build())*/
+                .setSocialMetaTagParameters(
+                        new DynamicLink.SocialMetaTagParameters.Builder()
+                                .setTitle(instance.getString(R.string.syuma))
+                                .setDescription("ShareApp")
+                                .build())
+                .buildShortDynamicLink()
+                .addOnCompleteListener(instance, task -> {
+                    if (task.isSuccessful()) {
+                        AppUtils.hideDialog();
+                        Uri shortLink = task.getResult().getShortLink();
+                        Uri flowchartLink = task.getResult().getPreviewLink();
+                        Log.d(TAG, "shortLink: " + shortLink);
+                        Log.d(TAG, "flowchartLink: " + flowchartLink);
+                        assert shortLink != null;
+                        //openShareAppDialog(shortLink.toString(), instance);
+
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        // sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey check out my app at: https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey check out my app at: " + shortLink);
+                        sendIntent.setType("text/plain");
+                        instance.startActivity(sendIntent);
+
+                    } else {
+                        Log.d(TAG, "onComplete: Error " + Objects.requireNonNull(task.getException()).getLocalizedMessage());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
+                        AppUtils.hideDialog();
+                    }
+                });
     }
 
     public static int setExperience(String experience) {
@@ -799,4 +842,6 @@ public class AppUtils {
         intent.setDataAndType(Uri.parse(filePath), "application/pdf");
 
     }
+
+
 }

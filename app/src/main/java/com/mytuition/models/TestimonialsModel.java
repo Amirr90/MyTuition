@@ -3,11 +3,19 @@ package com.mytuition.models;
 public class TestimonialsModel {
 
     String comment;
-    Boolean isActive;
+    Boolean active;
     String uid;
     String image;
     String name;
     Long timestamp;
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
     public String getImage() {
         return image;
@@ -25,13 +33,6 @@ public class TestimonialsModel {
         this.comment = comment;
     }
 
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
 
     public String getUid() {
         return uid;
