@@ -78,7 +78,7 @@
     <fragment
         android:id="@+id/userNotVerifiedFragment"
         android:name="com.mytuition.UserNotVerifiedFragment"
-        android:label="fragment_user_not_verified"
+        android:label="Profile Verification"
         tools:layout="@layout/fragment_user_not_verified" />
     <dialog
         android:id="@+id/acceptTuitionBootomFragment"

@@ -7,15 +7,18 @@ import android.os.Handler;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.mytuition.R;
+import com.mytuition.databinding.SplashScreenBinding;
 import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.activity.ChooseLoginTypeScreen;
 import com.mytuition.views.activity.ParentScreen;
 import com.mytuition.views.activity.TeacherScreen;
 
+import static com.mytuition.utility.AppUtils.fadeOut;
 import static com.mytuition.utility.AppUtils.getCurrentUser;
 import static com.mytuition.utility.Utils.LOGIN_TYPE;
 import static com.mytuition.utility.Utils.LOGIN_TYPE_PARENT;
@@ -26,10 +29,14 @@ public class SplashScreen extends AppCompatActivity {
     String loginType = LOGIN_TYPE_PARENT;
     String notificationId, notificationType;
 
+    SplashScreenBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_screen);
+        binding = DataBindingUtil.setContentView(this, R.layout.splash_screen);
+
+
     }
 
     @Override
@@ -42,6 +49,8 @@ public class SplashScreen extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+
+        binding.imageView12.setAnimation(fadeOut(this));
         loginType = AppUtils.getString(LOGIN_TYPE, this);
         new Handler().postDelayed(() -> {
             Intent intent;
@@ -59,7 +68,7 @@ public class SplashScreen extends AppCompatActivity {
             }
             SplashScreen.this.startActivity(intent);
             SplashScreen.this.finish();
-        }, 1000);
+        }, 3000);
     }
 
     public void getNotificationData() {

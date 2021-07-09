@@ -296,7 +296,7 @@ public class AppUtils {
         map.put("name", teacherModel.getName());
         map.put("id", getUid());
         map.put("active", teacherModel.isActive());
-        map.put("speciality", teacherModel.getSpeciality());
+        map.put("speciality", teacherModel.getTeachingProfile().getExpertIn());
         map.put("about", teacherModel.getAbout());
         map.put("profileFilled", true);
         map.put("phoneNumber", getMobileNumber());
