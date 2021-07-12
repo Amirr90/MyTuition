@@ -114,7 +114,6 @@ public class ParentRepo {
             mutableDashboardLiveData = new MutableLiveData<>();
             loadDashboardData(requestModel2, fragmentActivity);
         }
-
         return mutableDashboardLiveData;
     }
 

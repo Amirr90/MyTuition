@@ -12,6 +12,12 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:name=".utility.App"
         android:allowBackup="true"
@@ -21,6 +27,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".views.activity.IncomingCallScreen"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".views.activity.TeacherSignUpActivity"
             android:label="@string/title_activity_teacher_signup"
@@ -68,10 +77,10 @@
             </intent-filter>
         </service>
 
+        <receiver android:name=".VideocallBroadcast" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4669458320732543~4109540636" />
-
     </application>
 
 </manifest>

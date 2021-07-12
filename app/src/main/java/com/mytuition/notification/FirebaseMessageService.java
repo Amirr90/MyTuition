@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Ringtone;
@@ -21,6 +22,8 @@ import androidx.navigation.NavDeepLinkBuilder;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mytuition.R;
+import com.mytuition.VideocallBroadcast;
+import com.mytuition.utility.App;
 import com.mytuition.utility.AppConstant;
 import com.mytuition.views.activity.ParentScreen;
 import com.mytuition.views.activity.TeacherScreen;
@@ -31,6 +34,8 @@ import org.json.JSONObject;
 import java.util.Date;
 import java.util.Map;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 public class FirebaseMessageService extends FirebaseMessagingService {
 
     private static final String TAG = "FirebaseMessageService";
@@ -39,18 +44,29 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     Context context;
     int destinationId;
     private NotificationManager mManager;
+    VideocallBroadcast videocallBroadcast;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "onMessageReceivedData: " + remoteMessage.getData());
 
         try {
-            showNotification(remoteMessage.getData());
+            if (remoteMessage.getData().get("notificationType").equalsIgnoreCase("tuitionDetail"))
+                showDemoCallNotification();
+            else
+                showNotification(remoteMessage.getData());
         } catch (JSONException e) {
             e.printStackTrace();
             Log.d(TAG, "onMessageReceived: error " + e.getLocalizedMessage());
         }
 
+    }
+
+    private void showDemoCallNotification() {
+        Intent intent = new Intent();
+        intent.setClassName("com.mytuition", "com.mytuition.views.activity.IncomingCallScreen");
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        App.context.startActivity(intent);
     }
 
     private void showNotification(Map<String, String> data) throws JSONException {
