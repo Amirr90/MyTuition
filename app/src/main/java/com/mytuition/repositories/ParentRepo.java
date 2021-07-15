@@ -5,6 +5,8 @@ import android.widget.Toast;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 
 import com.mytuition.R;
 import com.mytuition.interfaces.ApiInterface;
@@ -20,8 +22,6 @@ import com.mytuition.utility.DatabaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import es.dmoral.toasty.Toasty;
 
 public class ParentRepo {
     MutableLiveData<List<SpecialityModel>> mutableLiveSpecialityData;
@@ -109,7 +109,7 @@ public class ParentRepo {
         });
     }
 
-    public LiveData<List<DashboardModel>> getDashboardData(RequestModel2 requestModel2, FragmentActivity fragmentActivity) {
+    public LiveData<List<DashboardModel>> getDashboardData(RequestModel2 requestModel2, NavController fragmentActivity) {
         if (mutableDashboardLiveData == null) {
             mutableDashboardLiveData = new MutableLiveData<>();
             loadDashboardData(requestModel2, fragmentActivity);
@@ -117,22 +117,34 @@ public class ParentRepo {
         return mutableDashboardLiveData;
     }
 
-    private void loadDashboardData(RequestModel2 requestModel2, FragmentActivity fragmentActivity) {
-        if (AppUtils.isNetworkConnected(App.context)) {
-            AppUtils.showRequestDialog(fragmentActivity);
-            DatabaseUtils.getDashboardData(requestModel2, new ApiInterface() {
-                @Override
-                public void onSuccess(Object obj) {
-                    AppUtils.hideDialog();
-                    mutableDashboardLiveData.setValue((List<DashboardModel>) obj);
-                }
+    private void loadDashboardData(RequestModel2 requestModel2, NavController navController) {
 
-                @Override
-                public void onFailed(String msg) {
-                    AppUtils.hideDialog();
-                    Toast.makeText(App.context, "No data Found !! " + msg, Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else Toasty.warning(App.context, R.string.no_internet, Toast.LENGTH_SHORT).show();
+        if (!AppUtils.isNetworkConnected(App.context)) {
+            navController.navigate(
+                    R.id.noInternetFragmnet,
+                    null,
+                    new NavOptions.Builder()
+                            .setEnterAnim(android.R.animator.fade_in)
+                            .setExitAnim(android.R.animator.fade_out)
+                            .build()
+            );
+            return;
+        }
+
+        AppUtils.showRequestDialog(App.context);
+        DatabaseUtils.getDashboardData(requestModel2, new ApiInterface() {
+            @Override
+            public void onSuccess(Object obj) {
+                AppUtils.hideDialog();
+                mutableDashboardLiveData.setValue((List<DashboardModel>) obj);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                AppUtils.hideDialog();
+                Toast.makeText(App.context, "No data Found !! " + msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+        //  } else Toasty.warning(App.context, R.string.no_internet, Toast.LENGTH_SHORT).show();
     }
 }

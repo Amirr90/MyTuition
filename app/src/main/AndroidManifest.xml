@@ -78,6 +78,7 @@
         </service>
 
         <receiver android:name=".VideocallBroadcast" />
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4669458320732543~4109540636" />

@@ -128,7 +128,7 @@ public class ParentDashboardFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
         requestModel2.setCity("Lucknow");
         requestModel2.setUserId(getUid());
-        viewModel.getDashboardData(requestModel2, requireActivity()).observe(getViewLifecycleOwner(), dashboardModels -> {
+        viewModel.getDashboardData(requestModel2, navController).observe(getViewLifecycleOwner(), dashboardModels -> {
             AppUtils.hideDialog();
             models = dashboardModels;
             if (!dashboardModels.isEmpty()) {

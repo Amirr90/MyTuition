@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -31,6 +32,8 @@ import com.mytuition.views.activity.TeacherScreen;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 import java.util.Map;
 
@@ -50,14 +53,22 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "onMessageReceivedData: " + remoteMessage.getData());
 
-        try {
+        /*try {
             if (remoteMessage.getData().get("notificationType").equalsIgnoreCase("tuitionDetail"))
                 showDemoCallNotification();
             else
                 showNotification(remoteMessage.getData());
+
         } catch (JSONException e) {
             e.printStackTrace();
             Log.d(TAG, "onMessageReceived: error " + e.getLocalizedMessage());
+        }*/
+
+        try {
+            showNotification(remoteMessage.getData());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "onMessageReceivedError: " + e.getLocalizedMessage());
         }
 
     }
@@ -69,25 +80,26 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         App.context.startActivity(intent);
     }
 
-    private void showNotification(Map<String, String> data) throws JSONException {
+    private void showNotification(Map<String, String> data) {
 
         JSONObject json = new JSONObject(data);
         try {
-            String title = json.getString("title");
-            String msg = json.getString("body");
-            String id = json.getString("id");
-            String notificationType = json.getString("notificationType");
+            String image;
+            String title = json.getString(AppConstant.NOTIFICATION_TITLE);
+            String msg = json.getString(AppConstant.NOTIFICATION_BODY);
+            String id = json.getString(AppConstant.NOTIFICATION_ID_);
+            String notificationType = json.getString(AppConstant.NOTIFICATION_TYPE);
+            if (null != json.getString(AppConstant.NOTIFICATION_IMAGE) && !json.getString(AppConstant.NOTIFICATION_IMAGE).isEmpty()) {
+                image = json.getString(AppConstant.NOTIFICATION_IMAGE);
+                URL url = new URL(image);
+                bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            }
 
             Bundle bundle = new Bundle();
 
-
-            //if body || title null or empty return
-           /* if (null == msg && msg.isEmpty() && null == title && title.isEmpty())
-                return;*/
-
             if (notificationType.equalsIgnoreCase(AppConstant.NOTIFICATION_TUITION_DETAIL)) {
                 destinationId = R.id.DetailsFragment2;
-                bundle.putString("tuitionId", id);
+                bundle.putString(AppConstant.TUITION_ID, id);
             }
 
             PendingIntent pendingIntent = new NavDeepLinkBuilder(null == ParentScreen.getInstance() ? TeacherScreen.getInstance() : ParentScreen.getInstance())
@@ -118,7 +130,6 @@ public class FirebaseMessageService extends FirebaseMessagingService {
                     notification.setLargeIcon(bitmap);
                 }
 
-                //int timestamp = 1000;
                 int timestamp = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 
                 getManager().notify(timestamp, notification.build());
@@ -154,6 +165,8 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         } catch (JSONException e) {
             e.printStackTrace();
             Log.d(TAG, "showNotification: " + e.getLocalizedMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 

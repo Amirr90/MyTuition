@@ -334,4 +334,9 @@
             android:defaultValue="0"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/noInternetFragmnet"
+        android:name="com.mytuition.NoInternetFragmnet"
+        android:label="No Internet"
+        tools:layout="@layout/fragment_no_internet_fragmnet" />
 </navigation>

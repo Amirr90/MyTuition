@@ -3,6 +3,7 @@ package com.mytuition.viewHolder;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.NavController;
 
 import com.mytuition.models.DashboardModel;
 import com.mytuition.models.RequestModel2;
@@ -30,7 +31,7 @@ public class ParentViewHolder extends ViewModel {
         return repo.getTuitionList(fragmentActivity);
     }
 
-    public LiveData<List<DashboardModel>> getDashboardData(RequestModel2 requestModel2, FragmentActivity fragmentActivity) {
+    public LiveData<List<DashboardModel>> getDashboardData(RequestModel2 requestModel2, NavController fragmentActivity) {
         return repo.getDashboardData(requestModel2, fragmentActivity);
     }
 }

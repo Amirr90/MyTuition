@@ -35,4 +35,8 @@ public class AppConstant {
     public static final String REJECT = "Reject";
     public static final String ACTION_TIMESTAMP = "actionTimeStamp";
     public static final String NEW_QUERY_TOPIC = "newQuery";
+    public static final String NOTIFICATION_TITLE = "title";
+    public static final String NOTIFICATION_BODY = "body";
+    public static final String NOTIFICATION_ID_ = "id";
+    public static final String NOTIFICATION_IMAGE = "image";
 }

@@ -35,7 +35,7 @@ public class GetAddressIntentService extends IntentService {
         Location location = intent.getParcelableExtra("add_location");
         if (location == null) {
             msg = "No location, can't go further without location";
-            sendResultsToReceiver(0, msg, "0", "0");
+            //sendResultsToReceiver(0, msg, "0", "0");
             return;
         }
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -47,7 +47,7 @@ public class GetAddressIntentService extends IntentService {
         }
         if (addresses == null || addresses.size() == 0) {
             msg = "No address found for the location";
-            sendResultsToReceiver(1, msg, "0", "0");
+            //sendResultsToReceiver(1, msg, "0", "0");
         } else {
             Address address = addresses.get(0);
 

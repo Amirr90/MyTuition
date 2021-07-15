@@ -133,7 +133,7 @@ public class TeacherModel extends BaseObservable {
     }
 
     public String getImage() {
-        return image;
+        return null == image ? "" : image;
     }
 
     public void setImage(String image) {

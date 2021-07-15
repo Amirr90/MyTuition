@@ -92,6 +92,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     @Override
     protected void onStart() {
         super.onStart();
+
         navController = Navigation.findNavController(this, R.id.nav_host_parent);
         NavigationUI.setupActionBarWithNavController(this, navController);
         Objects.requireNonNull(getSupportActionBar()).hide();
@@ -422,17 +423,14 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             if (resultCode == 0) {
                 Log.d("Address", "Location null retrying");
                 getAddress();
+            } else if (resultCode == 1) {
+                Toast.makeText(ParentScreen.this, resultData.getString("address_result"), Toast.LENGTH_SHORT).show();
+            } else if (resultCode == 2) {
+                String currentAdd = resultData.getString("address_result");
+                String lat = resultData.getString("lat");
+                String lng = resultData.getString("lng");
+                showResults(currentAdd, lat, lng);
             }
-
-            if (resultCode == 1) {
-                Toast.makeText(ParentScreen.this, "Address not found, ", Toast.LENGTH_SHORT).show();
-            }
-
-            String currentAdd = resultData.getString("address_result");
-            String lat = resultData.getString("lat");
-            String lng = resultData.getString("lng");
-            Log.d(TAG, "onReceiveResult: " + currentAdd);
-            showResults(currentAdd, lat, lng);
 
         }
     }
