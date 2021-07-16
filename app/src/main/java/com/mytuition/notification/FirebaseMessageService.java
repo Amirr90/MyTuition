@@ -23,9 +23,9 @@ import androidx.navigation.NavDeepLinkBuilder;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mytuition.R;
-import com.mytuition.VideocallBroadcast;
 import com.mytuition.utility.App;
 import com.mytuition.utility.AppConstant;
+import com.mytuition.videoCall.IncomingCallActivity;
 import com.mytuition.views.activity.ParentScreen;
 import com.mytuition.views.activity.TeacherScreen;
 
@@ -47,7 +47,6 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     Context context;
     int destinationId;
     private NotificationManager mManager;
-    VideocallBroadcast videocallBroadcast;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -65,7 +64,8 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         }*/
 
         try {
-            showNotification(remoteMessage.getData());
+            // showNotification(remoteMessage.getData());
+            showDemoCallNotification();
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "onMessageReceivedError: " + e.getLocalizedMessage());
@@ -74,8 +74,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     }
 
     private void showDemoCallNotification() {
-        Intent intent = new Intent();
-        intent.setClassName("com.mytuition", "com.mytuition.views.activity.IncomingCallScreen");
+        Intent intent = new Intent(App.context, IncomingCallActivity.class);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         App.context.startActivity(intent);
     }

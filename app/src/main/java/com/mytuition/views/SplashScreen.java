@@ -94,11 +94,7 @@ public class SplashScreen extends AppCompatActivity {
                     new AlertDialog.Builder(this)
                             .setTitle("Please Enable the additional permissions")
                             .setMessage("You will not receive notifications while the app is in background if you disable these permissions")
-                            .setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(intent);
-                                }
-                            })
+                            .setPositiveButton("Go to Settings", (dialog, which) -> startActivity(intent))
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .setCancelable(false)
                             .show();

@@ -8,7 +8,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -16,7 +17,7 @@
             android:layout_height="240dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:src="@drawable/appointment_done" />
+            android:src="@drawable/ic_tuition_requested_sueecssfully" />
 
         <TextView
             android:id="@+id/textView6"
@@ -29,8 +30,8 @@
             android:layout_marginRight="42dp"
             android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
-            android:text="You have successfully requested Tuition !!"
-            android:textColor="#262E3F"
+            android:text="@string/you_have_successfully_requested_tuition"
+            android:textColor="@color/green"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -59,23 +60,22 @@
             android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
             android:text="@string/thank_you_for_using_our_services"
-            android:textColor="#3F4E6E"
+            android:textColor="@color/green"
             android:textSize="14sp"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnBookingDetails"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/textView8"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="70dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/round_for_search"
-            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTint="@color/blue"
             android:fontFamily="@font/poppins_semibold"
-            android:text="@string/tuition_details"
+            android:text="@string/view_details"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="12sp"

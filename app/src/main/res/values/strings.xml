@@ -173,6 +173,9 @@
     <string name="say_something_about_us">Say something about us</string>
     <string name="s_y_u_m_a">S Y U M A</string>
     <string name="top_teachers">Top Teachers</string>
+    <string name="you_have_successfully_requested_tuition">You have successfully Requested Tuition !!</string>
+    <string name="view_details">View detail</string>
+    <string name="video_call_request">"Request Video Call with our best teachers "</string>
 
     <!--    Live Ad Id-->
     <!--    <string name="adaptive_banner_ad_unit_id_test">ca-app-pub-4669458320732543/9170295624</string>-->

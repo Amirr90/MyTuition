@@ -66,6 +66,19 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_parentDashboardFragment2_to_videoCallExplainationFragment"
+            app:destination="@id/videoCallExplainationFragment"
+            app:enterAnim="@anim/slide_up"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down" />
+        <action
+            android:id="@+id/action_parentDashboardFragment2_to_searchTeacherFragment"
+            app:destination="@id/searchTeacherFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
 
     </fragment>
     <fragment
@@ -339,4 +352,14 @@
         android:name="com.mytuition.NoInternetFragmnet"
         android:label="No Internet"
         tools:layout="@layout/fragment_no_internet_fragmnet" />
+    <fragment
+        android:id="@+id/videoCallExplainationFragment"
+        android:name="com.mytuition.VideoCallExplanationFragment"
+        android:label="fragment_video_call_explaination"
+        tools:layout="@layout/fragment_video_call_explaination" />
+    <fragment
+        android:id="@+id/searchTeacherFragment"
+        android:name="com.mytuition.SearchTeacherFragment"
+        android:label="Search Teachers"
+        tools:layout="@layout/fragment_search_teacher" />
 </navigation>

@@ -172,7 +172,10 @@ public class ParentDashboardFragment extends Fragment {
             return true;
         });
 
+        parentDashboardBinding.btnVideoCall.setOnClickListener(v -> navController.navigate(R.id.action_parentDashboardFragment2_to_videoCallExplainationFragment));
 
+
+        parentDashboardBinding.laySearch.setOnClickListener(v -> navController.navigate(R.id.action_parentDashboardFragment2_to_searchTeacherFragment));
     }
 
     private void initNativeAds() {

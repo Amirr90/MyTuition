@@ -3,7 +3,7 @@
 
     <!--  slideUpAnimation-->
     <translate
-        android:duration="200"
+        android:duration="500"
         android:fromYDelta="100%"
         android:toYDelta="0" />
 </set>
