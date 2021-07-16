@@ -1,0 +1,255 @@
+Index: app/src/main/java/com/mytuition/notification/FirebaseMessageService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.mytuition.notification;\r\n\r\nimport android.app.Notification;\r\nimport android.app.NotificationChannel;\r\nimport android.app.NotificationManager;\r\nimport android.app.PendingIntent;\r\nimport android.content.Context;\r\nimport android.graphics.Bitmap;\r\nimport android.graphics.Color;\r\nimport android.media.Ringtone;\r\nimport android.media.RingtoneManager;\r\nimport android.net.Uri;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.core.app.NotificationCompat;\r\nimport androidx.navigation.NavDeepLinkBuilder;\r\n\r\nimport com.google.firebase.messaging.FirebaseMessagingService;\r\nimport com.google.firebase.messaging.RemoteMessage;\r\nimport com.mytuition.R;\r\nimport com.mytuition.utility.AppConstant;\r\nimport com.mytuition.views.activity.ParentScreen;\r\nimport com.mytuition.views.activity.TeacherScreen;\r\n\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.util.Date;\r\nimport java.util.Map;\r\n\r\npublic class FirebaseMessageService extends FirebaseMessagingService {\r\n\r\n    private static final String TAG = \"FirebaseMessageService\";\r\n    final String CHANNEL_ID = \"com.mytuition\";\r\n    Bitmap bitmap;\r\n    Context context;\r\n    int destinationId;\r\n    private NotificationManager mManager;\r\n\r\n    @Override\r\n    public void onMessageReceived(RemoteMessage remoteMessage) {\r\n        Log.d(TAG, \"onMessageReceivedData: \" + remoteMessage.getData());\r\n\r\n        try {\r\n            showNotification(remoteMessage.getData());\r\n        } catch (JSONException e) {\r\n            e.printStackTrace();\r\n            Log.d(TAG, \"onMessageReceived: error \" + e.getLocalizedMessage());\r\n        }\r\n\r\n    }\r\n\r\n    private void showNotification(Map<String, String> data) throws JSONException {\r\n\r\n        JSONObject json = new JSONObject(data);\r\n        try {\r\n            String title = json.getString(\"title\");\r\n            String msg = json.getString(\"body\");\r\n            String id = json.getString(\"id\");\r\n            String notificationType = json.getString(\"notificationType\");\r\n\r\n            Bundle bundle = new Bundle();\r\n\r\n\r\n            //if body || title null or empty return\r\n           /* if (null == msg && msg.isEmpty() && null == title && title.isEmpty())\r\n                return;*/\r\n\r\n            if (notificationType.equalsIgnoreCase(AppConstant.NOTIFICATION_TUITION_DETAIL)) {\r\n                destinationId = R.id.DetailsFragment2;\r\n                bundle.putString(\"tuitionId\", id);\r\n            }\r\n\r\n            PendingIntent pendingIntent = new NavDeepLinkBuilder(null == ParentScreen.getInstance() ? TeacherScreen.getInstance() : ParentScreen.getInstance())\r\n                    .setGraph(R.navigation.parent_nav)\r\n                    .setDestination(destinationId)\r\n                    .setArguments(bundle)\r\n                    .createPendingIntent();\r\n\r\n            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {\r\n                NotificationChannel androidChannel = new NotificationChannel(CHANNEL_ID,\r\n                        title, NotificationManager.IMPORTANCE_HIGH);\r\n                androidChannel.enableLights(true);\r\n                androidChannel.enableVibration(true);\r\n                androidChannel.setLightColor(Color.GREEN);\r\n\r\n                androidChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);\r\n                getManager().createNotificationChannel(androidChannel);\r\n\r\n                NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)\r\n                        .setSmallIcon(R.mipmap.ic_launcher)\r\n                        .setContentTitle(title)\r\n                        .setContentText(msg)\r\n                        .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))\r\n                        .setAutoCancel(true)\r\n                        .setContentIntent(pendingIntent);\r\n\r\n                if (bitmap != null) {\r\n                    notification.setLargeIcon(bitmap);\r\n                }\r\n\r\n                //int timestamp = 1000;\r\n                int timestamp = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);\r\n\r\n                getManager().notify(timestamp, notification.build());\r\n\r\n                playNotificationSound();\r\n\r\n            } else {\r\n                try {\r\n                    playNotificationSound();\r\n                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)\r\n                            .setSmallIcon(R.mipmap.ic_launcher)\r\n                            .setContentTitle(title)\r\n                            .setContentText(msg)\r\n                            .setAutoCancel(true)\r\n                            .setPriority(NotificationCompat.PRIORITY_HIGH)\r\n                            .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))\r\n                            .setContentIntent(pendingIntent)\r\n                            .setDefaults(Notification.DEFAULT_ALL)\r\n                            .setLights(0xFF760193, 300, 1000)\r\n                            .setVibrate(new long[]{200, 400});\r\n\r\n                    if (bitmap != null) {\r\n                        notificationBuilder.setLargeIcon(bitmap);\r\n                    }\r\n                    int timestamp = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);\r\n                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);\r\n                    notificationManager.notify(timestamp, notificationBuilder.build());\r\n                } catch (SecurityException se) {\r\n                    se.printStackTrace();\r\n                    Log.d(TAG, \"createNotification: \" + se.getLocalizedMessage());\r\n                }\r\n            }\r\n        } catch (JSONException e) {\r\n            e.printStackTrace();\r\n            Log.d(TAG, \"showNotification: \" + e.getLocalizedMessage());\r\n        }\r\n\r\n\r\n    }\r\n\r\n    @Override\r\n    public void onNewToken(@NonNull String s) {\r\n        super.onNewToken(s);\r\n        Log.d(TAG, \"onNewToken: \" + s);\r\n    }\r\n\r\n    public void playNotificationSound() {\r\n        try {\r\n            Uri notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);\r\n            Ringtone r = RingtoneManager.getRingtone(this, notificationSoundUri);\r\n            r.play();\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private NotificationManager getManager() {\r\n        if (mManager == null) {\r\n            mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);\r\n        }\r\n        return mManager;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mytuition/notification/FirebaseMessageService.java	(revision 85c0c3221c940acf2392d6f301eacaaaa563c1e5)
++++ app/src/main/java/com/mytuition/notification/FirebaseMessageService.java	(date 1625892726759)
+@@ -5,6 +5,7 @@
+ import android.app.NotificationManager;
+ import android.app.PendingIntent;
+ import android.content.Context;
++import android.content.Intent;
+ import android.graphics.Bitmap;
+ import android.graphics.Color;
+ import android.media.Ringtone;
+@@ -22,6 +23,7 @@
+ import com.google.firebase.messaging.RemoteMessage;
+ import com.mytuition.R;
+ import com.mytuition.utility.AppConstant;
++import com.mytuition.videoCall.IncomingCallActivity;
+ import com.mytuition.views.activity.ParentScreen;
+ import com.mytuition.views.activity.TeacherScreen;
+ 
+@@ -45,7 +47,9 @@
+         Log.d(TAG, "onMessageReceivedData: " + remoteMessage.getData());
+ 
+         try {
+-            showNotification(remoteMessage.getData());
++
++            showCallNotification();
++            //showNotification(remoteMessage.getData());
+         } catch (JSONException e) {
+             e.printStackTrace();
+             Log.d(TAG, "onMessageReceived: error " + e.getLocalizedMessage());
+@@ -53,6 +57,13 @@
+ 
+     }
+ 
++    private void showCallNotification() throws JSONException {
++        Intent intent = new Intent(getApplicationContext(), IncomingCallActivity.class);
++        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
++        startActivity(intent);
++
++    }
++
+     private void showNotification(Map<String, String> data) throws JSONException {
+ 
+         JSONObject json = new JSONObject(data);
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    package=\"com.mytuition\">\r\n\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\r\n    <uses-permission\r\n        android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"\r\n        tools:ignore=\"ScopedStorage\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n\r\n    <application\r\n        android:name=\".utility.App\"\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:requestLegacyExternalStorage=\"true\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/AppTheme\">\r\n        <activity\r\n            android:name=\".views.activity.TeacherSignUpActivity\"\r\n            android:label=\"@string/title_activity_teacher_signup\"\r\n            android:theme=\"@style/AppTheme.NoActionBar\" />\r\n        <activity\r\n            android:name=\".views.activity.RegistrationActivity\"\r\n            android:theme=\"@style/AppTheme.NoToolbar\" />\r\n        <activity android:name=\".views.activity.TeacherScreen\" />\r\n        <activity android:name=\".views.activity.ParentScreen\" />\r\n        <activity\r\n            android:name=\".views.activity.ChooseLoginTypeScreen\"\r\n            android:theme=\"@style/AppTheme.NoToolbar\" />\r\n        <activity\r\n            android:name=\".views.SplashScreen\"\r\n            android:theme=\"@style/AppTheme.NoToolbar\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n\r\n        <service android:name=\".utility.GetAddressIntentService\" />\r\n        <service\r\n            android:name=\".notification.FirebaseMessageService\"\r\n            android:directBootAware=\"true\"\r\n            android:exported=\"false\">\r\n            <intent-filter>\r\n                <action android:name=\"com.google.firebase.MESSAGING_EVENT\" />\r\n            </intent-filter>\r\n        </service>\r\n\r\n        <meta-data\r\n            android:name=\"com.google.firebase.messaging.default_notification_channel_id\"\r\n            android:value=\"@string/default_notification_channel_id\" />\r\n        <meta-data\r\n            android:name=\"preloaded_fonts\"\r\n            android:resource=\"@array/preloaded_fonts\" />\r\n\r\n        <service\r\n            android:name=\".utility.FirebaseMessageService\"\r\n            android:exported=\"false\">\r\n            <intent-filter>\r\n                <action android:name=\"com.google.firebase.MESSAGING_EVENT\" />\r\n            </intent-filter>\r\n        </service>\r\n\r\n        <meta-data\r\n            android:name=\"com.google.android.gms.ads.APPLICATION_ID\"\r\n            android:value=\"ca-app-pub-4669458320732543~4109540636\" />\r\n\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 85c0c3221c940acf2392d6f301eacaaaa563c1e5)
++++ app/src/main/AndroidManifest.xml	(date 1625893721614)
+@@ -7,6 +7,11 @@
+     <uses-permission android:name="android.permission.INTERNET" />
+     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
++
++    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
++    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
++
++
+     <uses-permission
+         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+         tools:ignore="ScopedStorage" />
+@@ -21,6 +26,8 @@
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+         android:theme="@style/AppTheme">
++        <activity android:name=".videoCall.IncomingCallActivity"
++            android:theme="@style/AppTheme.NoToolbar"/>
+         <activity
+             android:name=".views.activity.TeacherSignUpActivity"
+             android:label="@string/title_activity_teacher_signup"
+@@ -71,7 +78,6 @@
+         <meta-data
+             android:name="com.google.android.gms.ads.APPLICATION_ID"
+             android:value="ca-app-pub-4669458320732543~4109540636" />
+-
+     </application>
+ 
+ </manifest>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_03-07-2021_21_13__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_03-07-2021_21_13__Default_Changelist_.xml	(revision 85c0c3221c940acf2392d6f301eacaaaa563c1e5)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_03-07-2021_21_13__Default_Changelist_.xml	(revision 85c0c3221c940acf2392d6f301eacaaaa563c1e5)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_03-07-2021_21_13_[Default_Changelist]" date="1625327027397" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03-07-2021_21_13_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 03-07-2021 21:13 [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_03-07-2021_21_13_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_03-07-2021_21_13_[Default_Changelist]/shelved.patch	(revision 85c0c3221c940acf2392d6f301eacaaaa563c1e5)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_03-07-2021_21_13_[Default_Changelist]/shelved.patch	(revision 85c0c3221c940acf2392d6f301eacaaaa563c1e5)
+@@ -1,18 +0,0 @@
+-Index: app/build.gradle
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>apply plugin: 'com.android.application'\r\napply plugin: 'com.google.gms.google-services'\r\n\r\nandroid {\r\n    compileSdkVersion 30\r\n    buildToolsVersion \"30.0.2\"\r\n\r\n    defaultConfig {\r\n        applicationId \"com.mytuition\"\r\n        minSdkVersion 26\r\n        targetSdkVersion 30\r\n        versionCode 3\r\n        versionName \"2.1\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    buildFeatures {\r\n        dataBinding true\r\n        viewBinding true\r\n    }\r\n\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: \"libs\", include: [\"*.jar\"])\r\n    implementation 'androidx.appcompat:appcompat:1.2.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'\r\n    implementation 'androidx.navigation:navigation-fragment:2.3.3'\r\n    implementation 'androidx.navigation:navigation-ui:2.3.3'\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n    implementation 'com.google.firebase:firebase-firestore:22.1.1'\r\n    implementation 'com.google.firebase:firebase-database:19.6.0'\r\n\r\n    implementation 'com.google.firebase:firebase-storage:19.2.1'\r\n    implementation 'com.google.firebase:firebase-messaging:21.1.0'\r\n    implementation 'com.google.android.material:material:1.3.0'\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.2'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'\r\n\r\n\r\n    implementation 'com.airbnb.android:lottie:3.4.2'\r\n\r\n    //Retrofit\r\n    /*implementation 'com.squareup.retrofit2:retrofit:2.7.2'\r\n    implementation 'com.squareup.retrofit2:converter-gson:2.7.2'*/\r\n    implementation 'com.squareup.retrofit2:retrofit:2.4.0'\r\n    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'\r\n    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'\r\n\r\n    //Image Picker\r\n    implementation 'com.github.dhaval2404:imagepicker:1.8'\r\n\r\n    implementation 'com.firebaseui:firebase-ui-auth:6.4.0'\r\n    implementation 'com.google.firebase:firebase-auth:19.0.0'\r\n\r\n    //Circle ImageView\r\n    implementation 'de.hdodenhof:circleimageview:3.1.0'\r\n\r\n    //Glide\r\n    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'\r\n    implementation 'com.github.bumptech.glide:glide:4.11.0'\r\n\r\n    //BannerSlider\r\n    implementation 'com.ss.bannerslider:bannerslider:2.0.0'\r\n\r\n    //Lottie\r\n    implementation 'com.airbnb.android:lottie:3.4.2'\r\n\r\n    //Stepper\r\n    implementation 'com.ernestoyaquello.stepperform:vertical-stepper-form:0.9.9'\r\n\r\n    //CircleImageView\r\n    implementation 'de.hdodenhof:circleimageview:3.1.0'\r\n\r\n    //for Location\r\n    implementation \"com.google.android.gms:play-services-location:18.0.0\"\r\n\r\n\r\n\r\n    implementation 'com.google.android.gms:play-services-ads:19.7.0'\r\n\r\n    implementation 'com.github.GrenderG:Toasty:1.5.0'\r\n\r\n    apply plugin: \"androidx.navigation.safeargs\"\r\n\r\n    //slider dot Indicator\r\n    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'\r\n\r\n\r\n    // FirebaseUI for Cloud FireStore\r\n    implementation 'com.firebaseui:firebase-ui-firestore:7.1.1'\r\n\r\n    //for paging Rec\r\n    implementation 'android.arch.paging:runtime:2.1.1'\r\n\r\n\r\n\r\n\r\n    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'\r\n    implementation 'com.github.bumptech.glide:glide:4.11.0'\r\n\r\n\r\n    // Dagger\r\n    def dagger_version = \"2.28.3\"\r\n\r\n    // Dagger2 core\r\n    implementation \"com.google.dagger:dagger:$dagger_version\"\r\n    annotationProcessor \"com.google.dagger:dagger-compiler:$dagger_version\"\r\n\r\n    // Dagger Android\r\n    implementation \"com.google.dagger:dagger-android:2.35.1\"\r\n    implementation \"com.google.dagger:dagger-android-support:$dagger_version\"\r\n    annotationProcessor \"com.google.dagger:dagger-android-processor:$dagger_version\"\r\n\r\n    // ViewModel and LiveData\r\n    def lifecycle_version = '2.2.0-alpha03'\r\n    implementation \"androidx.lifecycle:lifecycle-extensions:$lifecycle_version\"\r\n\r\n\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/build.gradle	(revision ba097190c7b4c38e1e07b29faba6aa901a4dc9d2)
+-+++ app/build.gradle	(date 1625250401302)
+-@@ -118,6 +118,7 @@
+-     // Dagger2 core
+-     implementation "com.google.dagger:dagger:$dagger_version"
+-     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+-+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+- 
+-     // Dagger Android
+-     implementation "com.google.dagger:dagger-android:2.35.1"
+-diff --git .idea/shelf/Uncommitted_changes_before_Update_at_6_28_2021_2_44_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_6_28_2021_2_44_PM__Default_Changelist_.xml
+Index: app/src/main/java/com/mytuition/videoCall/IncomingCallActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mytuition/videoCall/IncomingCallActivity.java	(date 1625893981590)
++++ app/src/main/java/com/mytuition/videoCall/IncomingCallActivity.java	(date 1625893981590)
+@@ -0,0 +1,46 @@
++package com.mytuition.videoCall;
++
++import android.media.Ringtone;
++import android.media.RingtoneManager;
++import android.net.Uri;
++import android.os.Bundle;
++
++import androidx.appcompat.app.AppCompatActivity;
++
++import com.mytuition.R;
++
++public class IncomingCallActivity extends AppCompatActivity {
++
++    Ringtone r;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_incoming_call);
++    }
++
++
++    @Override
++    protected void onStart() {
++        super.onStart();
++        playNotificationSound();
++    }
++
++    @Override
++    protected void onStop() {
++        super.onStop();
++
++        if (null != r)
++            r.stop();
++    }
++
++    public void playNotificationSound() {
++        try {
++            Uri notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
++            r = RingtoneManager.getRingtone(this, notificationSoundUri);
++            r.play();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_incoming_call.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_incoming_call.xml	(date 1625893865429)
++++ app/src/main/res/layout/activity_incoming_call.xml	(date 1625893865429)
+@@ -0,0 +1,35 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:background="@drawable/incoming_call_gradient"
++    tools:context=".videoCall.IncomingCallActivity">
++
++    <TextView
++        android:textColor="@color/white"
++        android:fontFamily="@font/rubik"
++        android:textSize="22dp"
++        android:id="@+id/textView52"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="100dp"
++        android:text="Incoming Video Call"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++
++    <TextView
++        android:textColor="@color/white"
++        android:fontFamily="@font/rubik"
++        android:textSize="24sp"
++        android:id="@+id/textView53"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="150dp"
++        android:text="Dr Rahata Ali Khan"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/textView52" />
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/drawable/incoming_call_gradient.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/drawable/incoming_call_gradient.xml	(date 1625893660393)
++++ app/src/main/res/drawable/incoming_call_gradient.xml	(date 1625893660393)
+@@ -0,0 +1,7 @@
++<shape xmlns:android="http://schemas.android.com/apk/res/android"
++    android:shape="rectangle">
++    <gradient
++        android:startColor="@color/colorAccent"
++        android:endColor="@color/colorPrimary"
++        android:angle="-270" />
++</shape>
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">SYUMA</string>\r\n    <string name=\"join_as\">Join As</string>\r\n    <string name=\"parents_self\">Parents/Self</string>\r\n    <string name=\"next\">Next</string>\r\n    <string name=\"parents\">Parent</string>\r\n    <string name=\"large_text\">\r\n        \"Material is the metaphor.\\n\\n\"\r\n\r\n        \"A material metaphor is the unifying theory of a rationalized space and a system of motion.\"\r\n        \"The material is grounded in tactile reality, inspired by the study of paper and ink, yet \"\r\n        \"technologically advanced and open to imagination and magic.\\n\"\r\n        \"Surfaces and edges of the material provide visual cues that are grounded in reality. The \"\r\n        \"use of familiar tactile attributes helps users quickly understand affordances. Yet the \"\r\n        \"flexibility of the material creates new affordances that supercede those in the physical \"\r\n        \"world, without breaking the rules of physics.\\n\"\r\n        \"The fundamentals of light, surface, and movement are key to conveying how objects move, \"\r\n        \"interact, and exist in space and in relation to each other. Realistic lighting shows \"\r\n        \"seams, divides space, and indicates moving parts.\\n\\n\"\r\n\r\n        \"Bold, graphic, intentional.\\n\\n\"\r\n\r\n        \"The foundational elements of print based design typography, grids, space, scale, color, \"\r\n        \"and use of imagery guide visual treatments. These elements do far more than please the \"\r\n        \"eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge \"\r\n        \"imagery, large scale typography, and intentional white space create a bold and graphic \"\r\n        \"interface that immerse the user in the experience.\\n\"\r\n        \"An emphasis on user actions makes core functionality immediately apparent and provides \"\r\n        \"waypoints for the user.\\n\\n\"\r\n\r\n        \"Motion provides meaning.\\n\\n\"\r\n\r\n        \"Motion respects and reinforces the user as the prime mover. Primary user actions are \"\r\n        \"inflection points that initiate motion, transforming the whole design.\\n\"\r\n        \"All action takes place in a single environment. Objects are presented to the user without \"\r\n        \"breaking the continuity of experience even as they transform and reorganize.\\n\"\r\n        \"Motion is meaningful and appropriate, serving to focus attention and maintain continuity. \"\r\n        \"Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\\n\\n\"\r\n\r\n        \"3D world.\\n\\n\"\r\n\r\n        \"The material environment is a 3D space, which means all objects have x, y, and z \"\r\n        \"dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the \"\r\n        \"positive z-axis extending towards the viewer. Every sheet of material occupies a single \"\r\n        \"position along the z-axis and has a standard 1dp thickness.\\n\"\r\n        \"On the web, the z-axis is used for layering and not for perspective. The 3D world is \"\r\n        \"emulated by manipulating the y-axis.\\n\\n\"\r\n\r\n        \"Light and shadow.\\n\\n\"\r\n\r\n        \"Within the material environment, virtual lights illuminate the scene. Key lights create \"\r\n        \"directional shadows, while ambient light creates soft shadows from all angles.\\n\"\r\n        \"Shadows in the material environment are cast by these two light sources. In Android \"\r\n        \"development, shadows occur when light sources are blocked by sheets of material at \"\r\n        \"various positions along the z-axis. On the web, shadows are depicted by manipulating the \"\r\n        \"y-axis only. The following example shows the card with a height of 6dp.\\n\\n\"\r\n\r\n        \"Resting elevation.\\n\\n\"\r\n\r\n        \"All material objects, regardless of size, have a resting elevation, or default elevation \"\r\n        \"that does not change. If an object changes elevation, it should return to its resting \"\r\n        \"elevation as soon as possible.\\n\\n\"\r\n\r\n        \"Component elevations.\\n\\n\"\r\n\r\n        \"The resting elevation for a component type is consistent across apps (e.g., FAB elevation \"\r\n        \"does not vary from 6dp in one app to 16dp in another app).\\n\"\r\n        \"Components may have different resting elevations across platforms, depending on the depth \"\r\n        \"of the environment (e.g., TV has a greater depth than mobile or desktop).\\n\\n\"\r\n\r\n        \"Responsive elevation and dynamic elevation offsets.\\n\\n\"\r\n\r\n        \"Some component types have responsive elevation, meaning they change elevation in response \"\r\n        \"to user input (e.g., normal, focused, and pressed) or system events. These elevation \"\r\n        \"changes are consistently implemented using dynamic elevation offsets.\\n\"\r\n        \"Dynamic elevation offsets are the goal elevation that a component moves towards, relative \"\r\n        \"to the component’s resting state. They ensure that elevation changes are consistent \"\r\n        \"across actions and component types. For example, all components that lift on press have \"\r\n        \"the same elevation change relative to their resting elevation.\\n\"\r\n        \"Once the input event is completed or cancelled, the component will return to its resting \"\r\n        \"elevation.\\n\\n\"\r\n\r\n        \"Avoiding elevation interference.\\n\\n\"\r\n\r\n        \"Components with responsive elevations may encounter other components as they move between \"\r\n        \"their resting elevations and dynamic elevation offsets. Because material cannot pass \"\r\n        \"through other material, components avoid interfering with one another any number of ways, \"\r\n        \"whether on a per component basis or using the entire app layout.\\n\"\r\n        \"On a component level, components can move or be removed before they cause interference. \"\r\n        \"For example, a floating action button (FAB) can disappear or move off screen before a \"\r\n        \"user picks up a card, or it can move if a snackbar appears.\\n\"\r\n        \"On the layout level, design your app layout to minimize opportunities for interference. \"\r\n        \"For example, position the FAB to one side of stream of a cards so the FAB won’t interfere \"\r\n        \"when a user tries to pick up one of cards.\\n\\n\"\r\n    </string>\r\n    <!-- TODO: Remove or change this placeholder text -->\r\n    <string name=\"hello_blank_fragment\">Hello blank fragment</string>\r\n    <string name=\"find_tutor_by\">Find Tutors By</string>\r\n    <string name=\"speciality\">Speciality</string>\r\n    <string name=\"classs\">Class</string>\r\n    <string name=\"name\">Name</string>\r\n    <string name=\"find_coachings\">Find Coaching</string>\r\n    <string name=\"near_you\">Near you</string>\r\n    <string name=\"proceed\">Proceed</string>\r\n    <string name=\"search_speciality_here\">Search Speciality Here</string>\r\n    <string name=\"select_speciality\">Please Select at-least one Class</string>\r\n    <string name=\"sorry\">Sorry!</string>\r\n    <string name=\"recommended_teachers\">Recommended Teachers</string>\r\n    <string name=\"popular_teachers\">Popular Teachers</string>\r\n    <string name=\"consulation_fee\">monthly</string>\r\n    <string name=\"about_doc\">About the Teacher</string>\r\n    <string name=\"tution_hours\">Tuition Hours</string>\r\n    <string name=\"request_tuition\">Request Tuition</string>\r\n    <string name=\"select_slot\">Select Time Slot</string>\r\n    <string name=\"search_teachers\">Search Teachers</string>\r\n    <string name=\"no_teachers_found\">No Teacher Found</string>\r\n    <string name=\"full_name\">Full Name</string>\r\n    <string name=\"enterFullName\">Enter Full Name</string>\r\n    <string name=\"email\">Email</string>\r\n    <string name=\"enter_your_email\">Enter Email</string>\r\n    <string name=\"mobile_no\">Mobile No</string>\r\n    <string name=\"mobile_number\">Enter Mobile Number</string>\r\n    <string name=\"dob\">DOB</string>\r\n    <string name=\"your_dob\">Enter DOB</string>\r\n    <string name=\"gender\">Gender</string>\r\n    <string name=\"address\">Address</string>\r\n    <string name=\"save\">Save</string>\r\n    <string name=\"your_name\">Your Name</string>\r\n    <string name=\"your_email\">Your Email</string>\r\n    <string name=\"you_want_to_update_on_whatsapp\">Update me on WhatsApp</string>\r\n    <string name=\"confirm\">Confirm</string>\r\n    <string name=\"thank_you_for_using_our_services\">Thank you for using our services.</string>\r\n    <string name=\"tuition_details\">Tuition Details</string>\r\n    <string name=\"per_visit\">per visit</string>\r\n    <string name=\"tuition_book_for\">Tuition Book for</string>\r\n    <string name=\"parent_s_information\">Parent\\'s Information</string>\r\n    <string name=\"view_profile\">View Profile</string>\r\n    <string name=\"request_time\">Request Time</string>\r\n    <string name=\"accepted_time\">Accepted at</string>\r\n    <string name=\"change_teacher\">Change Teacher</string>\r\n    <string name=\"try_again\">try again</string>\r\n    <string name=\"logout\">Logout</string>\r\n    <string name=\"share_app\">Share App</string>\r\n    <string name=\"about_us\">About Us</string>\r\n    <string name=\"tuition_reqiest\">Tuition Request</string>\r\n    <string name=\"cancel_tuition\">Cancel Tuition</string>\r\n    <string name=\"default_notification_channel_id\">com.mytuition</string>\r\n    <string name=\"tuition_history\">Tuition History</string>\r\n    <string name=\"submit\">Submit</string>\r\n    <string name=\"write_cancel_reason\">Write cancel Reason</string>\r\n    <string name=\"cancel_tuition_request\">Cancel Tuition Request</string>\r\n    <string name=\"find_top_coaching_near_you\">Find Top Coaching near you</string>\r\n    <string name=\"see_what_our_existing_users_have_to_say_about_us\">See what our existing users have to say about us</string>\r\n    <string name=\"testimonials\">Testimonials</string>\r\n    <string name=\"write_review\">Write Review</string>\r\n    <string name=\"write_review_here\">write review here</string>\r\n    <string name=\"syuma\">S Y U M A</string>\r\n    <string name=\"requests\">Requests</string>\r\n    <string name=\"profile\">profile</string>\r\n    <string name=\"cancel\">Cancel</string>\r\n    <string name=\"highest_education\">Highest Education</string>\r\n    <string name=\"title_activity_teacher_signup\">ScrollingActivity</string>\r\n    <string name=\"action_settings\">Settings</string>\r\n    <string name=\"add\">Add</string>\r\n    <string name=\"slots\">Slots</string>\r\n    <!--    Test Ad Id-->\r\n    <string name=\"adaptive_banner_ad_unit_id_test\">ca-app-pub-3940256099942544/6300978111</string>\r\n    <string name=\"msg_subscribed\">subscribe\\\\</string>\r\n    <string name=\"msg_subscribe_failed\">not subscribe</string>\r\n    <string name=\"view_all_tuitions\">View All Tuitions</string>\r\n    <string name=\"admin_controller\">Admin Controller</string>\r\n    <string name=\"no_internet\">No Internet connection</string>\r\n    <string name=\"say_something_about_us\">Say something about us</string>\r\n    <string name=\"s_y_u_m_a\">S Y U M A</string>\r\n    <string name=\"top_teachers\">Top Teachers</string>\r\n\r\n    <!--    Live Ad Id-->\r\n<!--    <string name=\"adaptive_banner_ad_unit_id_test\">ca-app-pub-4669458320732543/9170295624</string>-->\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 85c0c3221c940acf2392d6f301eacaaaa563c1e5)
++++ app/src/main/res/values/strings.xml	(date 1625892680250)
+@@ -175,6 +175,6 @@
+     <string name="top_teachers">Top Teachers</string>
+ 
+     <!--    Live Ad Id-->
+-<!--    <string name="adaptive_banner_ad_unit_id_test">ca-app-pub-4669458320732543/9170295624</string>-->
++    <!--    <string name="adaptive_banner_ad_unit_id_test">ca-app-pub-4669458320732543/9170295624</string>-->
+ 
+ </resources>
+\ No newline at end of file
