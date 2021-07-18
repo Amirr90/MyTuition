@@ -1,17 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeMyTuitions"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/swipeMyTuitions"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MyTuitionsFragment">
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recMyTuitions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/_10sdp"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/my_tuition_view" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/noDataFoundLayMy"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup2">
+
+        <TextView
+            android:id="@+id/textView64"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="You have not accepted any tutions!!"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

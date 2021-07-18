@@ -7,10 +7,13 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
+import com.mytuition.databinding.FragmentSearchTeacherBinding;
 import com.mytuition.utility.AppUtils;
 
 public class SearchTeacherFragment extends Fragment {
 
+
+    FragmentSearchTeacherBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

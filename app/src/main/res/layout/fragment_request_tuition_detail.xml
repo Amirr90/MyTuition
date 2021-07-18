@@ -7,6 +7,8 @@
 
         <import type="com.mytuition.utility.AppUtils" />
 
+        <import type="com.mytuition.utility.AppConstant" />
+
         <import type="android.view.View" />
 
         <variable
@@ -28,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <RelativeLayout
                 android:id="@+id/relativeLayout2"
                 android:layout_width="match_parent"
@@ -39,17 +42,32 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:paddingBottom="23dp"
-                android:visibility="@{tuition.teacherId.isEmpty()?View.GONE:View.VISIBLE}"
+                android:visibility="@{tuition.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING)?View.GONE:tuition.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_REJECTED)?View.GONE:View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationViewAudioCall"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="21dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/audio_call" />
 
                 <TextView
                     android:id="@+id/textView26"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="26dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@+id/animationViewAudioCall"
                     android:layout_toEndOf="@id/llImage"
                     android:fontFamily="@font/poppins_semibold"
                     android:text="@{teacher.name}"
@@ -269,6 +287,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -333,6 +352,46 @@
                     app:autoSizeTextType="uniform" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/border_rectangle"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+                <!--   Request Time-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="38dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/request_status"
+                    android:textColor="#262E3F"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:autoSizeTextType="uniform" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="38dp"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="@{tuition.reqStatus}"
+                    android:textAllCaps="true"
+                    android:textColor="@{tuition.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING)?@android:color/holo_orange_dark:tuition.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_ACCEPTED)?@android:color/holo_green_dark:@android:color/holo_red_dark}"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:autoSizeTextType="uniform" />
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btnChangeTeacher"
                 android:layout_width="0dp"
@@ -342,7 +401,7 @@
                 android:text="@string/change_teacher"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
-                android:visibility="@{tuition.reqStatus.equalsIgnoreCase(`Pending`)?View.GONE:View.VISIBLE}"
+                android:visibility="@{tuition.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_ACCEPTED)?View.VISIBLE:View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

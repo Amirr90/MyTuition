@@ -1,5 +1,7 @@
 package com.mytuition;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import com.mytuition.models.RequestModel2;
 import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.models.TeacherModel;
 import com.mytuition.responseModel.TuitionDetailResponse;
+import com.mytuition.utility.App;
 import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.DatabaseUtils;
@@ -82,6 +85,7 @@ public class RequestTuitionDetailFragment extends Fragment {
                     JSONObject request = new JSONObject(jsonString);
                     Bundle bundle = new Bundle();
                     bundle.putString("docModel", request.toString());
+                    bundle.putBoolean("tuitionPage", true);
                     navController.navigate(R.id.action_DetailsFragment2_to_teacherProfileFragment, bundle);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -102,6 +106,19 @@ public class RequestTuitionDetailFragment extends Fragment {
             bundle.putString(AppConstant.TEACHER_ID, requestTuitionModel.getTeacherId());
             navController.navigate(R.id.action_DetailsFragment2_to_cancelTuitionReqDialog, bundle);
         });
+
+        requestTuitionBinding.animationViewAudioCall.setOnClickListener(v -> {
+            performVoiceCall();
+        });
+    }
+
+    private void performVoiceCall() {
+        if (null != teacherModel && null != teacherModel.getPhoneNumber()) {
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:" + teacherModel.getPhoneNumber()));
+            startActivity(intent);
+        } else
+            Toast.makeText(App.context, "Mobile Number not updated !!", Toast.LENGTH_SHORT).show();
     }
 
     private void getTeacherProfile() {
@@ -141,6 +158,10 @@ public class RequestTuitionDetailFragment extends Fragment {
 
                         if (null != requestTuitionModel.getTeacherId() && !requestTuitionModel.getTeacherId().isEmpty())
                             getTeacherProfile();
+
+                        if (requestTuitionModel.getReqStatus().equalsIgnoreCase(AppConstant.REQUEST_STATUS_REJECTED)) {
+                            showSuggestionDialog(requestTuitionModel);
+                        }
                     }
 
                 }
@@ -156,6 +177,13 @@ public class RequestTuitionDetailFragment extends Fragment {
         }
 
 
+    }
+
+    private void showSuggestionDialog(RequestTuitionModel requestTuitionModel) {
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstant.TEACHER_NAME, requestTuitionModel.getName());
+        bundle.putString(AppConstant.TUITION_ID, requestTuitionModel.getId());
+        navController.navigate(R.id.action_DetailsFragment2_to_suggestionTeacherForRejectStatusFragment, bundle);
     }
 
     private void updateRequestStatus(RequestTuitionModel tuitionModel) {

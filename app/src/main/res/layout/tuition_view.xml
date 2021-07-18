@@ -6,6 +6,8 @@
 
         <import type="com.mytuition.utility.AppUtils" />
 
+        <import type="com.mytuition.utility.AppConstant" />
+
         <variable
             name="tuitionModel"
             type="com.mytuition.models.RequestTuitionModel" />
@@ -103,6 +105,7 @@
             android:fontFamily="@font/poppins_medium"
             android:text="Job Description"
             android:textColor="@android:color/black"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView44"
             app:layout_constraintTop_toBottomOf="@+id/textView47" />
 
@@ -115,6 +118,7 @@
             android:text="want teacher for 12th class ISC Board , sringar nagar metro station"
             android:textAlignment="textStart"
             android:textSize="16sp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView45"
@@ -153,8 +157,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:enabled="false"
-            android:text="@{tuitionModel.rejectedTeacherId.equalsIgnoreCase(AppUtils.getUid())?`Rejected your request`:tuitionModel.active?`get tuition`:`Hired`}"
+            android:text="@{tuitionModel.rejectedTeacherId.equalsIgnoreCase(AppUtils.getUid())?`Rejected your request`:tuitionModel.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING)?`get tuition`:`Hired`}"
             android:textColor="@{tuitionModel.rejectedTeacherId.equalsIgnoreCase(AppUtils.getUid())?@android:color/holo_red_light:tuitionModel.active?@android:color/holo_green_light:@android:color/holo_orange_light}"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView46" />

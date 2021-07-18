@@ -5,7 +5,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <import type="com.mytuition.utility.AppUtils" />
+
+        <import type="com.mytuition.utility.AppConstant" />
 
         <variable
             name="tuitionModel"
@@ -31,15 +35,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:fontFamily="@font/rubik"
                 android:padding="@dimen/_10sdp"
-                android:text="Accept Tuition"
+                android:text="@{tuitionModel.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING)?`Accept Tuition`:`Accepted`}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorText"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationViewAudioCallParent"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:visibility="@{tuitionModel.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING)?View.GONE:View.VISIBLE}"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/audio_call" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout2"
@@ -125,6 +143,7 @@
                     android:fontFamily="@font/rubik"
                     android:text="@{tuitionModel.tuitionFor}"
                     android:textAlignment="textEnd"
+                    android:textAllCaps="true"
                     android:textColor="@color/successColor"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -139,6 +158,7 @@
                     android:fontFamily="@font/poppins_medium"
                     android:text="Job Description"
                     android:textColor="@android:color/black"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="@+id/textView50"
                     app:layout_constraintTop_toBottomOf="@+id/textView50" />
 
@@ -148,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/rubik"
-                    android:text="want teacher for 12th class ISC Board , sringar nagar metro station"
+                    android:text=""
                     android:textAlignment="textStart"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -215,6 +235,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="accept tuition"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

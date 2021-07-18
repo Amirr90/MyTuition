@@ -1,19 +1,17 @@
 package com.mytuition.views.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.badge.BadgeDrawable;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.mytuition.R;
 import com.mytuition.databinding.ActivityTeacherScreenBinding;
@@ -23,7 +21,6 @@ import com.mytuition.utility.App;
 import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.TeacherProfile;
-import com.mytuition.views.SplashScreen;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
@@ -111,6 +108,8 @@ public class TeacherScreen extends DaggerAppCompatActivity {
             }
             return false;
         });
+
+        AppUtils.updateOnlineStatus(AppUtils.Teachers, true);
     }
 
     private void subscribeForNewQueryAddedNotification() {
@@ -147,30 +146,9 @@ public class TeacherScreen extends DaggerAppCompatActivity {
         return navController.navigateUp();
     }
 
-
-    private void showLogoutDialog() {
-        new AlertDialog.Builder(TeacherScreen.this)
-                .setMessage("Do you really want to logout?")
-                .setIcon(R.drawable.ic_launcher_foreground)
-                .setPositiveButton("YES",
-                        (dialog, id) -> {
-                            dialog.cancel();
-                            logout();
-                        })
-                .setNegativeButton("NO", (dialog, id) -> dialog.cancel()).show();
-
-    }
-
-    private void logout() {
-        AppUtils.showRequestDialog(TeacherScreen.this);
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(task -> {
-                    hideDialog();
-                    Intent intent = new Intent(TeacherScreen.this, SplashScreen.class);
-                    startActivity(intent);
-                    Toast.makeText(TeacherScreen.this, "logged out successfully", Toast.LENGTH_SHORT).show();
-                    finish();
-                });
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppUtils.updateOnlineStatus(AppUtils.Teachers, false, System.currentTimeMillis());
     }
 }

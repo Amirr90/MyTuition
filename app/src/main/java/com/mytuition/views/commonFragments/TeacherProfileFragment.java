@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.mytuition.R;
 import com.mytuition.databinding.FragmentTeacherProfileBinding;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.AppUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,6 +45,9 @@ public class TeacherProfileFragment extends Fragment {
         if (null == getArguments())
             return;
 
+        teacherProfileBinding.animationViewAudioCall.setVisibility(getArguments().containsKey("tuitionPage") ? View.GONE : View.GONE);
+        teacherProfileBinding.btnRequestTuition.setVisibility(getArguments().containsKey("tuitionPage") ? View.GONE : View.VISIBLE);
+
         String jsonString = getArguments().getString("docModel");
         Gson gson = new Gson();
 
@@ -60,6 +64,7 @@ public class TeacherProfileFragment extends Fragment {
         });
     }
 
+
     private void setAboutMe(TeacherModel teacherModel) {
         String text;
         if (teacherModel.getAbout().isEmpty()) {
@@ -74,5 +79,11 @@ public class TeacherProfileFragment extends Fragment {
         else
             teacherProfileBinding.textView92.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        AppUtils.showToolbar(requireActivity());
     }
 }

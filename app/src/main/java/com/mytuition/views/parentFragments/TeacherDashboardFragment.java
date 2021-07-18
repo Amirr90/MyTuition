@@ -80,13 +80,13 @@ public class TeacherDashboardFragment extends DaggerFragment {
 
         binding.radioGroup2.setOnCheckedChangeListener((group, checkedId) -> {
             filterData(checkedId);
-
         });
     }
 
     private void initAd() {
         adRequest = new AdRequest.Builder().build();
 
+        //with Test Add Id
         RewardedAd.load(requireActivity(), "ca-app-pub-3940256099942544/5224354917",
                 adRequest, new RewardedAdLoadCallback() {
                     @Override
@@ -108,13 +108,14 @@ public class TeacherDashboardFragment extends DaggerFragment {
     private void filterData(int checkedId) {
         if (checkedId == R.id.radioAll)
             setUpRecData(query
-                   /* .whereEqualTo(AppConstant.TEACHER_ID, "")*/);
+                    .whereEqualTo(AppConstant.REQUEST_TYPE, AppConstant.REQUEST_TYPE_BY_CLASS)
+            );
         else if (checkedId == R.id.radioHired)
             setUpRecData(query
-                    .whereEqualTo("reqStatus", AppConstant.REQUEST_STATUS_ACCEPTED));
+                    .whereEqualTo(AppConstant.REQUEST_STATUS, AppConstant.REQUEST_STATUS_ACCEPTED));
         else if (checkedId == R.id.radioAvailable)
             setUpRecData(query
-                    .whereEqualTo("reqStatus", AppConstant.REQUEST_STATUS_PENDING));
+                    .whereEqualTo(AppConstant.REQUEST_STATUS, AppConstant.REQUEST_STATUS_PENDING));
     }
 
     private void checkForProfileComplete() {
@@ -124,19 +125,19 @@ public class TeacherDashboardFragment extends DaggerFragment {
             public void onSuccess(Object obj) {
                 hideDialog();
                 TeacherModel teacherModel = (TeacherModel) obj;
-                AppUtils.setString("name", teacherModel.getName(), requireActivity());
+                AppUtils.setString(AppConstant.NAME, teacherModel.getName(), requireActivity());
                 if (null != teacherModel) {
                     Log.d(TAG, "onSuccess: " + teacherModel.toString());
                     if (!teacherModel.isProfileFilled()) {
                         Toast.makeText(requireActivity(), "incomplete profile !!", Toast.LENGTH_SHORT).show();
                         String model = getJSONFromModel(teacherModel);
                         Bundle bundle = new Bundle();
-                        bundle.putString("teacherModel", model);
+                        bundle.putString(AppConstant.TEACHER_MODEL, model);
                         navController.navigate(R.id.action_teacherDashboardFragment_to_demoFragment, bundle);
                     } else if (!teacherModel.isVerified())
                         navController.navigate(R.id.action_teacherDashboardFragment_to_userNotVerifiedFragment);
                     else {
-                        setUpRecData(query);
+                        setUpRecData(query.whereEqualTo(AppConstant.REQUEST_TYPE, AppConstant.REQUEST_TYPE_BY_CLASS));
                     }
                 }
 
@@ -153,6 +154,7 @@ public class TeacherDashboardFragment extends DaggerFragment {
 
     private void setUpRecData(Query query) {
         query.orderBy(AppConstant.TIMESTAMP, Query.Direction.DESCENDING);
+
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(10)
                 .setPageSize(5)
@@ -180,7 +182,7 @@ public class TeacherDashboardFragment extends DaggerFragment {
             protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull final RequestTuitionModel model) {
                 holder.tuitionViewBinding.setTuitionModel(model);
                 try {
-                    holder.tuitionViewBinding.button2.setEnabled(model.getActive());
+                    holder.tuitionViewBinding.button2.setEnabled(model.getReqStatus().equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -188,7 +190,6 @@ public class TeacherDashboardFragment extends DaggerFragment {
 
                 holder.tuitionViewBinding.button2.setOnClickListener(view -> {
                     showInterstialAd(model);
-
                 });
             }
 
@@ -198,6 +199,14 @@ public class TeacherDashboardFragment extends DaggerFragment {
                 super.onError(e);
                 hideDialog();
                 Log.d(TAG, "onError: " + e.getLocalizedMessage());
+            }
+
+            @Override
+            public int getItemCount() {
+                binding.dashboardRec.setVisibility(super.getItemCount() == 0 ? View.GONE : View.VISIBLE);
+                binding.textView64.setText(R.string.no_tuition_found);
+                binding.noDataFoundLay.setVisibility(super.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+                return super.getItemCount();
             }
 
             @Override
@@ -216,14 +225,16 @@ public class TeacherDashboardFragment extends DaggerFragment {
                         hideDialog();
                         if (binding.swipeDashboard.isRefreshing())
                             binding.swipeDashboard.setRefreshing(false);
-                        Log.d(TAG, "onLoadingStateChanged: FINISHED");
+                        Log.d(TAG, "onLoadingStateChanged: FINISHED " + getItemCount());
+
                     }
                     break;
                     case LOADED: {
                         hideDialog();
+                        Log.d(TAG, "onLoadingStateChanged: LOADED " + getItemCount());
                         if (binding.swipeDashboard.isRefreshing())
                             binding.swipeDashboard.setRefreshing(false);
-                        Log.d(TAG, "onLoadingStateChanged: LOADED " + getItemCount());
+
                     }
                     case LOADING_MORE: {
                         Log.d(TAG, "onLoadingStateChanged: LOADING_MORE");
@@ -242,6 +253,8 @@ public class TeacherDashboardFragment extends DaggerFragment {
         binding.dashboardRec.setHasFixedSize(true);
         binding.dashboardRec.setAdapter(adapter);
         TeacherScreen.getInstance().setBadge(adapter.getItemCount());
+
+        Log.d(TAG, "setUpRecData: " + adapter.getItemCount());
     }
 
     private void showInterstialAd(RequestTuitionModel model) {
@@ -287,6 +300,7 @@ public class TeacherDashboardFragment extends DaggerFragment {
 
 
         });
+
 
     }
 

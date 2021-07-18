@@ -4,7 +4,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <import type="com.mytuition.utility.AppUtils" />
+
+        <import type="com.mytuition.utility.AppConstant" />
 
         <variable
             name="tuitionModel"
@@ -145,7 +149,40 @@
             app:layout_constraintStart_toEndOf="@+id/textView47"
             app:layout_constraintTop_toBottomOf="@+id/textView43" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+
+        <Button
+            android:id="@+id/btnRejectTuition"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="@{tuitionModel.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_ACCEPTED)?`Accepted`:tuitionModel.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_REJECTED)?`REJECTED`:tuitionModel.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING)?`REJECT`:tuitionModel.reqStatus}"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView45"
+            app:strokeColor="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:enabled="true"
+            android:text="@{tuitionModel.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_ACCEPTED)?`View Details`:`Accept`}"
+            android:textColor="@color/colorWhite"
+            android:visibility="@{tuitionModel.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING)?View.VISIBLE:tuitionModel.reqStatus.equalsIgnoreCase(AppConstant.REQUEST_STATUS_ACCEPTED)?View.VISIBLE:View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnRejectTuition"
+            app:layout_constraintTop_toTopOf="@+id/btnRejectTuition" />
+        <!--  <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -155,28 +192,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView46">
 
-            <Button
-                android:id="@+id/button2"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:layout_weight="1"
-                android:enabled="true"
-                android:text="Cancel"
-                android:textColor="@color/colorPrimary"
-                app:strokeColor="@color/colorPrimary" />
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_weight="1"
-                android:enabled="true"
-                android:text="View Details"
-                android:textColor="@color/colorWhite" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-
+-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <RelativeLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -48,15 +48,22 @@
                             android:layout_height="54dp"
                             android:loadCustomTeacherImage="@{teacher.image}"
                             android:padding="2dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             app:srcCompat="@drawable/ic_launcher_foreground" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:id="@+id/lin"
+                            android:layout_width="0dp"
                             android:layout_height="54dp"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
                             android:layout_toEndOf="@+id/imageView20"
                             android:gravity="center_vertical"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toStartOf="@+id/animationView"
+                            app:layout_constraintStart_toEndOf="@+id/imageView20"
+                            app:layout_constraintTop_toTopOf="@+id/imageView20">
 
                             <TextView
                                 android:id="@+id/textView92"
@@ -80,15 +87,31 @@
                                 android:textSize="14sp" />
                         </LinearLayout>
 
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/animationViewAudioCall"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_toEndOf="@+id/lin"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            app:layout_constraintBottom_toBottomOf="@+id/lin"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/lin"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
+                            app:lottie_rawRes="@raw/audio_call" />
 
                         <RelativeLayout
 
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/imageView20"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="18dp"
-                            android:layout_marginRight="16dp">
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/imageView20">
 
                             <ImageView
                                 android:id="@+id/ivLocationPin"
@@ -132,19 +155,19 @@
                                 android:textSize="12sp" />
                         </RelativeLayout>
 
-                    </RelativeLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/round_from_top"
+                        android:baselineAligned="false"
                         android:orientation="horizontal"
                         android:paddingStart="15dp"
                         android:paddingTop="22dp"
                         android:paddingEnd="22dp"
                         android:paddingBottom="22dp"
-                        android:weightSum="2"
-                        android:baselineAligned="false">
+                        android:weightSum="2">
 
                         <RelativeLayout
                             android:layout_width="0dp"

@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.mytuition.RequestTuitionDetailFragment.TIME_SLOT;
 import static com.mytuition.utility.AppUtils.getCurrentDateInWeekMonthDayFormat;
@@ -106,7 +107,6 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
         timeSlotsModelList = new ArrayList<>();
         if (null != classId) {
             boolean b = false;
-
             timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Morning", getSlots(b, 6, 12)));
             timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Noon", getSlots(b, 12, 17)));
             timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Evening", getSlots(b, 17, 21)));
@@ -114,14 +114,43 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
             Log.d(TAG, "setSlots: " + getSlots(b, 21, 24));
 
         } else {
-            // timeSlotsModelList.addAll(teacherModel.getTimeSlots());
-            boolean b = false;
+            try {
+                List<TeacherModel.TimeSlotModel> slotModels = new ArrayList<>();
+                Map<String, Object> slotsMap = teacherModel.getSlots();
+                if (null == slotsMap)
+                    return;
+                Log.d("TAG", "addData: " + slotsMap.toString());
+                if (slotsMap.containsKey("Morning")) {
+                    ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Morning");
+                    if (!slots.isEmpty())
+                        slotModels.add(new TeacherModel.TimeSlotModel("Morning", slots));
+                }
+                if (slotsMap.containsKey("Noon")) {
+                    ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Noon");
+                    if (!slots.isEmpty())
+                        slotModels.add(new TeacherModel.TimeSlotModel("Noon", slots));
+                }
+                if (slotsMap.containsKey("Evening")) {
+                    ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Evening");
+                    if (!slots.isEmpty())
+                        slotModels.add(new TeacherModel.TimeSlotModel("Evening", slots));
+                }
+                if (slotsMap.containsKey("Night")) {
+                    ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Night");
+                    if (!slots.isEmpty())
+                        slotModels.add(new TeacherModel.TimeSlotModel("Night", slots));
+                }
+                timeSlotsModelList.addAll(slotModels);
+            } catch (Exception e) {
+                e.printStackTrace();
+                boolean b = false;
+                timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Morning", getSlots(b, 6, 12)));
+                timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Noon", getSlots(b, 12, 17)));
+                timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Evening", getSlots(b, 17, 21)));
+                timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Night", getSlots(b, 21, 24)));
+                Log.d(TAG, "setSlots: " + getSlots(b, 21, 24));
+            }
 
-            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Morning", getSlots(b, 6, 12)));
-            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Noon", getSlots(b, 12, 17)));
-            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Evening", getSlots(b, 17, 21)));
-            timeSlotsModelList.add(new TeacherModel.TimeSlotModel("Night", getSlots(b, 21, 24)));
-            Log.d(TAG, "setSlots: " + getSlots(b, 21, 24));
         }
         slotsAdapter = new TimeSlotsAdapter(timeSlotsModelList, this);
         slotsBinding.timingRec.setAdapter(slotsAdapter);

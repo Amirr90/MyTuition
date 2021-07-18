@@ -2,6 +2,7 @@ package com.mytuition.utility;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -46,6 +47,7 @@ import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.interfaces.UploadImageInterface;
 import com.mytuition.interfaces.onSuccessListener;
 import com.mytuition.models.CalendarModel;
+import com.mytuition.models.RequestTuitionModel;
 import com.mytuition.models.SpecialityModel;
 import com.mytuition.models.TeacherModel;
 
@@ -82,6 +84,8 @@ public class AppUtils {
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+    private static final String ONLINE = "online";
+    private static final String LAST_SEEN = "lastSeen";
     public static Toast mToast;
     public static String Teachers = "Teachers";
     public static String Users = "Users";
@@ -855,6 +859,27 @@ public class AppUtils {
     public static Animation slideUp(Context activity) {
         return AnimationUtils.loadAnimation(activity, R.anim.slide_up);
     }
+
+    public static void updateOnlineStatus(String doc, boolean status) {
+        getFirestoreReference().collection(doc).document(getUid()).update("online", status);
+    }
+
+    public static void updateOnlineStatus(String doc, boolean status, long timestamp) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(AppUtils.ONLINE, status);
+        map.put(AppUtils.LAST_SEEN, timestamp);
+        Log.d(TAG, "updateOnlineStatus: " + getUid());
+        getFirestoreReference().collection(doc).document(getUid()).update(map);
+    }
+
+    public static void rejectTuition(RequestTuitionModel model, Activity fragmentActivity, onSuccessListener onSuccessListener) {
+        new AlertDialog.Builder(fragmentActivity)
+                .setMessage("Reject Tuition??")
+                .setPositiveButton("Yes", (dialog, which) -> getFirestoreReference().collection(AppConstant.REQUEST_TUITION)
+                        .document(model.getId())
+                        .update(AppConstant.REQUEST_STATUS, AppConstant.REQUEST_STATUS_REJECTED).addOnSuccessListener(aVoid -> onSuccessListener.onSuccess(""))).setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
+    }
+
 
     private void showPdf(String filePath) {
         Intent intent = new Intent(Intent.ACTION_VIEW);

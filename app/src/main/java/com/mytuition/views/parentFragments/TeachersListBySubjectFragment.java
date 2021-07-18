@@ -17,6 +17,7 @@ import com.mytuition.R;
 import com.mytuition.adapters.SubSpecialityAdapter;
 import com.mytuition.databinding.FragmentTeachersListBySubjectBinding;
 import com.mytuition.responseModel.TeacherRequestModel;
+import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.viewHolder.ParentViewHolder;
 
@@ -35,7 +36,7 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
 
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@org.jetbrains.annotations.NotNull @NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         bySubjectBinding = FragmentTeachersListBySubjectBinding.inflate(getLayoutInflater());
         return bySubjectBinding.getRoot();
@@ -76,6 +77,7 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
     public void onItemClick(String item) {
         Bundle bundle = new Bundle();
         bundle.putString("docModel", item);
+        bundle.putString(AppConstant.FROM, AppConstant.SUBJECT);
         navController.navigate(R.id.action_teachersListBySubjectFragment_to_selectTimeSlotsFragment, bundle);
     }
 }

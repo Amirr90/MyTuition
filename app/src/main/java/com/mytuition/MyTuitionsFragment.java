@@ -17,12 +17,12 @@ import androidx.paging.PagedList;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.Query;
 import com.mytuition.adapters.CategoryViewHolder;
 import com.mytuition.databinding.FragmentMyTuitionsBinding;
 import com.mytuition.databinding.MyTuitionViewBinding;
 import com.mytuition.models.RequestTuitionModel;
+import com.mytuition.utility.App;
 import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.activity.TeacherScreen;
@@ -56,6 +56,8 @@ public class MyTuitionsFragment extends Fragment {
 
 
         setUpRecData();
+
+        binding.swipeMyTuitions.setOnRefreshListener(this::setUpRecData);
     }
 
     private void setUpRecData() {
@@ -65,12 +67,7 @@ public class MyTuitionsFragment extends Fragment {
                 .orderBy(AppConstant.TIMESTAMP, Query.Direction.DESCENDING);
 
 
-        query.get().addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-            }
-        });
+        query.get().addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(10)
                 .setPageSize(5)
@@ -80,7 +77,6 @@ public class MyTuitionsFragment extends Fragment {
                 .setLifecycleOwner(requireActivity())
                 .setQuery(query, config, snapshot -> {
                     RequestTuitionModel requestTuitionModel = snapshot.toObject(RequestTuitionModel.class);
-                    Log.d(TAG, "setUpRecData: " + snapshot.getData().toString());
                     requestTuitionModel.setId(snapshot.getId());
                     return requestTuitionModel;
                 }).build();
@@ -99,14 +95,24 @@ public class MyTuitionsFragment extends Fragment {
             protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull final RequestTuitionModel model) {
                 holder.myTuitionViewBinding.setTuitionModel(model);
                 if (null != model.getActive())
-                    holder.myTuitionViewBinding.button2.setEnabled(model.getActive());
-                holder.myTuitionViewBinding.button2.setOnClickListener(view -> {
+                    holder.myTuitionViewBinding.btnRejectTuition.setEnabled(model.getReqStatus().equals(AppConstant.REQUEST_STATUS_PENDING));
+                holder.myTuitionViewBinding.button3.setOnClickListener(view -> {
                     Bundle bundle = new Bundle();
                     bundle.putString("RequestTuitionModel", getJSONFromModel(model));
-                    navController.navigate(R.id.action_teacherDashboardFragment_to_acceptTuitionBootomFragment, bundle);
+                    navController.navigate(R.id.acceptTuitionBootomFragment, bundle);
                 });
+                holder.myTuitionViewBinding.btnRejectTuition.setOnClickListener(v ->
+                        rejectTuition(model)
+                );
             }
 
+
+            @Override
+            public int getItemCount() {
+                binding.noDataFoundLayMy.setVisibility(super.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+                binding.recMyTuitions.setVisibility(super.getItemCount() == 0 ? View.GONE : View.VISIBLE);
+                return super.getItemCount();
+            }
 
             @Override
             protected void onError(@NonNull Exception e) {
@@ -139,6 +145,8 @@ public class MyTuitionsFragment extends Fragment {
                         if (binding.swipeMyTuitions.isRefreshing())
                             binding.swipeMyTuitions.setRefreshing(false);
                         Log.d(TAG, "onLoadingStateChanged: LOADED " + getItemCount());
+                        if (getItemCount() == 0)
+                            Toast.makeText(App.context, "No Tuition found for you!!", Toast.LENGTH_SHORT).show();
                     }
                     case LOADING_MORE: {
                         Log.d(TAG, "onLoadingStateChanged: LOADING_MORE");
@@ -157,5 +165,13 @@ public class MyTuitionsFragment extends Fragment {
         binding.recMyTuitions.setHasFixedSize(true);
         binding.recMyTuitions.setAdapter(adapter);
         TeacherScreen.getInstance().setBadge(adapter.getItemCount());
+    }
+
+    private void rejectTuition(RequestTuitionModel model) {
+
+        AppUtils.rejectTuition(model, requireActivity(), obj -> {
+            Toast.makeText(App.context, "Tuition Rejected !!", Toast.LENGTH_SHORT).show();
+            setUpRecData();
+        });
     }
 }

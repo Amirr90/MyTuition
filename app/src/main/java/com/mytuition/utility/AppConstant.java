@@ -39,4 +39,10 @@ public class AppConstant {
     public static final String NOTIFICATION_BODY = "body";
     public static final String NOTIFICATION_ID_ = "id";
     public static final String NOTIFICATION_IMAGE = "image";
+    public static final String FROM = "from";
+    public static final String SUBJECT = "subject";
+    public static final String REQUEST_STATUS = "reqStatus";
+    public static final String MOBILE = "mobile";
+    public static final String REQUEST_TYPE = "reqType";
+    public static final String TEACHER_NAME = "teacherName";
 }

@@ -1,5 +1,6 @@
 package com.mytuition;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mytuition.databinding.FragmentTuitionListBinding;
 import com.mytuition.databinding.TuitionListViewBinding;
 import com.mytuition.models.RequestTuitionModel;
+import com.mytuition.utility.AppConstant;
 import com.mytuition.viewHolder.ParentViewHolder;
 
 import org.jetbrains.annotations.NotNull;
@@ -96,8 +98,25 @@ public class TuitionListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull AdapterTuitionList.TuitionVH holder, final int position) {
             holder.binding.setTuition(listModels.get(position));
-            holder.binding.root.setOnClickListener(v -> {
 
+            String status = listModels.get(position).getReqStatus();
+            switch (status) {
+                case AppConstant.REQUEST_STATUS_PENDING:
+                    holder.binding.llImage.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.yellow2)));
+                    break;
+                case AppConstant.REQUEST_STATUS_REJECTED:
+                    holder.binding.llImage.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.pink)));
+                    break;
+
+                case AppConstant.REQUEST_STATUS_ACCEPTED:
+                    holder.binding.llImage.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                    break;
+                case AppConstant.REQUEST_STATUS_CANCELLED:
+                    holder.binding.llImage.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.red700)));
+                    break;
+            }
+
+            holder.binding.root.setOnClickListener(v -> {
 
                 TuitionListFragmentDirections.ActionTuitionListFragmentToDetailsFragment2 action = TuitionListFragmentDirections.actionTuitionListFragmentToDetailsFragment2();
                 action.setTuitionId(listModels.get(position).getId());

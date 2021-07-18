@@ -251,6 +251,9 @@
             android:name="tuitionId"
             android:defaultValue="0"
             app:argType="string" />
+        <action
+            android:id="@+id/action_DetailsFragment2_to_suggestionTeacherForRejectStatusFragment"
+            app:destination="@id/suggestionTeacherForRejectStatusFragment" />
     </fragment>
     <fragment
         android:id="@+id/tuitionListFragment"
@@ -362,4 +365,9 @@
         android:name="com.mytuition.SearchTeacherFragment"
         android:label="Search Teachers"
         tools:layout="@layout/fragment_search_teacher" />
+    <dialog
+        android:id="@+id/suggestionTeacherForRejectStatusFragment"
+        android:name="com.mytuition.SuggestionTeacherForRejectStatusFragment"
+        android:label="fragment_suggestion_teacher_for_reject_status"
+        tools:layout="@layout/fragment_suggestion_teacher_for_reject_status" />
 </navigation>

@@ -1,10 +1,13 @@
 package com.mytuition;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +28,7 @@ import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.mytuition.utility.AppUtils.getFirestoreReference;
 import static com.mytuition.utility.AppUtils.getUid;
 
 
@@ -57,11 +61,39 @@ public class AcceptTuitionBottomFragment extends BottomSheetDialogFragment {
 
         Log.d(TAG, "onViewCreated: " + requestTuitionModel.getId());
 
+        binding.btnAcceptTuition.setVisibility(requestTuitionModel.getReqStatus().equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING) ? View.VISIBLE : View.GONE);
         binding.btnAcceptTuition.setOnClickListener(view2 -> {
             updateTuitionStatus();
         });
 
+        binding.animationViewAudioCallParent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callParent();
+            }
+        });
 
+    }
+
+    private void callParent() {
+        if (AppUtils.isNetworkConnected(requireActivity())) {
+            AppUtils.showRequestDialog(requireActivity());
+            getFirestoreReference().collection(AppConstant.USERS).document(requestTuitionModel.getUid()).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        AppUtils.hideDialog();
+                        if (null != documentSnapshot) {
+                            String number = documentSnapshot.getString(AppConstant.MOBILE);
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
+                            intent.setData(Uri.parse("tel:" + number));
+                            startActivity(intent);
+                        } else
+                            Toast.makeText(App.context, "Unable To get parent contact number, try again later!!", Toast.LENGTH_SHORT).show();
+
+                    }).addOnFailureListener(e -> {
+                AppUtils.hideDialog();
+                Toast.makeText(App.context, "Unable To get parent contact number, try again later!!", Toast.LENGTH_SHORT).show();
+            });
+        } else Toast.makeText(App.context, "No Internet Connection!!", Toast.LENGTH_SHORT).show();
     }
 
     private void updateTuitionStatus() {
@@ -75,7 +107,7 @@ public class AcceptTuitionBottomFragment extends BottomSheetDialogFragment {
                     Map<String, Object> map = new HashMap<>();
                     map.put("reqStatus", AppConstant.REQUEST_STATUS_ACCEPTED);
                     map.put("teacherId", getUid());
-                    map.put("active", false);
+                    // map.put("active", false);
                     map.put("acceptedAt", System.currentTimeMillis());
                     map.put("name", AppUtils.getString("name", requireActivity()));
                     reference.update(map)

@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.ServerValue;
 import com.mytuition.R;
 import com.mytuition.adapters.NavAdapter;
 import com.mytuition.databinding.ActivityParentScreenBinding;
@@ -114,9 +115,6 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
 
         updateUI(getIntent().getStringExtra(LOGIN_TYPE));
 
-        if (null != getUid()) {
-            updateUserInfo();
-        }
         setNavAdapter();
 
 
@@ -147,15 +145,23 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         });
 
 
-        if (null != getUid()) {
-            switch (getUid()) {
-                case AppConstant.ADMIN_UID:
-                case AppConstant.ADMIN_UID2:
-                    MenuItem menuItem = mainBinding.navView.getMenu().findItem(R.id.admin);
-                    menuItem.setVisible(true);
-            }
+        getUid();
+        updateUserInfo();
+        switch (getUid()) {
+            case AppConstant.ADMIN_UID:
+            case AppConstant.ADMIN_UID2:
+                MenuItem menuItem = mainBinding.navView.getMenu().findItem(R.id.admin);
+                menuItem.setVisible(true);
         }
 
+        AppUtils.updateOnlineStatus(AppUtils.Users, true);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        AppUtils.updateOnlineStatus(AppUtils.Users, false, System.currentTimeMillis());
     }
 
     private void updateUserInfo() {
@@ -334,6 +340,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             return "";
         else return areaName;
     }
+
 
     public void setAreaName(String areaName) {
         this.areaName = areaName;

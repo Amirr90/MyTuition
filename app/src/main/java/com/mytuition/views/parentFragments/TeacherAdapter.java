@@ -70,12 +70,6 @@ public class TeacherAdapter extends ListAdapter<TeacherModel, TeacherAdapter.Das
         });
 
     }
-
-    private void AddNewTeacher(TeacherModel teacherModel) {
-        teacherModel.setTimestamp(System.currentTimeMillis());
-        AppUtils.getFirestoreReference().collection(AppConstant.TEACHER).add(teacherModel);
-    }
-
     public static class DashBoardVH2 extends RecyclerView.ViewHolder {
         DashBoardViewHorizontal1Binding dashBoardViewBinding;
 

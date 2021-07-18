@@ -32,6 +32,7 @@ public class TeacherModel extends BaseObservable {
     private boolean availableForDemoClass;
     private boolean availableForSunday;
     private boolean verified;
+    private boolean online;
     private String name;
     private String image;
     private String id;
@@ -42,6 +43,14 @@ public class TeacherModel extends BaseObservable {
     private Profile profile;
     private long timestamp;
 
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
 
     public TeacherModel() {
     }

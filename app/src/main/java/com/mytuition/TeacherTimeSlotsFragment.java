@@ -72,7 +72,7 @@ public class TeacherTimeSlotsFragment extends DaggerFragment implements TeacherT
         primaryAdapter = new TeacherTimingPrimaryAdapter(this);
 
         viewModel.slotList().observe(getViewLifecycleOwner(), teacherModel -> {
-            getSlots(teacherModel);
+            setSlots(teacherModel);
             binding.setTeacherModel(teacherModel);
         });
 
@@ -94,7 +94,7 @@ public class TeacherTimeSlotsFragment extends DaggerFragment implements TeacherT
 
     }
 
-    private void getSlots(TeacherModel teacherModel) {
+    private void setSlots(TeacherModel teacherModel) {
         List<TeacherModel.TimeSlotModel> slotModels = new ArrayList<>();
         Map<String, Object> slotsMap = teacherModel.getSlots();
         if (null == slotsMap)
