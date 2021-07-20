@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.mytuition.R;
 import com.mytuition.databinding.FragmentTeacherProfileBinding;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -60,6 +61,7 @@ public class TeacherProfileFragment extends Fragment {
         teacherProfileBinding.btnRequestTuition.setOnClickListener(view1 -> {
             Bundle bundle = new Bundle();
             bundle.putString("docModel", getJSONFromModel(teacherModel));
+            bundle.putString(AppConstant.SPECIALITY_NAME, AppConstant.ALL);
             navController.navigate(R.id.action_teacherProfileFragment_to_selectTimeSlotsFragment, bundle);
         });
     }

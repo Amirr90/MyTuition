@@ -17,7 +17,16 @@ public class RequestTuitionModel {
     private String time;
     private String date;
     private Boolean active;
+    private Boolean updateOnWhatsApp;
 
+
+    public Boolean getUpdateOnWhatsApp() {
+        return updateOnWhatsApp;
+    }
+
+    public void setUpdateOnWhatsApp(Boolean updateOnWhatsApp) {
+        this.updateOnWhatsApp = updateOnWhatsApp;
+    }
 
     public Long getAcceptedAt() {
         return acceptedAt;

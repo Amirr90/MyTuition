@@ -4,7 +4,7 @@ public class AppConstant {
     public static final String USERS = "Users";
     public static final String TEACHER_ID = "teacherId";
     public static final String DATE = "date";
-    public static final String ALL = "all";
+    public static final String ALL = "ALL";
     public static final String TEACHER_MODEL = "teacherModel";
 
     public static final String REQUEST_TUITION = "TuitionRequest";
@@ -45,4 +45,5 @@ public class AppConstant {
     public static final String MOBILE = "mobile";
     public static final String REQUEST_TYPE = "reqType";
     public static final String TEACHER_NAME = "teacherName";
+    public static final String SPECIALITY_NAME = "specialityName";
 }

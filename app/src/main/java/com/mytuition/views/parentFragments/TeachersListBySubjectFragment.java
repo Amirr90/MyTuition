@@ -78,6 +78,7 @@ public class TeachersListBySubjectFragment extends Fragment implements SubSpecia
         Bundle bundle = new Bundle();
         bundle.putString("docModel", item);
         bundle.putString(AppConstant.FROM, AppConstant.SUBJECT);
+        bundle.putString(AppConstant.SPECIALITY_NAME, specialityName);
         navController.navigate(R.id.action_teachersListBySubjectFragment_to_selectTimeSlotsFragment, bundle);
     }
 }

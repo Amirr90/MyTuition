@@ -23,6 +23,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -176,6 +177,30 @@ public class ParentDashboardFragment extends Fragment {
 
 
         parentDashboardBinding.laySearch.setOnClickListener(v -> navController.navigate(R.id.action_parentDashboardFragment2_to_searchTeacherFragment));
+        getCredential();
+    }
+
+    public void getCredential() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        try {
+            Log.d(TAG, "getAccessToken: " + firebaseAuth.getAccessToken(true).addOnSuccessListener(getTokenResult -> {
+                Log.d(TAG, "onSuccess: " + getTokenResult.getToken());
+                Log.d(TAG, "onSuccess: " + getTokenResult.getExpirationTimestamp());
+                Log.d(TAG, "onSuccess: " + getTokenResult.getSignInProvider());
+                Log.d(TAG, "onSuccess: " + getTokenResult.getAuthTimestamp());
+                Log.d(TAG, "onSuccess: " + getTokenResult.getClaims());
+
+                /*FirebaseAuth.getInstance().revokeRefreshTokens(uid);
+                UserRecord user = FirebaseAuth.getInstance().getUser(uid);
+                long revocationSecond = user.getTokensValidAfterTimestamp() / 1000;
+                System.out.println("Tokens revoked at: " + revocationSecond);*/
+
+
+            }));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "getCredential: " + e.getLocalizedMessage());
+        }
     }
 
     private void initNativeAds() {

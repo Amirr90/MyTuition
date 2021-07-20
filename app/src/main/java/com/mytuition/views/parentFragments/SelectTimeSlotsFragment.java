@@ -165,6 +165,8 @@ public class SelectTimeSlotsFragment extends Fragment implements AdapterInterfac
         String timeSlot = (String) o;
         bundle.putString(TIME_SLOT, timeSlot);
         bundle.putString(AppConstant.DATE, date);
+        if (null != getArguments() && getArguments().containsKey(AppConstant.SPECIALITY_NAME))
+            bundle.putString(AppConstant.SPECIALITY_NAME, getArguments().getString(AppConstant.SPECIALITY_NAME));
 
         Gson gson = new Gson();
         String jsonString = gson.toJson(teacherModel);

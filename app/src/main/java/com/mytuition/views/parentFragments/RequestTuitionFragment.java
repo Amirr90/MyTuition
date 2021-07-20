@@ -101,13 +101,21 @@ public class RequestTuitionFragment extends Fragment {
     }
 
     private boolean initReqModel() {
+        String tuitionFor;
+        if (null != getArguments())
+            tuitionFor = getArguments().getString(AppConstant.SPECIALITY_NAME);
+        else tuitionFor = "";
+
+        // String name = requestTuitionBinding.editTextTextPersonName2.getText().toString();
+        requestTuitionModel = new RequestTuitionModel();
         requestTuitionModel = new RequestTuitionModel();
         requestTuitionModel.setName(null == teacherModel ? "Not Defined" : teacherModel.getName());
         requestTuitionModel.setReqDate(date);
+        requestTuitionModel.setUpdateOnWhatsApp(requestTuitionBinding.radioWhatsAppBtn.isChecked());
         requestTuitionModel.setReqTime(timeSlot);
         requestTuitionModel.setUid(getUid());
         requestTuitionModel.setTeacherId(null == teacherModel ? "" : teacherModel.getId());
-        requestTuitionModel.setTuitionFor(null == classId ? AppConstant.ALL : classId);
+        requestTuitionModel.setTuitionFor(null == classId ? tuitionFor : classId);
         requestTuitionModel.setReqType(null == classId ? AppConstant.REQUEST_TYPE_BY_TEACHER : AppConstant.REQUEST_TYPE_BY_CLASS);
         return null != requestTuitionModel;
     }
