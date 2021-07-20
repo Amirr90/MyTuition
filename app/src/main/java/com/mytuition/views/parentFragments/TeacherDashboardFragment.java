@@ -269,37 +269,39 @@ public class TeacherDashboardFragment extends DaggerFragment {
                 proceedToNextPage(model);
                 initAd();
             });
+
+            mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    // Called when ad is shown.
+                    Log.d(TAG, "Ad was shown.");
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(AdError adError) {
+                    // Called when ad fails to show.
+                    Log.d(TAG, "Ad failed to show.");
+                    proceedToNextPage(model);
+                }
+
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    // Called when ad is dismissed.
+                    // Set the ad reference to null so you don't show the ad a second time.
+                    Log.d(TAG, "Ad was dismissed.");
+                    mRewardedAd = null;
+                    Toast.makeText(App.context, "View Full Ad to accept tuition !!", Toast.LENGTH_SHORT).show();
+                    initAd();
+                }
+
+
+            });
         } else {
             proceedToNextPage(model);
             Log.d(TAG, "The rewarded ad wasn't ready yet.");
         }
 
-        mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-            @Override
-            public void onAdShowedFullScreenContent() {
-                // Called when ad is shown.
-                Log.d(TAG, "Ad was shown.");
-            }
 
-            @Override
-            public void onAdFailedToShowFullScreenContent(AdError adError) {
-                // Called when ad fails to show.
-                Log.d(TAG, "Ad failed to show.");
-                proceedToNextPage(model);
-            }
-
-            @Override
-            public void onAdDismissedFullScreenContent() {
-                // Called when ad is dismissed.
-                // Set the ad reference to null so you don't show the ad a second time.
-                Log.d(TAG, "Ad was dismissed.");
-                mRewardedAd = null;
-                Toast.makeText(App.context, "View Full Ad to accept tuition !!", Toast.LENGTH_SHORT).show();
-                initAd();
-            }
-
-
-        });
 
 
     }

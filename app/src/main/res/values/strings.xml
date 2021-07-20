@@ -107,7 +107,7 @@
     <string name="sorry">Sorry!</string>
     <string name="recommended_teachers">Recommended Teachers</string>
     <string name="popular_teachers">Popular Teachers</string>
-    <string name="consulation_fee">monthly</string>
+    <string name="consulation_fee">Monthly</string>
     <string name="about_doc">About the Teacher</string>
     <string name="tution_hours">Tuition Hours</string>
     <string name="request_tuition">Request Tuition</string>
@@ -131,7 +131,7 @@
     <string name="confirm">Confirm</string>
     <string name="thank_you_for_using_our_services">Thank you for using our services.</string>
     <string name="tuition_details">Tuition Details</string>
-    <string name="per_visit">per visit</string>
+    <string name="per_visit">Per Visit</string>
     <string name="tuition_book_for">Tuition Book for</string>
     <string name="parent_s_information">Parent\'s Information</string>
     <string name="view_profile">View Profile</string>
