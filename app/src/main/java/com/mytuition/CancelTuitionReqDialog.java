@@ -41,12 +41,11 @@ public class CancelTuitionReqDialog extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.btnCancelReqTuition.setOnClickListener(v -> {
-            if (binding.etReason.getText().toString().isEmpty()) {
+            String text = binding.etReason.getText() != null ? binding.etReason.getText().toString() : "";
+            if (text.isEmpty()) {
                 Toasty.info(requireActivity(), "Please write reason for cancelling Tuition Request", Toast.LENGTH_SHORT, true).show();
-
             } else {
                 updateRequestStatus();
-
             }
         });
 

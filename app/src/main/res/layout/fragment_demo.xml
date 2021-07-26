@@ -42,7 +42,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_40sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:src="@drawable/ic_login_image"
+                android:src="@drawable/teacher_demo_icon"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -141,6 +141,7 @@
                         app:startIconTint="@color/colorPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLength="26"
@@ -164,6 +165,7 @@
                         app:startIconTint="@color/colorPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etFatherName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLength="26"
@@ -201,10 +203,13 @@
                         android:hint="Email"
                         app:counterEnabled="true"
                         app:counterMaxLength="26"
+                        app:helperText="required*"
+                        app:helperTextTextColor="@android:color/holo_red_dark"
                         app:startIconDrawable="@drawable/ic_baseline_email_24"
                         app:startIconTint="@color/colorPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textEmailAddress"
@@ -223,11 +228,13 @@
                         app:counterMaxLength="60"
                         app:endIconMode="clear_text"
                         app:helperText="required*"
+                        android:layout_marginTop="@dimen/_10sdp"
                         app:helperTextTextColor="@android:color/holo_red_dark"
                         app:startIconDrawable="@drawable/ic_baseline_home_24"
                         app:startIconTint="@color/colorPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etAddress"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLength="60"
@@ -245,10 +252,13 @@
                         app:counterEnabled="true"
                         app:counterMaxLength="30"
                         app:endIconMode="clear_text"
+                        app:helperText="required*"
+                        app:helperTextTextColor="@android:color/holo_red_dark"
                         app:startIconDrawable="@drawable/ic_baseline_home_work_24"
                         app:startIconTint="@color/colorPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etLandMark"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLength="30"
@@ -262,6 +272,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="City"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:helperText="required*"
+                        app:helperTextTextColor="@android:color/holo_red_dark"
                         app:startIconDrawable="@drawable/ic_baseline_my_location_24"
                         app:startIconTint="@color/colorPrimary">
 
@@ -279,8 +292,8 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_10sdp"
                         android:hint="State"
+                        android:layout_marginTop="@dimen/_10sdp"
                         app:startIconDrawable="@drawable/ic_baseline_my_location_24"
                         app:startIconTint="@color/colorPrimary">
 
@@ -351,6 +364,7 @@
                         app:startIconTint="@color/colorPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSchoolCollegeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLength="60"
@@ -505,7 +519,7 @@
                         android:gravity="center_vertical"
                         android:hint="About yourself *"
                         app:counterEnabled="true"
-                        app:counterMaxLength="100"
+                        app:counterMaxLength="150"
                         app:endIconMode="clear_text"
                         app:helperText="required*"
                         app:helperTextTextColor="@android:color/holo_red_dark"
@@ -513,9 +527,10 @@
                         app:startIconTint="@color/colorPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etAbout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:maxLength="101"
+                            android:maxLength="200"
                             android:singleLine="false"
                             android:text="@={teacherProfile.about}" />
                     </com.google.android.material.textfield.TextInputLayout>

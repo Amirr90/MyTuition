@@ -46,4 +46,20 @@ public class AppConstant {
     public static final String REQUEST_TYPE = "reqType";
     public static final String TEACHER_NAME = "teacherName";
     public static final String SPECIALITY_NAME = "specialityName";
+
+    //live
+    public static final String NATIVE_ADD_ID = "ca-app-pub-4669458320732543/1192567403";
+    //Demo
+    // public static final String NATIVE_ADD_ID = "ca-app-pub-3940256099942544/2247696110";
+
+
+    //live
+    public static final String BANNER_ADD_ID = "ca-app-pub-4669458320732543/9170295624";
+    //Demo
+    //public static final String BANNER_ADD_ID = "ca-app-pub-4669458320732543/9170295624";
+
+    //live
+    public static final String INTERSTITIAL_AD_ID = "ca-app-pub-4669458320732543/3534280391";
+    //Demo
+    //public static final String INTERSTITIAL_AD_ID = "ca-app-pub-3940256099942544/5224354917";
 }

@@ -11,7 +11,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.badge.BadgeDrawable;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.mytuition.R;
 import com.mytuition.databinding.ActivityTeacherScreenBinding;
@@ -25,6 +24,7 @@ import com.mytuition.utility.TeacherProfile;
 import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.mytuition.utility.AppUtils.getJSONFromModel;
+import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.AppUtils.hideDialog;
 
 public class TeacherScreen extends DaggerAppCompatActivity {
@@ -149,6 +149,7 @@ public class TeacherScreen extends DaggerAppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        AppUtils.updateOnlineStatus(AppUtils.Teachers, false, System.currentTimeMillis());
+        if (null != getUid() && !getUid().isEmpty())
+            AppUtils.updateOnlineStatus(AppUtils.Teachers, false, System.currentTimeMillis());
     }
 }

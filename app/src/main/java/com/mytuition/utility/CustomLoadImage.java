@@ -25,15 +25,15 @@ public class CustomLoadImage {
                 Glide.with(App.context)
                         .load(imagePath)
                         .centerCrop()
-                        .placeholder(R.drawable.ic_launcher_background)
+                        .placeholder(R.drawable.teacher_demo_icon)
                         .into(imageView);
 
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(TAG, "loadImage: " + e.getLocalizedMessage());
-                imageView.setImageResource(R.drawable.ic_launcher_foreground);
+                imageView.setImageResource(R.drawable.teacher_demo_icon);
             }
-        } else imageView.setImageResource(R.drawable.ic_launcher_foreground);
+        } else imageView.setImageResource(R.drawable.teacher_demo_icon);
 
     }
 

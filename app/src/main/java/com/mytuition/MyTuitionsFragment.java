@@ -77,6 +77,7 @@ public class MyTuitionsFragment extends Fragment {
                 .setLifecycleOwner(requireActivity())
                 .setQuery(query, config, snapshot -> {
                     RequestTuitionModel requestTuitionModel = snapshot.toObject(RequestTuitionModel.class);
+
                     requestTuitionModel.setId(snapshot.getId());
                     return requestTuitionModel;
                 }).build();

@@ -102,23 +102,27 @@ public class TeacherTimeSlotsFragment extends DaggerFragment implements TeacherT
         Log.d("TAG", "addData: " + slotsMap.toString());
         if (slotsMap.containsKey("Morning")) {
             ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Morning");
-            if (!slots.isEmpty())
-                slotModels.add(new TeacherModel.TimeSlotModel("Morning", slots));
+            if (null != slots)
+                if (!slots.isEmpty())
+                    slotModels.add(new TeacherModel.TimeSlotModel("Morning", slots));
         }
         if (slotsMap.containsKey("Noon")) {
             ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Noon");
-            if (!slots.isEmpty())
-                slotModels.add(new TeacherModel.TimeSlotModel("Noon", slots));
+            if (null != slots)
+                if (!slots.isEmpty())
+                    slotModels.add(new TeacherModel.TimeSlotModel("Noon", slots));
         }
         if (slotsMap.containsKey("Evening")) {
             ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Evening");
-            if (!slots.isEmpty())
-                slotModels.add(new TeacherModel.TimeSlotModel("Evening", slots));
+            if (null != slots)
+                if (!slots.isEmpty())
+                    slotModels.add(new TeacherModel.TimeSlotModel("Evening", slots));
         }
         if (slotsMap.containsKey("Night")) {
             ArrayList<String> slots = (ArrayList<String>) slotsMap.get("Night");
-            if (!slots.isEmpty())
-                slotModels.add(new TeacherModel.TimeSlotModel("Night", slots));
+            if (null != slots)
+                if (!slots.isEmpty())
+                    slotModels.add(new TeacherModel.TimeSlotModel("Night", slots));
         }
 
 

@@ -2,6 +2,7 @@ package com.mytuition.views.commonFragments;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,11 +69,16 @@ public class TeacherProfileFragment extends Fragment {
 
 
     private void setAboutMe(TeacherModel teacherModel) {
-        String text;
-        if (teacherModel.getAbout().isEmpty()) {
-            text = "Hi there, I'm " + teacherModel.getName() + " and I teach all subjects and specialization in " + teacherModel.getSpeciality() + ". I have been teaching for over " + teacherModel.getTeachingProfile().getExperience() + " years and have education experience in " + teacherModel.getAcademicInformation().getHighestEducation() + ". When you walk in my classroom you will notice.";
-        } else text = teacherModel.getAbout();
-        teacherProfileBinding.textView105.setText(text);
+
+        if (teacherModel != null) {
+            String text;
+            if (null != teacherModel.getAbout() && !teacherModel.getAbout().isEmpty()) {
+                text = teacherModel.getAbout();
+            } else {
+                text = "Hi there, I'm \'<b>" + teacherModel.getName() + "</b>\' and I teach all subjects and specialization in <b>" + teacherModel.getSpeciality() + "</b>. I have been teaching for over <b>" + teacherModel.getTeachingProfile().getExperience() + "</b> years and have education experience in <b>" + teacherModel.getAcademicInformation().getHighestEducation() + "</b>\'. When you walk in my classroom you will notice.";
+            }
+            teacherProfileBinding.textView105.setText(Html.fromHtml(text));
+        }
 
         Drawable img = teacherProfileBinding.textView92.getContext().getResources().getDrawable(R.drawable.ic_baseline_verified_user_24);
 

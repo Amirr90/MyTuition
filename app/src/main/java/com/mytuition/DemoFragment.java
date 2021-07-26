@@ -26,6 +26,7 @@ import com.mytuition.databinding.FragmentDemoBinding;
 import com.mytuition.interfaces.ApiInterface;
 import com.mytuition.interfaces.UploadImageInterface;
 import com.mytuition.models.TeacherModel;
+import com.mytuition.utility.App;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.views.SplashScreen;
 
@@ -40,6 +41,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.mytuition.utility.AppUtils.getAllSpeciality;
 import static com.mytuition.utility.AppUtils.getMobileNumber;
 import static com.mytuition.utility.AppUtils.hideDialog;
+import static com.mytuition.utility.AppUtils.isEmailValid;
 import static com.mytuition.utility.Utils.getCityList;
 import static com.mytuition.utility.Utils.getStateList;
 
@@ -113,6 +115,7 @@ public class DemoFragment extends Fragment {
 
     private void logout() {
         AppUtils.showRequestDialog(requireActivity());
+        AppUtils.updateOnlineStatus(AppUtils.Teachers, false, System.currentTimeMillis());
         AuthUI.getInstance()
                 .signOut(requireActivity())
                 .addOnCompleteListener(task -> {
@@ -201,6 +204,63 @@ public class DemoFragment extends Fragment {
             Toast.makeText(requireActivity(), "School/College Name required !!", Toast.LENGTH_SHORT).show();
             return false;
         }*/
+
+        if (binding.etName.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "Enter name", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etFatherName.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "Enter father name", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etEmail.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "Enter email", Toast.LENGTH_SHORT).show();
+            return false;
+
+        } else if (isEmailValid(binding.etName.getText().toString())) {
+            Toast.makeText(App.context, "Enter valid email", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etAddress.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "Enter address", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etAddress.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "Enter address", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etLandMark.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "Enter land Mark", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etCity.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "select city", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etState.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "select state", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etHighestEducation.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "select Highest Education", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etSchoolCollegeName.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "select College/School name", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.tvSelectedSubjects.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "select teaching subjects", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etSpecialistIn.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "select speciality subjects", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.monthlyFeeSpinner.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "select your monthly fee", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.perVisitSpinner.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "select your per visit fee", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.expSpinner.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "select your teaching experience", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etAbout.getText().toString().isEmpty()) {
+            Toast.makeText(App.context, "write about you", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (binding.etAbout.getText().toString().length() < 150) {
+            Toast.makeText(App.context, "please write minimum 150 words about you", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         return true;
     }
 
@@ -369,10 +429,10 @@ public class DemoFragment extends Fragment {
             list.add(getAllSpeciality().get(index));
         }
         teachingProfile.setTeachingSubject(list);
-
         teacherModel.setTeachingProfile(teachingProfile);
         if (teacherModel.getProfile().getVerified() == null)
             teacherModel.getProfile().setVerified(false);
+
         AppUtils.updateTeacherProfile(teacherModel, new ApiInterface() {
             @Override
             public void onSuccess(Object obj) {
@@ -387,6 +447,7 @@ public class DemoFragment extends Fragment {
                 Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 }

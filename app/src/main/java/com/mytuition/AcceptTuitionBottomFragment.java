@@ -62,16 +62,9 @@ public class AcceptTuitionBottomFragment extends BottomSheetDialogFragment {
         Log.d(TAG, "onViewCreated: " + requestTuitionModel.getId());
 
         binding.btnAcceptTuition.setVisibility(requestTuitionModel.getReqStatus().equalsIgnoreCase(AppConstant.REQUEST_STATUS_PENDING) ? View.VISIBLE : View.GONE);
-        binding.btnAcceptTuition.setOnClickListener(view2 -> {
-            updateTuitionStatus();
-        });
+        binding.btnAcceptTuition.setOnClickListener(view2 -> updateTuitionStatus());
 
-        binding.animationViewAudioCallParent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callParent();
-            }
-        });
+        binding.animationViewAudioCallParent.setOnClickListener(v -> callParent());
 
     }
 

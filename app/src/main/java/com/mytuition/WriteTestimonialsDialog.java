@@ -61,18 +61,16 @@ public class WriteTestimonialsDialog extends BottomSheetDialogFragment {
         testimonialsModel.setActive(false);
         testimonialsModel.setName(getParentModel(requireActivity()).getName());
 
-        if (getUid() != null) {
-            AppUtils.getFirestoreReference().collection(AppConstant.TESTIMONIALS)
-                    .document(getUid())
-                    .set(testimonialsModel).addOnSuccessListener(aVoid -> {
-                AppUtils.hideDialog();
-                dismiss();
-                Toasty.success(App.context, "Added successfully!!", Toast.LENGTH_SHORT, true).show();
-            }).addOnFailureListener(e -> {
-                AppUtils.hideDialog();
-                Toasty.error(App.context, "something went wrong, try again", Toast.LENGTH_SHORT, true).show();
-                Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-            });
-        }
+        AppUtils.getFirestoreReference().collection(AppConstant.TESTIMONIALS)
+                .document(getUid())
+                .set(testimonialsModel).addOnSuccessListener(aVoid -> {
+            AppUtils.hideDialog();
+            dismiss();
+            Toasty.success(App.context, "Added successfully!!", Toast.LENGTH_SHORT, true).show();
+        }).addOnFailureListener(e -> {
+            AppUtils.hideDialog();
+            Toasty.error(App.context, "something went wrong, try again", Toast.LENGTH_SHORT, true).show();
+            Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
+        });
     }
 }

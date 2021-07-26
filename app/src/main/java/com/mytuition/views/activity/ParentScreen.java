@@ -29,7 +29,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.firebase.database.ServerValue;
 import com.mytuition.R;
 import com.mytuition.adapters.NavAdapter;
 import com.mytuition.databinding.ActivityParentScreenBinding;
@@ -161,7 +160,8 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     protected void onStop() {
         super.onStop();
 
-        AppUtils.updateOnlineStatus(AppUtils.Users, false, System.currentTimeMillis());
+        if (null != getUid() && !getUid().isEmpty())
+            AppUtils.updateOnlineStatus(AppUtils.Users, false, System.currentTimeMillis());
     }
 
     private void updateUserInfo() {
@@ -404,6 +404,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     }
 
     private void logout() {
+        AppUtils.updateOnlineStatus(AppUtils.Users, false, System.currentTimeMillis());
         AppUtils.showRequestDialog(ParentScreen.this);
         AuthUI.getInstance()
                 .signOut(this)

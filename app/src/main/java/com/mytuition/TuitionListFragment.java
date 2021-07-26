@@ -31,7 +31,6 @@ import static com.mytuition.utility.AppUtils.fadeIn;
 
 public class TuitionListFragment extends Fragment {
 
-    private static final String TAG = "TuitionListFragment";
     FragmentTuitionListBinding binding;
     NavController navController;
     ParentViewHolder viewModel;

@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     tools:context=".views.parentFragments.RequestTuitionSuccessfullyFragment">
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
         <ImageView
+            android:contentDescription="@android:string/cancel"
             android:id="@+id/imageView2"
             android:layout_width="240dp"
             android:layout_height="240dp"
@@ -28,11 +24,11 @@
             android:layout_marginLeft="42dp"
             android:layout_marginTop="24dp"
             android:layout_marginRight="42dp"
-            android:fontFamily="@font/poppins_semibold"
+            android:fontFamily="@font/rubik"
             android:gravity="center"
             android:text="@string/you_have_successfully_requested_tuition"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/green"
-            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
@@ -57,12 +53,12 @@
             android:layout_below="@id/textView7"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:fontFamily="@font/poppins_semibold"
+            android:fontFamily="@font/rubik"
             android:gravity="center"
             android:text="@string/thank_you_for_using_our_services"
             android:textColor="@color/green"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            />
 
         <Button
             android:id="@+id/btnBookingDetails"
@@ -73,13 +69,10 @@
             android:layout_marginTop="70dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="15dp"
-            android:backgroundTint="@color/blue"
+            android:backgroundTint="@color/colorPrimary"
             android:fontFamily="@font/poppins_semibold"
             android:text="@string/view_details"
-            android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             android:textStyle="bold" />
     </RelativeLayout>
-
-</FrameLayout>

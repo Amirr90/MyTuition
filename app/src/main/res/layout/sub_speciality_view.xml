@@ -42,7 +42,7 @@
                     android:layout_height="60dp"
                     android:loadCustomTeacherImage="@{teacher.image}"
                     android:padding="2dp"
-                    app:srcCompat="@drawable/ic_launcher_foreground" />
+                    app:srcCompat="@drawable/teacher_demo_icon" />
 
                 <TextView
                     android:id="@+id/textView76"
@@ -92,7 +92,7 @@
                     android:lineSpacingExtra="0dp"
                     android:lineSpacingMultiplier="1"
                     android:singleLine="true"
-                    android:text="@{teacher.academicInformation.collegeName,default=`College Name`}"
+                    android:text="@{teacher.academicInformation.schoolName,default=`College Name`}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />
 

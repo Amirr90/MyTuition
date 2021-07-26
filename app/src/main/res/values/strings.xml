@@ -179,6 +179,8 @@
     <string name="our_teacher_will_accept_your_video_call_request_and_schedule_an_online_class_with_you">"Our Teacher will accept your video call request and schedule an online class with you"</string>
     <string name="no_tuition_found">No Tuition Found for You</string>
     <string name="request_status">Request Status</string>
+    <string name="parent_student">Parent/Student</string>
+    <string name="join">Join</string>
 
     <!--    Live Ad Id-->
     <!--    <string name="adaptive_banner_ad_unit_id_test">ca-app-pub-4669458320732543/9170295624</string>-->

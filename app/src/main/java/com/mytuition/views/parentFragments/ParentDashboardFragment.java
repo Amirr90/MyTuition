@@ -42,6 +42,7 @@ import com.mytuition.models.DashboardModel1;
 import com.mytuition.models.ParentModel;
 import com.mytuition.models.RequestModel2;
 import com.mytuition.models.TestimonialsModel;
+import com.mytuition.utility.AppConstant;
 import com.mytuition.utility.AppUtils;
 import com.mytuition.utility.PicassoImageLoadingService;
 import com.mytuition.utility.Utils;
@@ -204,8 +205,8 @@ public class ParentDashboardFragment extends Fragment {
     }
 
     private void initNativeAds() {
-        adLoader = new AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
-                /*   adLoader = new AdLoader.Builder(requireContext(), "ca-app-pub-4669458320732543/1192567403")*/
+        // adLoader = new AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
+        adLoader = new AdLoader.Builder(requireContext(), AppConstant.NATIVE_ADD_ID)
                 .forNativeAd(NativeAd -> {
                     Log.d(TAG, "onNativeAdLoaded: " + NativeAd.getStore());
                     for (int a = 0; a < NativeAd.getImages().size(); a++) {
@@ -235,7 +236,7 @@ public class ParentDashboardFragment extends Fragment {
     private void initAds() {
 
         adView = new AdView(requireActivity());
-        adView.setAdUnitId(getString(R.string.adaptive_banner_ad_unit_id_test));
+        adView.setAdUnitId(AppConstant.BANNER_ADD_ID);
         parentDashboardBinding.adContainer.addView(adView);
 
         MobileAds.initialize(requireActivity(), initializationStatus -> {

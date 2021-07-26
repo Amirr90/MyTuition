@@ -41,7 +41,6 @@ import java.util.Objects;
 
 import static com.mytuition.utility.AppUtils.getFirestoreReference;
 import static com.mytuition.utility.AppUtils.getTimeFormat;
-import static com.mytuition.utility.AppUtils.getUid;
 import static com.mytuition.utility.AppUtils.hideDialog;
 
 
@@ -107,9 +106,7 @@ public class RequestTuitionDetailFragment extends Fragment {
             navController.navigate(R.id.action_DetailsFragment2_to_cancelTuitionReqDialog, bundle);
         });
 
-        requestTuitionBinding.animationViewAudioCall.setOnClickListener(v -> {
-            performVoiceCall();
-        });
+        requestTuitionBinding.animationViewAudioCall.setOnClickListener(v -> performVoiceCall());
     }
 
     private void performVoiceCall() {
@@ -148,20 +145,24 @@ public class RequestTuitionDetailFragment extends Fragment {
                 @Override
                 public void onSuccess(Object obj) {
                     AppUtils.hideDialog();
-                    List<TuitionDetailResponse.Tuition> tuitions = (List<TuitionDetailResponse.Tuition>) obj;
-                    if (null != tuitions && !tuitions.isEmpty()) {
-                        requestTuitionModel = tuitions.get(0).getTuitionModel().get(0);
-                        Log.d(TAG, "getTuitionDetails: " + requestTuitionModel.toString());
-                        requestTuitionBinding.setTuition(requestTuitionModel);
-                        updateRequestStatus(requestTuitionModel);
+                    try {
+                        List<TuitionDetailResponse.Tuition> tuitions = (List<TuitionDetailResponse.Tuition>) obj;
+                        if (null != tuitions && !tuitions.isEmpty()) {
+                            requestTuitionModel = tuitions.get(0).getTuitionModel().get(0);
+                            Log.d(TAG, "getTuitionDetails: " + requestTuitionModel.toString());
+                            requestTuitionBinding.setTuition(requestTuitionModel);
+                            updateRequestStatus(requestTuitionModel);
 
 
-                        if (null != requestTuitionModel.getTeacherId() && !requestTuitionModel.getTeacherId().isEmpty())
-                            getTeacherProfile();
+                            if (null != requestTuitionModel.getTeacherId() && !requestTuitionModel.getTeacherId().isEmpty())
+                                getTeacherProfile();
 
-                        if (requestTuitionModel.getReqStatus().equalsIgnoreCase(AppConstant.REQUEST_STATUS_REJECTED)) {
-                            showSuggestionDialog(requestTuitionModel);
+                            if (requestTuitionModel.getReqStatus().equalsIgnoreCase(AppConstant.REQUEST_STATUS_REJECTED)) {
+                                showSuggestionDialog(requestTuitionModel);
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                 }
@@ -236,19 +237,17 @@ public class RequestTuitionDetailFragment extends Fragment {
 
     private void swapTeacher(String choice) {
         AppUtils.showRequestDialog(requireActivity());
-
-        if (getUid() != null)
-            AppUtils.getFirestoreReference().collection(REQUEST_TUITION)
-                    .document(requestTuitionModel.getId()).update(getUpdateMap(choice))
-                    .addOnSuccessListener(aVoid -> {
-                        hideDialog();
-                        Toast.makeText(requireActivity(), "request Submitted successfully !!", Toast.LENGTH_SHORT).show();
-                        ParentScreen.getInstance().onSupportNavigateUp();
-                    }).addOnFailureListener(e -> {
-                hideDialog();
-                Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
-                Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
-            });
+        AppUtils.getFirestoreReference().collection(REQUEST_TUITION)
+                .document(requestTuitionModel.getId()).update(getUpdateMap(choice))
+                .addOnSuccessListener(aVoid -> {
+                    hideDialog();
+                    Toast.makeText(requireActivity(), "request Submitted successfully !!", Toast.LENGTH_SHORT).show();
+                    ParentScreen.getInstance().onSupportNavigateUp();
+                }).addOnFailureListener(e -> {
+            hideDialog();
+            Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
+            Toast.makeText(requireActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
+        });
     }
 
     private Map<String, Object> getUpdateMap(String choice) {
@@ -259,10 +258,6 @@ public class RequestTuitionDetailFragment extends Fragment {
         objectsMap.put("rejectedTeacherId", requestTuitionModel.getTeacherId());
         objectsMap.put("requestActionTimestamp", System.currentTimeMillis());
         return objectsMap;
-    }
-
-    private void showToast(String s) {
-        Toast.makeText(requireActivity(), s, Toast.LENGTH_SHORT).show();
     }
 
 

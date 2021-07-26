@@ -119,7 +119,6 @@ public class AllotTeacherFragment extends Fragment {
         for (DocumentSnapshot snapshot : task.getResult()) {
             TeacherModel model = snapshot.toObject(TeacherModel.class);
             teacherModelList.add(model);
-            Log.d(TAG, "Added: " + model.getName());
         }
         adapter.notifyDataSetChanged();
     }

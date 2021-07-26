@@ -73,21 +73,15 @@ public class TeacherDashboardFragment extends DaggerFragment {
         checkForProfileComplete();
 
         initAd();
-        binding.swipeDashboard.setOnRefreshListener(() -> {
-            filterData(binding.radioGroup2.getCheckedRadioButtonId());
-        });
+        binding.swipeDashboard.setOnRefreshListener(() -> filterData(binding.radioGroup2.getCheckedRadioButtonId()));
 
 
-        binding.radioGroup2.setOnCheckedChangeListener((group, checkedId) -> {
-            filterData(checkedId);
-        });
+        binding.radioGroup2.setOnCheckedChangeListener((group, checkedId) -> filterData(checkedId));
     }
 
     private void initAd() {
         adRequest = new AdRequest.Builder().build();
-
-        //with Test Add Id
-        RewardedAd.load(requireActivity(), "ca-app-pub-3940256099942544/5224354917",
+        RewardedAd.load(requireActivity(), AppConstant.INTERSTITIAL_AD_ID,
                 adRequest, new RewardedAdLoadCallback() {
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
@@ -125,8 +119,9 @@ public class TeacherDashboardFragment extends DaggerFragment {
             public void onSuccess(Object obj) {
                 hideDialog();
                 TeacherModel teacherModel = (TeacherModel) obj;
-                AppUtils.setString(AppConstant.NAME, teacherModel.getName(), requireActivity());
+
                 if (null != teacherModel) {
+                    AppUtils.setString(AppConstant.NAME, teacherModel.getName(), requireActivity());
                     Log.d(TAG, "onSuccess: " + teacherModel.toString());
                     if (!teacherModel.isProfileFilled()) {
                         Toast.makeText(requireActivity(), "incomplete profile !!", Toast.LENGTH_SHORT).show();
@@ -164,6 +159,7 @@ public class TeacherDashboardFragment extends DaggerFragment {
                 .setLifecycleOwner(requireActivity())
                 .setQuery(query, config, snapshot -> {
                     RequestTuitionModel requestTuitionModel = snapshot.toObject(RequestTuitionModel.class);
+                    assert requestTuitionModel != null;
                     requestTuitionModel.setId(snapshot.getId());
                     return requestTuitionModel;
                 }).build();
@@ -188,9 +184,7 @@ public class TeacherDashboardFragment extends DaggerFragment {
                 }
 
 
-                holder.tuitionViewBinding.button2.setOnClickListener(view -> {
-                    showInterstialAd(model);
-                });
+                holder.tuitionViewBinding.button2.setOnClickListener(view -> showInterstialAd(model));
             }
 
 
@@ -300,8 +294,6 @@ public class TeacherDashboardFragment extends DaggerFragment {
             proceedToNextPage(model);
             Log.d(TAG, "The rewarded ad wasn't ready yet.");
         }
-
-
 
 
     }
