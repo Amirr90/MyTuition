@@ -10,6 +10,7 @@ public class App extends DaggerApplication {
 
     public static App context;
     AppComponent appComponent;
+    static String cityName = "Lucknow";
 
     @Override
     public void onCreate() {

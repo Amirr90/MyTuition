@@ -26,7 +26,7 @@ public class TestimonialsModel {
     }
 
     public String getComment() {
-        return comment = "\" " + comment + " \"";
+        return comment;
 
     }
 

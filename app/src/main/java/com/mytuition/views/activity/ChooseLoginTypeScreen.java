@@ -1,7 +1,18 @@
 package com.mytuition.views.activity;
 
+import static com.mytuition.utility.AppConstant.USERS;
+import static com.mytuition.utility.AppUtils.fadeIn;
+import static com.mytuition.utility.AppUtils.getFirestoreReference;
+import static com.mytuition.utility.AppUtils.getUid;
+import static com.mytuition.utility.AppUtils.setString;
+import static com.mytuition.utility.Utils.LOGIN_TYPE;
+import static com.mytuition.utility.Utils.LOGIN_TYPE_PARENT;
+import static com.mytuition.utility.Utils.LOGIN_TYPE_TEACHER;
+import static com.mytuition.utility.Utils.setParentModel;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -18,16 +29,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.mytuition.utility.AppConstant.USERS;
-import static com.mytuition.utility.AppUtils.fadeIn;
-import static com.mytuition.utility.AppUtils.getFirestoreReference;
-import static com.mytuition.utility.AppUtils.getUid;
-import static com.mytuition.utility.AppUtils.setString;
-import static com.mytuition.utility.Utils.LOGIN_TYPE;
-import static com.mytuition.utility.Utils.LOGIN_TYPE_PARENT;
-import static com.mytuition.utility.Utils.LOGIN_TYPE_TEACHER;
-import static com.mytuition.utility.Utils.setParentModel;
 
 public class ChooseLoginTypeScreen extends AppCompatActivity {
     private static final String TAG = "ChooseLoginTypeScreen";
@@ -118,15 +119,16 @@ public class ChooseLoginTypeScreen extends AppCompatActivity {
     }
 
     private void updateParentModel() {
-        if (null != getUid())
-            getFirestoreReference().collection(USERS)
-                    .document(getUid())
-                    .get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
-                        setParentModel(ChooseLoginTypeScreen.this, parentModel);
-                        startActivity(new Intent(ChooseLoginTypeScreen.this, ParentScreen.class));
-                        finish();
-                    });
+        Log.d(TAG, "updateParentModel: " + getUid());
+        getFirestoreReference().collection(USERS)
+                .document(getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    ParentModel parentModel = documentSnapshot.toObject(ParentModel.class);
+                    setParentModel(ChooseLoginTypeScreen.this, parentModel);
+                    startActivity(new Intent(ChooseLoginTypeScreen.this, ParentScreen.class));
+                    finish();
+                })
+                .addOnFailureListener(e -> Toast.makeText(ChooseLoginTypeScreen.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
     }
 }

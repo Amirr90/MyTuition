@@ -1,42 +1,33 @@
 {
   "project_info": {
-    "project_number": "450624743766",
-    "firebase_url": "https://mytuition-41294-default-rtdb.firebaseio.com",
-    "project_id": "mytuition-41294",
-    "storage_bucket": "mytuition-41294.appspot.com"
+    "project_number": "969688941993",
+    "project_id": "my-tuition-f9b41",
+    "storage_bucket": "my-tuition-f9b41.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:450624743766:android:082402c81458cd2d9c0ef7",
+        "mobilesdk_app_id": "1:969688941993:android:18e7933b019a4c449e30b8",
         "android_client_info": {
           "package_name": "com.mytuition"
         }
       },
       "oauth_client": [
         {
-          "client_id": "450624743766-7o61ab7uqaiog20n6ieeeo1jjs377jjl.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.mytuition",
-            "certificate_hash": "74ecb1309f51c14df5df8a443372c913d2485c4c"
-          }
-        },
-        {
-          "client_id": "450624743766-fmbad13somfunnndh86inf40rd9ag4oq.apps.googleusercontent.com",
+          "client_id": "969688941993-7fqjb4duk3k4vet6e01hsa8crv30uif7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDxu20Tl_O6ENKV40Au8vUsqpU91Ggle00"
+          "current_key": "AIzaSyD1IKH6VN4iY0-UTmy1iLO59NZew4Y0cjU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "450624743766-fmbad13somfunnndh86inf40rd9ag4oq.apps.googleusercontent.com",
+              "client_id": "969688941993-7fqjb4duk3k4vet6e01hsa8crv30uif7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

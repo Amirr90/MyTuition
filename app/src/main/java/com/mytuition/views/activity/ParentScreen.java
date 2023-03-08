@@ -1,5 +1,17 @@
 package com.mytuition.views.activity;
 
+import static com.mytuition.utility.AppUtils.getFirestoreReference;
+import static com.mytuition.utility.AppUtils.getMobileNumber;
+import static com.mytuition.utility.AppUtils.getUid;
+import static com.mytuition.utility.AppUtils.hideDialog;
+import static com.mytuition.utility.Utils.LOGIN_TYPE;
+import static com.mytuition.utility.Utils.setParentModel;
+import static com.mytuition.utility.Utils.updateUI;
+import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_ACCEPTED;
+import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_PENDING;
+import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_REJECTED;
+import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_TUITION;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,11 +26,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -50,18 +64,6 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.mytuition.utility.AppUtils.getFirestoreReference;
-import static com.mytuition.utility.AppUtils.getMobileNumber;
-import static com.mytuition.utility.AppUtils.getUid;
-import static com.mytuition.utility.AppUtils.hideDialog;
-import static com.mytuition.utility.Utils.LOGIN_TYPE;
-import static com.mytuition.utility.Utils.setParentModel;
-import static com.mytuition.utility.Utils.updateUI;
-import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_ACCEPTED;
-import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_PENDING;
-import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_STATUS_REJECTED;
-import static com.mytuition.views.parentFragments.RequestTuitionFragment.REQUEST_TUITION;
-
 public class ParentScreen extends AppCompatActivity implements NavigationInterface {
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 2020;
     private static final String TAG = "ParentScreen";
@@ -77,6 +79,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     private LocationAddressResultReceiver addressResultReceiver;
     private Location currentLocation;
     private LocationCallback locationCallback;
+    public MutableLiveData<String> cityObserver = new MutableLiveData<>();
 
     public static ParentScreen getInstance() {
         return instance;
@@ -103,7 +106,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         locationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(LocationResult locationResult) {
+            public void onLocationResult(@NonNull LocationResult locationResult) {
                 currentLocation = locationResult.getLocations().get(0);
                 Log.d(TAG, "onLocationResult: " + currentLocation);
                 getAddress();
@@ -130,12 +133,10 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
             } else if (item.getItemId() == R.id.itemShareApp) {
                 AppUtils.shareApp(instance);
             } else if (item.getItemId() == R.id.admin_item1) {
-                if (null != getUid()) {
-                    switch (getUid()) {
-                        case AppConstant.ADMIN_UID:
-                        case AppConstant.ADMIN_UID2:
-                            navController.navigate(R.id.tuitionRequestForAdminFragment);
-                    }
+                switch (getUid()) {
+                    case AppConstant.ADMIN_UID:
+                    case AppConstant.ADMIN_UID2:
+                        navController.navigate(R.id.tuitionRequestForAdminFragment);
                 }
             } else if (item.getItemId() == R.id.itemLogout)
                 showLogoutDialog();
@@ -144,7 +145,6 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         });
 
 
-        getUid();
         updateUserInfo();
         switch (getUid()) {
             case AppConstant.ADMIN_UID:
@@ -160,7 +160,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     protected void onStop() {
         super.onStop();
 
-        if (null != getUid() && !getUid().isEmpty())
+        if (!getUid().isEmpty())
             AppUtils.updateOnlineStatus(AppUtils.Users, false, System.currentTimeMillis());
     }
 
@@ -218,38 +218,37 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
 
     private void updateRequestView() {
 
-        if (null != getUid())
-            getFirestoreReference().collection(REQUEST_TUITION)
-                    .document(getUid())
-                    .get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            RequestTuitionModel tuitionModel = documentSnapshot.toObject(RequestTuitionModel.class);
-                            if (null != tuitionModel) {
-                                if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_CONFIRMED)) {
-                                    mainBinding.constraintLayout.setVisibility(View.GONE);
-                                }
-                            } else {
-                                switch (tuitionModel.getReqStatus()) {
-                                    case REQUEST_STATUS_PENDING:
-                                        mainBinding.textView9.setText("Waiting for Teacher to accept your Demo Class");
-                                        break;
-                                    case REQUEST_STATUS_ACCEPTED:
-                                        //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Accepted your tuition request");
-                                        mainBinding.btLoading.setAnimation(R.raw.accepted);
-                                        mainBinding.btLoading.playAnimation();
-                                        break;
-                                    case REQUEST_STATUS_REJECTED:
-                                        //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Rejected your tuition request");
-                                        mainBinding.btLoading.setAnimation(R.raw.rejected);
-                                        mainBinding.btLoading.playAnimation();
-                                        break;
-                                }
+        getFirestoreReference().collection(REQUEST_TUITION)
+                .document(getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        RequestTuitionModel tuitionModel = documentSnapshot.toObject(RequestTuitionModel.class);
+                        if (null != tuitionModel) {
+                            if (tuitionModel.getReqStatus().equals(REQUEST_STATUS_CONFIRMED)) {
+                                mainBinding.constraintLayout.setVisibility(View.GONE);
                             }
-
-
+                        } else {
+                            switch (tuitionModel.getReqStatus()) {
+                                case REQUEST_STATUS_PENDING:
+                                    mainBinding.textView9.setText("Waiting for Teacher to accept your Demo Class");
+                                    break;
+                                case REQUEST_STATUS_ACCEPTED:
+                                    //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Accepted your tuition request");
+                                    mainBinding.btLoading.setAnimation(R.raw.accepted);
+                                    mainBinding.btLoading.playAnimation();
+                                    break;
+                                case REQUEST_STATUS_REJECTED:
+                                    //mainBinding.textView9.setText(tuitionModel.getTeacherModel().getName() + " Rejected your tuition request");
+                                    mainBinding.btLoading.setAnimation(R.raw.rejected);
+                                    mainBinding.btLoading.playAnimation();
+                                    break;
+                            }
                         }
-                    }).addOnFailureListener(e -> mainBinding.constraintLayout.setVisibility(View.GONE));
+
+
+                    }
+                }).addOnFailureListener(e -> mainBinding.constraintLayout.setVisibility(View.GONE));
 
     }
 
@@ -265,12 +264,10 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         navModels.add(new NavModel(getString(R.string.about_us), R.drawable.ic_baseline_textsms_24));
         navModels.add(new NavModel(getString(R.string.share_app), R.drawable.ic_baseline_share_24));
         navModels.add(new NavModel(getString(R.string.logout), R.drawable.ic_baseline_logout_24));
-        if (null != getUid()) {
-            switch (getUid()) {
-                case AppConstant.ADMIN_UID:
-                case AppConstant.ADMIN_UID2:
-                    navModels.add(new NavModel(getString(R.string.requests), R.drawable.ic_baseline_verified_user_24));
-            }
+        switch (getUid()) {
+            case AppConstant.ADMIN_UID:
+            case AppConstant.ADMIN_UID2:
+                navModels.add(new NavModel(getString(R.string.requests), R.drawable.ic_baseline_verified_user_24));
         }
         navAdapter.notifyDataSetChanged();
     }
@@ -314,6 +311,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         try {
             setAreaName(address[1]);
             setCityName(address[0]);
+            cityObserver.postValue(address[0]);
             ParentDashboardFragment.getInstance().updateLocation(address[0], address[1]);
             Log.d(TAG, "showResults: " + address[0]);
 
@@ -377,12 +375,10 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
         } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.share_app))) {
             AppUtils.shareApp(instance);
         } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.view_all_tuitions))) {
-            if (null != getUid()) {
-                switch (getUid()) {
-                    case AppConstant.ADMIN_UID:
-                    case AppConstant.ADMIN_UID2:
-                        navModels.add(new NavModel(getString(R.string.requests), R.drawable.ic_baseline_verified_user_24));
-                }
+            switch (getUid()) {
+                case AppConstant.ADMIN_UID:
+                case AppConstant.ADMIN_UID2:
+                    navModels.add(new NavModel(getString(R.string.requests), R.drawable.ic_baseline_verified_user_24));
             }
 
         } else if (navModels.get(pos).getTitle().equalsIgnoreCase(getString(R.string.logout)))
@@ -418,7 +414,7 @@ public class ParentScreen extends AppCompatActivity implements NavigationInterfa
     }
 
     private void updateToken() {
-        AppUtils.updateToken(obj -> Log.d(TAG, "updateToken: " + (String) obj));
+        AppUtils.updateToken(obj -> Log.d(TAG, "updateToken: " + obj));
     }
 
     private class LocationAddressResultReceiver extends ResultReceiver {

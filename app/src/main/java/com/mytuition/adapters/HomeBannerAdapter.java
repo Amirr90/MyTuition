@@ -1,5 +1,7 @@
 package com.mytuition.adapters;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -52,6 +54,7 @@ public class HomeBannerAdapter extends RecyclerView.Adapter<HomeBannerAdapter.Ba
             if (null != bannerImage.getCallToAction() && !bannerImage.getCallToAction().isEmpty()) {
                 Log.d(TAG, "onClick: " + bannerImage.getCallToAction());
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(bannerImage.getCallToAction()));
+                browserIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                 App.context.startActivity(browserIntent);
             }
         });

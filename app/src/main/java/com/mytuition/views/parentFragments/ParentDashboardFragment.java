@@ -1,5 +1,8 @@
 package com.mytuition.views.parentFragments;
 
+import static com.mytuition.utility.AppUtils.getUid;
+import static com.mytuition.utility.Utils.getParentModel;
+
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -57,17 +60,13 @@ import java.util.List;
 import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
 
-import static com.mytuition.utility.AppUtils.getUid;
-import static com.mytuition.utility.Utils.getParentModel;
-
 public class ParentDashboardFragment extends Fragment {
 
     public static final String DASHBOARD = "Dashboard";
-    public static final String BANNER = "Banner";
     public static final String BANNER_SLIDER = "SliderBanner";
     private static final String TAG = "ParentDashboardFragment";
     public static ParentDashboardFragment instance;
-    //aamirr.3212@gmail.com
+    //aamirr.1232@gmail.com
     FragmentParentDashboardBinding parentDashboardBinding;
     DashboardPatientAdapter1 adapter1;
     TeacherAdapter adapter2;
@@ -104,8 +103,8 @@ public class ParentDashboardFragment extends Fragment {
         navController = Navigation.findNavController(view);
         requestModel2 = new RequestModel2();
 
-        initAds();
-        initNativeAds();
+        // initAds();
+        // initNativeAds();
         parentDashboardBinding.setParent(getParentModel(requireActivity()));
         adapter1 = new DashboardPatientAdapter1();
         adapter2 = new TeacherAdapter();
@@ -117,6 +116,9 @@ public class ParentDashboardFragment extends Fragment {
         parentDashboardBinding.bannerViewPager.setAdapter(homeBannerAdapter);
 
         parentDashboardBinding.rec1.setAdapter(adapter1);
+        //Binding First Adapter
+        adapter1.submitList(getFirstAdapterData());
+
         parentDashboardBinding.rec2.setAdapter(adapter2);
         parentDashboardBinding.rec3.setAdapter(adapter3);
 
@@ -128,16 +130,16 @@ public class ParentDashboardFragment extends Fragment {
 
 
         viewModel = new ViewModelProvider(requireActivity()).get(ParentViewHolder.class);
+        if (null == ParentScreen.instance)
+            return;
+
+
         requestModel2.setCity("Lucknow");
         requestModel2.setUserId(getUid());
         viewModel.getDashboardData(requestModel2, navController).observe(getViewLifecycleOwner(), dashboardModels -> {
             AppUtils.hideDialog();
             models = dashboardModels;
             if (!dashboardModels.isEmpty()) {
-
-                //Binding First Adapter
-                adapter1.submitList(getFirstAdapterData());
-
                 //Binding Top Teacher Data Adapter
                 adapter2.submitList(dashboardModels.get(0).getTeacherList());
 
@@ -156,13 +158,11 @@ public class ParentDashboardFragment extends Fragment {
                 loadBigBannerImage(dashboardModels.get(0).getBannerData());
             } else Log.d(TAG, "onChanged: no data");
         });
-
         updateProfile();
         parentDashboardBinding.profileImage.setOnClickListener(view1 -> navController.navigate(R.id.action_parentDashboardFragment2_to_parentProfileFragment));
 
 
-        parentDashboardBinding.imageView7.setOnClickListener(
-                v -> ParentScreen.getInstance().openDrawer());
+        parentDashboardBinding.imageView7.setOnClickListener(v -> ParentScreen.getInstance().openDrawer());
         parentDashboardBinding.tvWriteReview.setOnClickListener(v -> navController.navigate(R.id.action_parentDashboardFragment2_to_writeTestimonialsDialog));
 
         parentDashboardBinding.bottomAppBar.setNavigationOnClickListener(v -> ParentScreen.getInstance().openDrawer());
@@ -190,13 +190,6 @@ public class ParentDashboardFragment extends Fragment {
                 Log.d(TAG, "onSuccess: " + getTokenResult.getSignInProvider());
                 Log.d(TAG, "onSuccess: " + getTokenResult.getAuthTimestamp());
                 Log.d(TAG, "onSuccess: " + getTokenResult.getClaims());
-
-                /*FirebaseAuth.getInstance().revokeRefreshTokens(uid);
-                UserRecord user = FirebaseAuth.getInstance().getUser(uid);
-                long revocationSecond = user.getTokensValidAfterTimestamp() / 1000;
-                System.out.println("Tokens revoked at: " + revocationSecond);*/
-
-
             }));
         } catch (Exception e) {
             e.printStackTrace();
@@ -206,27 +199,19 @@ public class ParentDashboardFragment extends Fragment {
 
     private void initNativeAds() {
         // adLoader = new AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
-        adLoader = new AdLoader.Builder(requireContext(), AppConstant.NATIVE_ADD_ID)
-                .forNativeAd(NativeAd -> {
-                    Log.d(TAG, "onNativeAdLoaded: " + NativeAd.getStore());
-                    for (int a = 0; a < NativeAd.getImages().size(); a++) {
-                        String image = (NativeAd.getImages().get(a).getUri().toString());
-                        homeBannerAdapter.addItem(new BannerAddModel(image, NativeAd.getBody(), NativeAd.getHeadline(), NativeAd.getCallToAction(), NativeAd.getAdvertiser()));
-                    }
-                })
-                .withAdListener(new AdListener() {
-                    @Override
-                    public void onAdFailedToLoad(LoadAdError adError) {
-                        // Handle the failure by logging, altering the UI, and so on.
-                        Log.d(TAG, "onAdFailedToLoad: " + adError.getMessage());
-                    }
-                })
-                .withNativeAdOptions(new NativeAdOptions.Builder()
-                        // Methods in the NativeAdOptions.Builder class can be
-                        // used here to specify individual options settings.
-                        .build())
-                .build();
-
+        adLoader = new AdLoader.Builder(requireContext(), AppConstant.NATIVE_ADD_ID).forNativeAd(NativeAd -> {
+            Log.d(TAG, "onNativeAdLoaded: " + NativeAd.getStore());
+            for (int a = 0; a < NativeAd.getImages().size(); a++) {
+                String image = (NativeAd.getImages().get(a).getUri().toString());
+                homeBannerAdapter.addItem(new BannerAddModel(image, NativeAd.getBody(), NativeAd.getHeadline(), NativeAd.getCallToAction(), NativeAd.getAdvertiser()));
+            }
+        }).withAdListener(new AdListener() {
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                Log.d(TAG, "onAdFailedToLoad: " + adError.getMessage());
+            }
+        }).withNativeAdOptions(new NativeAdOptions.Builder()
+                .build()).build();
         adLoader.loadAds(new AdRequest.Builder().build(), 3);
 
 
@@ -239,9 +224,7 @@ public class ParentDashboardFragment extends Fragment {
         adView.setAdUnitId(AppConstant.BANNER_ADD_ID);
         parentDashboardBinding.adContainer.addView(adView);
 
-        MobileAds.initialize(requireActivity(), initializationStatus -> {
-            setUpAds();
-        });
+        MobileAds.initialize(requireActivity(), initializationStatus -> setUpAds());
     }
 
     private void setUpAds() {
@@ -269,7 +252,8 @@ public class ParentDashboardFragment extends Fragment {
 
     private void loadBigBannerImage(DashboardModel.BannerData bannerData) {
         bannerImages.clear();
-        bannerImages.add(new BannerAddModel(bannerData.getBanner().getBannerImage(), "", "", "", ""));
+        if (null != bannerData.getBanner().getBannerImage())
+            bannerImages.add(new BannerAddModel(bannerData.getBanner().getBannerImage(), "", "", "", ""));
         if (null != bannerData.getBanner().getBannerImage2())
             bannerImages.add(new BannerAddModel(bannerData.getBanner().getBannerImage2(), "", "", "", ""));
         if (null != bannerData.getBanner().getBannerImage3())
@@ -309,7 +293,6 @@ public class ParentDashboardFragment extends Fragment {
             parentDashboardBinding.tvLocation.setText(area);
             parentDashboardBinding.tvCity.setText(city);
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -344,8 +327,7 @@ public class ParentDashboardFragment extends Fragment {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         // TODO: handle the post
                         Banner banner = postSnapshot.getValue(Banner.class);
-                        if (banner != null)
-                            images.add(banner.getBannerImage());
+                        if (banner != null) images.add(banner.getBannerImage());
                     }
                 } else {
                     for (Banner banner : getSliderData())

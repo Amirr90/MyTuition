@@ -16,12 +16,14 @@ public class PicassoImageLoadingService implements ImageLoadingService {
 
     @Override
     public void loadImage(String url, ImageView imageView) {
-        Glide.with(context).load(url).into(imageView);
+        if (context != null)
+            Glide.with(context).load(url).into(imageView);
     }
 
     @Override
     public void loadImage(int resource, ImageView imageView) {
-        Glide.with(context).load(resource).into(imageView);
+        if (context != null)
+            Glide.with(context).load(resource).into(imageView);
     }
 
     @Override

@@ -1,5 +1,10 @@
 package com.mytuition.teacherView;
 
+import static android.app.Activity.RESULT_OK;
+import static com.mytuition.utility.AppUtils.getAllSpeciality;
+import static com.mytuition.utility.AppUtils.hideDialog;
+import static com.mytuition.utility.AppUtils.showToolbar;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -31,11 +36,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
-import static com.mytuition.utility.AppUtils.getAllSpeciality;
-import static com.mytuition.utility.AppUtils.hideDialog;
-import static com.mytuition.utility.AppUtils.showToolbar;
 
 
 public class TProfileFragment extends Fragment {
@@ -95,17 +95,19 @@ public class TProfileFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_FRONT_IMAGE: {
+                    if (null == data)
+                        return;
                     Uri uri = data.getData();
                     binding.ivAadharFront.setImageURI(uri);
                     frontImageUrl = uri.toString();
-                    Log.d(TAG, "onActivityResult: FrontUri" + data.getData());
                     break;
                 }
                 case REQUEST_CODE_BACK_IMAGE: {
+                    if (null == data)
+                        return;
                     Uri uri = data.getData();
                     binding.ivAadharBack.setImageURI(uri);
                     backImageUrl = uri.toString();
-                    Log.d(TAG, "onActivityResult: BackUri" + data.getData());
                     break;
                 }
             }
@@ -239,7 +241,7 @@ public class TProfileFragment extends Fragment {
         binding.perVisitSpinner.setAdapter(preVisitAdapter);
 
         //Experience Spinner
-        String[] experience = new String[]{"0(Fresher)", "1", "2", "3", "4", "5", "6", "7", "8+ years"};
+        String[] experience = new String[]{"0(Fresher)", "1", "2", "3", "4", "5", "6", "7", "8+ Years"};
         ArrayAdapter<String> experienceAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, experience);
         binding.expSpinner.setAdapter(experienceAdapter);
 
@@ -266,19 +268,19 @@ public class TProfileFragment extends Fragment {
                     }
 
                 }).setPositiveButton("OK", (dialog, id) -> {
-            String selectedIndex = "";
-            for (Integer i : mSelectedItems) {
-                selectedIndex += choices[i] + ", ";
-            }
+                    String selectedIndex = "";
+                    for (Integer i : mSelectedItems) {
+                        selectedIndex += choices[i] + ", ";
+                    }
 
 
-            String msg = ("Selected index: " + selectedIndex);
-            binding.tvSelectedSubjects.setText(selectedIndex);
+                    String msg = ("Selected index: " + selectedIndex);
+                    binding.tvSelectedSubjects.setText(selectedIndex);
 
-            Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
 
-        }).setNegativeButton("Cancel", (dialog, id) -> {
-        }).show();
+                }).setNegativeButton("Cancel", (dialog, id) -> {
+                }).show();
     }
 
     @Override
